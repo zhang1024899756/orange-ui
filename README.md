@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Orange-ui
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a UI component library designed to help front-end engineers quickly build UI interfaces
 
 ## Available Scripts
 
