@@ -1,11 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.scss';
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
 import Button from './components/Button/button'
+import Icon from './components/Icon/icon'
 import './index.scss'
+
+library.add(fas)
 
 ReactDOM.render(
   <div>
+    <h4>按钮</h4>
     <div className='demo-p'>
       <Button size='hg' btnType='primary'>大型按钮</Button>
       <Button size='lg' btnType='primary'>中型按钮</Button>
@@ -14,6 +21,8 @@ ReactDOM.render(
       <Button size='mini' btnType='primary'>迷你按钮</Button>
     </div>
     <div className='demo-p'>
+      <Button loading>加载按钮</Button>
+      <Button loading btnType='primary'>加载按钮</Button>
       <Button disabled btnType='primary'>主题色 禁用</Button>
       <Button btnType='success'>成功按钮</Button>
       <Button btnType='warning'>警告按钮</Button>
@@ -30,6 +39,17 @@ ReactDOM.render(
     <div className='demo-p'>
       <Button size='lg' btnType='link' href='http://www.baidu.com'>www.baidu.com</Button>
       <Button size='lg' disabled btnType='link' href='http://www.baidu.com'>www.baidu.com</Button>
+    </div>
+    <h4>图标</h4>
+    <div className='demo-p'>
+      <Icon icon="microphone-alt" theme="secondary" size="3x"></Icon>
+      <Icon icon="meh-rolling-eyes" theme="success" size="3x"></Icon>
+      <Icon icon="level-up-alt" theme="dark" size="3x"></Icon>
+      <Icon icon="coffee" theme="danger" size="3x"></Icon>
+      <Icon icon="jedi" theme="success" size="3x"></Icon>
+      <Icon icon="keyboard" size="3x"></Icon>
+      <Icon icon="kiss-wink-heart" theme="armygreen" size="3x"></Icon>
+      <Icon icon="landmark" theme="danger" size="3x"></Icon>
     </div>
   </div>,
   document.getElementById('root')

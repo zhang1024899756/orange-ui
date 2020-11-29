@@ -1,5 +1,6 @@
 import React, { FC, ButtonHTMLAttributes, AnchorHTMLAttributes } from 'react'
 import classNames from 'classnames'
+import Icon from '../Icon/icon'
 
 export type ButtonSize = 'hg' | 'lg' | 'sm' | 'mini'
 export type ButtonType = 'primary' | 'default' | 'success' | 'warning' | 'danger' | 'link'
@@ -8,6 +9,8 @@ interface BaseButtonProps {
   className?: string;
   /**设置 Button 的禁用 */
   disabled?: boolean;
+  /* 设置loading */ 
+  loading?: boolean,
   /**设置 Button 的尺寸 */
   size?: ButtonSize;
   /** 圆角 **/ 
@@ -24,7 +27,7 @@ export type ButtonProps = Partial<NativeButtonProps & AnchorButtonProps>
 
 
 export const Button: FC<ButtonProps> = (props) => {
-  const { btnType, className, disabled, size, round, children, href, ...restProps } = props
+  const { btnType, className, disabled, loading, size, round, children, href, ...restProps } = props
 
   const classes = classNames('btn', className, {
     [`btn-${btnType}`]: btnType,
@@ -37,7 +40,7 @@ export const Button: FC<ButtonProps> = (props) => {
   } else {
     return (
       <button className={classes} disabled={disabled} {...restProps}>
-        {children}
+        {loading? <Icon icon="spinner" spin/> : children}
       </button>
     )
   }
