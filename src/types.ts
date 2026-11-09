@@ -6,6 +6,6 @@ export type Color = 'primary' | 'neutral' | 'success' | 'warning' | 'danger';
 export type Variant = 'solid' | 'outlined' | 'soft' | 'ghost' | 'text';
 
 /** 主题名。用 (string & {}) 保留使用方注册私有主题的扩展能力 */
-export type OuiTheme = 'orange' | 'modelscope' | 'teal' | 'rose' | (string & {});
+export type OuiTheme = 'orange' | 'violet' | 'teal' | 'rose' | (string & {});
 
 export type OuiScheme = 'light' | 'dark' | 'system';

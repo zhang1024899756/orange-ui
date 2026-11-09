@@ -13,7 +13,7 @@ export interface ButtonProps extends Omit<ComponentPropsWithRef<'button'>, 'colo
   variant?: Variant;
   /** 角色色，默认 primary */
   color?: Color;
-  /** 尺寸，默认 md（32px，与参照站一致） */
+  /** 尺寸，默认 md（32px） */
   size?: Size;
   /** 形状：方角 / 胶囊 / 正圆 */
   shape?: ButtonShape;

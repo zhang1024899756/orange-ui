@@ -5,7 +5,7 @@ import { cx } from '../utils/cx';
 import type { OuiScheme, OuiTheme } from '../types';
 
 export interface ThemeProviderProps {
-  /** 内置主题名（orange / modelscope / teal / rose）或使用方自己注册的主题名 */
+  /** 内置主题名（orange / violet / teal / rose）或使用方自己注册的主题名 */
   theme?: OuiTheme;
   /** 明暗；system 会跟随 prefers-color-scheme */
   scheme?: OuiScheme;

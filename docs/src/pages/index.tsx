@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
+import { DocButton } from '@site/src/components/DocButton';
 import {
   Avatar,
   Badge,
@@ -140,11 +141,11 @@ export default function Home() {
           </h1>
           <p className="oui-hero__lead">
             高密度小字、低阴影、细边框的骨相，加上只能出现在 16px 彩色图标里的那点活泼。
-            面向模型社区、内容平台、AI 工作台——不是后台管理系统。
+            面向模型社区、内容平台、AI 工作台。
           </p>
           <div className="oui-hero__actions">
-            <Button size="lg" href="/guide/getting-started">开始使用</Button>
-            <Button size="lg" variant="outlined" href="/design/tokens">设计变量</Button>
+            <DocButton size="lg" to="/guide/getting-started">开始使用</DocButton>
+            <DocButton size="lg" variant="outlined" to="/design/tokens">设计变量</DocButton>
           </div>
 
           <div className="oui-hero__stage">
