@@ -1,0 +1,82 @@
+name: Deploy docs
+
+# 文档站 → GitHub Pages
+# 站点地址：https://zhang1024899756.github.io/orange-ui/
+# 注意：文档站通过 webpack alias 消费打包产物 dist/，所以必须先 build 组件库再 build 文档。
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'src/**'
+      - 'package.json'
+      - 'tsup.config.ts'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/deploy-docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一分支只保留最新一次部署，避免两个 Pages 部署互相覆盖
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: build docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      # 文档站 import 的是 dist 里的真实产物，这一步不能省
+      - name: Build library
+        run: pnpm build
+
+      - name: Build docs
+        run: pnpm docs:build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          # 仓库还没在 Settings 里开 Pages 时，用 GITHUB_TOKEN 自动打开（需要 admin 权限）
+          enablement: true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/build
+
+  deploy:
+    name: deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
