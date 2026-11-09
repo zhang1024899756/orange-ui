@@ -128,14 +128,15 @@
     color: var(--oui-color-text-secondary);
   }
 
+  /* 与 spinner 同口径：不确定进度是「等待反馈」，不是装饰（WCAG 2.2.2）。
+     减少动态偏好下只降速到 2.4s 一轮，不改成静态满条——0.1.x 把它冻结成 100% 宽度 + 半透明，
+     用户会以为「已经快完成了」。base.css 已把这两个播放元素排除在「压平一切动画」之外。 */
   @media (prefers-reduced-motion: reduce) {
     .oui-progress[data-indeterminate] .oui-progress__fill {
-      animation: none;
-      width: 100%;
-      opacity: 0.7;
+      animation-duration: 2.4s;
     }
     .oui-progress[data-indeterminate] .oui-progress__ring-fill {
-      animation: none;
+      animation-duration: 2.4s;
     }
   }
 }

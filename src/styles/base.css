@@ -46,7 +46,7 @@
        jsdom 不做动画、单测测不出来，只能靠 spinner-motion.test.ts 静态守着。
        WCAG 2.2.2 要求超过 5 秒的等待必须有持续反馈，所以 spinner / 图标旋转只降速（1.6s），
        不进入这条压缩规则；其余装饰性动画照旧压平。 */
-    :where(.oui-root) :where(*:not(.oui-spinner-glyph):not(.oui-icon--spin)),
+    :where(.oui-root) :where(*:not(.oui-spinner-glyph):not(.oui-icon--spin):not([data-indeterminate] .oui-progress__fill):not([data-indeterminate] .oui-progress__ring-fill)),
     :where(.oui-root) :where(*::before),
     :where(.oui-root) :where(*::after) {
       animation-duration: 0.001ms !important;

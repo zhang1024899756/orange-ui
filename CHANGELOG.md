@@ -27,9 +27,18 @@
   现在降速到 1.6s/圈 —— 超过 5 秒的等待必须有持续反馈（WCAG 2.2.2）；base.css 用
   `:not(.oui-spinner-glyph)` 把它排除在压缩规则外，并由 `spinner-motion.test.ts` 静态守住
 
+### 新增
+- `ThemeProvider` 的 `primarySolid`：不传时由 `primary` 自动派生实心档（保持色相/饱和度、压低明度到
+  白字 ≥4.5:1，并按 92% / 86% 派生 hover / active）。`<ThemeProvider primary="#00AA88">` 的实心按钮
+  直接就是 `#00806A`（4.89），不再需要外层 div 补变量
+- `src/utils/color.ts`：WCAG 对比度与实心档派生的纯函数（`deriveSolidColor` / `contrastRatio` 等），
+  服务端与客户端结果一致
+
 ### 注意
-- 自定义品牌色现在要同时给 `--oui-color-primary-solid`（例如 `#0EA5E9` → `#0378B4`，白字 4.83），
-  否则实心按钮会沿用默认主题的实心档 —— CSS 无法从品牌色反解出「白字达标」的那一档
+- **纯 CSS 注册的自定义主题**仍要自己给 `--oui-color-primary-solid`（例如 `#0EA5E9` → `#0378B4`，4.83）：
+  CSS 里没有运行时算对比度的能力。用 `ThemeProvider` 则已自动处理
+- `Progress` 的 `indeterminate` 在 `prefers-reduced-motion: reduce` 下从「停止 + 静态半透明」改为
+  降速到 2.4s/轮 —— 与 spinner 同口径（WCAG 2.2.2：等待反馈必须持续），base.css 的全局压制同步放行
 
 ## 0.1.0
 

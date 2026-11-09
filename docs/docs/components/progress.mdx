@@ -55,7 +55,7 @@ import { Progress } from '@arvinzxy/orange-ui';
 ## 不确定进度 indeterminate
 
 `indeterminate` 时忽略 `value`：填充块无限流动，组件只挂 `aria-busy="true"`，不报任何百分比。
-`prefers-reduced-motion` 下动画停止，退化成一条静态的半透明填充——宁可不动，也不要制造「卡死」的错觉。
+`prefers-reduced-motion` 下只是**降速到 2.4s 一轮**，不停止：不确定进度是「等待反馈」，冻住会被读成卡死（WCAG 2.2.2）。0.1.x 曾把它退化成静态半透明填充，0.2.0 改掉。
 
 <Demo layout="block">
   <div style={{ display: 'grid', gap: 20, width: 520 }}>
@@ -114,7 +114,7 @@ import { Progress } from '@arvinzxy/orange-ui';
 - `indeterminate` 时不报数值，只有 `aria-busy="true"`——假数值会让读屏用户误判
 - 标签用等宽数字（`tabular-nums`），百分比变化时不会左右抖动
 - 不用 `aria-live` 播报：进度更新频繁时会刷屏，重要节点请另用文字状态说明
-- `prefers-reduced-motion` 下不确定态停止动画
+- `prefers-reduced-motion` 下不确定态**降速到 2.4s/轮但不停止**——等待反馈必须持续存在，否则用户无法区分「在加载」和「卡死」
 
 ## API
 

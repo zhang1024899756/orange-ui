@@ -89,17 +89,23 @@ import { ThemeProvider, Button } from '@arvinzxy/orange-ui';
 实心档怎么解：把品牌色压深，直到白色文字 ≥ 4.5:1。上面两个数是量出来的
 （`#0EA5E9` 压白字 2.77 → `#0378B4` 4.83）。
 
-React 里（姿势 C）：`primary` 只接管主色与渐变，实心档要用外层变量补——
-`ThemeProvider` 没有 `style` 入参，所以包一层：
+React 里（姿势 C）：**只给 `primary` 就够了**。`ThemeProvider` 会在运行时把实心档算出来——
+保持色相与饱和度、压低明度到白字刚好 ≥4.5:1，hover / active 再按同一套比例（92% / 86% 保留）派生：
 
 ```tsx
-// primary 写着 fill 层，实心档交给 CSS 变量
-<div style={{ '--oui-color-primary-solid': '#00806A' } as React.CSSProperties}>
-  <ThemeProvider primary="#00AA88" primary2="#3DD4BE"> … </ThemeProvider>
-</div>
+// 一个值跑完整条链路：fill 用 #00AA88，实心档自动压到白字达标的深一档
+<ThemeProvider primary="#00AA88" primary2="#3DD4BE"> … </ThemeProvider>
 ```
 
-`#00AA88` 压白字只有 2.96，压到 `#00806A` 是 4.89——这一档就是这么解出来的。
+`#00AA88` 压白字只有 2.96，自动派生会给出 `#00806A`（4.89）。想精确控制品牌色在实心大块上的
+深浅时，再显式传 `primarySolid`：
+
+```tsx
+<ThemeProvider primary="#00AA88" primarySolid="#00806A"> … </ThemeProvider>
+```
+
+这条派生是纯函数（`deriveSolidColor`），服务端与客户端结果一致，不会造成水合不一致；
+但**纯 CSS 写法（姿势 A / B）没有这层兜底**，那里必须自己把 `-solid` 写上。
 
 :::note 哪些是现算的，哪些是写死的
 浅底与描边现算，所以换品牌色**不需要构建脚本生成色阶**——这也是它比 antd（主题编译进包）更轻的原因。
