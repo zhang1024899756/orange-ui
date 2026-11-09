@@ -1,5 +1,8 @@
 packages:
   - docs
 
+# pnpm 11 的默认值会让「有构建脚本却没被放行」的依赖把 install 变成失败（CI 直接红）。
+# 这里显式关掉严格模式，只放行真正需要跑构建脚本的依赖。
+strictDepBuilds: false
 onlyBuiltDependencies:
   - esbuild
