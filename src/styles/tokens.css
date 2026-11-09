@@ -1,21 +1,30 @@
 /* ============================================================================
    orange-ui v3 · Design Tokens
    本文件是全部设计变量的唯一出口。命名前缀 --oui-。
-   依据：_research/orange-ui-spec.md（所有中性色、字号、圆角、间距、阴影为实测值）。
 
    组织顺序（层叠顺序即优先级）
      1  中性色（亮）        —— 所有主题共用
-     2  语义色（亮）
+     2  语义色（亮）        —— fill / solid / ink / on-* 四层
      3  强调色 · 4 套主题    —— 切 data-oui-theme 只改这一组
      4  中性色 / 语义色（暗）—— 切 data-oui-scheme 只改这一组
      5  强调色 · 暗色微调    —— hover/active 在深色下改为提亮
      6  字体 / 字号阶梯     7  圆角      8  间距 / 控件高度
      9  阴影 / 动效 / 层级  10 组件度量  11 布局
 
-   两处与契约图表不同、说明如下（都以契约自己写的判定规则为准）：
-   · --oui-color-on-primary 按「对比度 ≥ 4.5:1 决定」求解：白字压在 orange/teal/rose
-     上分别只有 3.04 / 3.80 / 3.90，故取墨色而不是白字；每套主题各自解到「静止态仍是
-     ≥4.5:1 的最浅一档」，所以三套墨值不同、观感密度一致；violet 白字 5.33，用 #FFFFFF。
+   ---- 0.2.0 起：实心背景一律白字，所以颜色分成了「fill」和「solid」两层 ----
+   · fill  = 角色色本身（--oui-color-primary / --oui-color-success …），用于描边、图标、
+             焦点环、10% 浅底混色、渐变副色、状态点。它不保证能承载白色文字。
+   · solid = 实心背景专用档（--oui-color-*-solid / -solid-hover / -solid-active），
+             逐档压到「白色文字刚好 ≥4.5:1 的最浅值」。按钮 solid、徽章、tag solid、
+             头像回退底色都走这一层。
+   · 实心背景上的字只有一个取值：--oui-color-on-solid = #FFFFFF。
+     白字压在品牌色上只有 3.04（orange）/ 3.80（teal）/ 3.90（rose），所以不是把字改深，
+     而是把底压深一档 —— 这是可测量的取舍，不是偏好。violet 白字本来就有 5.33，solid 直接用原色。
+   · 中性色（黑/白按钮）是唯一例外：亮色深底白字、暗色浅底深字（--oui-color-on-neutral 跟随
+     明暗反转）。白字压浅底物理上不可能 ≥4.5:1，这一条例外写进了文档站。
+   · --oui-color-on-primary 现在是 --oui-color-on-solid 的别名，只用于「primary 的实心档」之上。
+
+   另外三处与契约图表不同、说明如下（都以契约自己写的判定规则为准）：
    · --oui-color-primary-ink 是「文本级主色」：契约的 #F26B21 作为文字压在白底只有
      3.04，故派生更深的 #B8480A（5.29，primary 淡底 4.75）；深色主题下换回亮色。
      四个语义色同理解出一个 *-ink（判定口径见 §2 注释）。
@@ -40,25 +49,40 @@
   --oui-color-text-inverse: #FFFFFF;    /* 辅助 · 深底上的字 */
   --oui-color-shade: #000000;           /* hover/active 的混合基色（深色改为白） */
 
-  /* ---- 2. 语义色（亮） · 填充 / 填充上的字 / 文本级 ink / 派生 ----
-     ink = 这个角色当「文字」时的颜色，判定口径：白底 ≥4.5:1，且压在本色 10% 淡底上 ≥4.5:1
-     （淡底上会掉 2–8%，所以 ink 必须比 fill 深一档）。实测值随行标注。 */
-  --oui-color-success: #0B7A55;
-  --oui-color-on-success: #FFFFFF;
-  --oui-color-success-ink: #0A6F4C;    /* 白底 6.19 / 本色淡底 5.43 / 淡底叠 bg-subtle 5.03 */
-  --oui-color-warning: #A9610B;
-  --oui-color-on-warning: #FFFFFF;
-  --oui-color-warning-ink: #9F5B0B;    /* 白底 5.28 / 本色淡底 4.63 */
-  --oui-color-danger: #CF3A34;
-  --oui-color-on-danger: #FFFFFF;
-  --oui-color-danger-ink: #B32E29;     /* 白底 6.29 / 本色淡底 5.43 */
-  --oui-color-info: #2F6FED;
-  --oui-color-on-info: #FFFFFF;
-  --oui-color-info-ink: #1B63ED;       /* 白底 5.18 / 本色淡底 4.56 */
+  /* 实心背景上的字：全库唯一取值。配 *-solid 档使用，见文件头 §0.2.0 说明。 */
+  --oui-color-on-solid: #FFFFFF;
+  --oui-color-on-primary: var(--oui-color-on-solid);
 
-  /* 中性角色的四件套（与上面的中性色同源，供组件统一取用） */
+  /* ---- 2. 语义色（亮） · fill / solid / 填充上的字 / 文本级 ink / 派生 ----
+     fill = 细线、图标、浅底混色；solid = 实心背景专用档（白字 ≥4.5:1）；
+     ink = 这个角色当「文字」时的颜色，判定口径：白底 ≥4.5:1，且压在本色 10% 淡底上 ≥4.5:1
+     （淡底上会掉 2–8%，所以 ink 必须比 fill 深一档）。实测值随行标注。
+     亮色下 success / warning / danger 的 fill 本身已经能承载白字，solid 与之同值；
+     info 原值 4.55 贴线，solid 压到 #2D6EED 取 4.60 的余量。 */
+  --oui-color-success: #0B7A55;
+  --oui-color-success-solid: #0B7A55;  --oui-color-success-solid-hover: #0A704E;  --oui-color-success-solid-active: #096949;
+  --oui-color-on-success: var(--oui-color-on-solid);
+  --oui-color-success-ink: #0A6F4C;    /* 白底 6.19 / 本色淡底 5.43 / 淡底叠 bg-subtle 5.03；白字 5.34 / 6.10 / 6.71 */
+  --oui-color-warning: #A9610B;
+  --oui-color-warning-solid: #A9610B;  --oui-color-warning-solid-hover: #9B590A;  --oui-color-warning-solid-active: #915309;
+  --oui-color-on-warning: var(--oui-color-on-solid);
+  --oui-color-warning-ink: #9F5B0B;    /* 白底 5.28 / 本色淡底 4.63；白字 4.77 / 5.49 / 6.10 */
+  --oui-color-danger: #CF3A34;
+  --oui-color-danger-solid: #CF3A34;   --oui-color-danger-solid-hover: #BE3530;   --oui-color-danger-solid-active: #B2322D;
+  --oui-color-on-danger: var(--oui-color-on-solid);
+  --oui-color-danger-ink: #B32E29;     /* 白底 6.29 / 本色淡底 5.43；白字 4.87 / 5.61 / 6.20 */
+  --oui-color-info: #2F6FED;
+  --oui-color-info-solid: #2D6EED;     --oui-color-info-solid-hover: #2965DA;     --oui-color-info-solid-active: #275FCC;
+  --oui-color-on-info: var(--oui-color-on-solid);
+  --oui-color-info-ink: #1B63ED;       /* 白底 5.18 / 本色淡底 4.56；白字 4.60 / 5.29 / 5.84 */
+
+  /* 中性角色的四件套（与上面的中性色同源，供组件统一取用）
+     中性色不参与白字规则：solid 档=角色色本身，文字色 on-neutral 跟随明暗反转。 */
   --oui-color-neutral: var(--oui-color-text);
   --oui-color-on-neutral: var(--oui-color-bg);
+  --oui-color-neutral-solid: var(--oui-color-neutral);
+  --oui-color-neutral-solid-hover: color-mix(in srgb, var(--oui-color-neutral) 92%, var(--oui-color-shade));
+  --oui-color-neutral-solid-active: color-mix(in srgb, var(--oui-color-neutral) 86%, var(--oui-color-shade));
   --oui-color-neutral-subtle: var(--oui-color-bg-muted);
   --oui-color-neutral-border: var(--oui-color-border-strong);
 
@@ -74,14 +98,20 @@
   --oui-color-info-subtle: color-mix(in srgb, var(--oui-color-info) 10%, transparent);
   --oui-color-info-border: color-mix(in srgb, var(--oui-color-info) 32%, transparent);
 
-  /* 装饰色上的字：比纯墨浅一档的 #201D30 —— 最紧的品红底 4.69:1，仍过 AA */
-  --oui-color-on-accent: #201D30;
+  /* 装饰色上的字：0.2.0 起与实心字同源（装饰色也补了 solid 档） */
+  --oui-color-on-accent: var(--oui-color-on-solid);
 
-  /* ---- 5. 装饰图标色（唯一允许出现彩色的地方，只给 16px 图标用） ---- */
+  /* ---- 5. 装饰色（亮） · fill 给 16px 图标，solid 给头像/标签的实心底 ----
+     fill 是亮色，压白字只有 2.02–3.50，所以实心底必须换成 solid 档（4.63–4.65）。
+     改头像回退底色会改变观感：这是「白字」的必然代价，比把 12px 小字压成墨色更统一。 */
   --oui-accent-cyan: #54C1FA;
   --oui-accent-teal: #2FB3A1;
   --oui-accent-amber: #F5A524;
   --oui-accent-magenta: #E056A0;
+  --oui-accent-cyan-solid: #057BB9;     --oui-accent-cyan-solid-hover: #0571AA;     --oui-accent-cyan-solid-active: #046A9F;     /* 白字 4.63 / 5.32 / 5.89 */
+  --oui-accent-teal-solid: #228275;     --oui-accent-teal-solid-hover: #1F786C;     --oui-accent-teal-solid-active: #1D7065;     /* 白字 4.65 / 5.30 / 5.90 */
+  --oui-accent-amber-solid: #A46808;    --oui-accent-amber-solid-hover: #976007;    --oui-accent-amber-solid-active: #8D5907;    /* 白字 4.60 / 5.26 / 5.89 */
+  --oui-accent-magenta-solid: #D72886;  --oui-accent-magenta-solid-hover: #C6257B;  --oui-accent-magenta-solid-active: #B92273;  /* 白字 4.63 / 5.31 / 5.93 */
 
   /* ---- 6. 字体 ---- */
   --oui-font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -197,7 +227,9 @@
 
 /* ============================================================================
    3. 强调色 · 4 套主题（亮）
-   每套只改这 5 + 2 个值，其余全部由它们派生。切 data-oui-theme 时中性色不动。
+   每套改 primary / hover / active / solid 三档 / ink / 渐变副色。
+   solid 档的判据：白字 ≥4.5:1，取「刚好达标的最浅值」——所以它是这套主题里
+   唯一能承载白色文字的主色版本。切 data-oui-theme 时中性色不动。
    ========================================================================== */
 
 /* 默认主题 · 蜜橘（与库同名；未写 data-oui-theme 时也用它） */
@@ -206,7 +238,9 @@
   --oui-color-primary: #F26B21;
   --oui-color-primary-hover: #F15E0E;      /* 加深 8% */
   --oui-color-primary-active: #E0580D;     /* 再加深 6% */
-  --oui-color-on-primary: #232038;         /* 白字 3.04 ⊂ 不合格；墨色 5.17（hover 4.75） */
+  --oui-color-primary-solid: #C74F0A;      /* 白字 4.61（原色只有 3.04，spec 里算过的同一个值） */
+  --oui-color-primary-solid-hover: #B74909;  /* 5.29 */
+  --oui-color-primary-solid-active: #AB4409; /* 5.89 */
   --oui-color-primary-ink: #B8480A;        /* 白底 5.29 / primary 淡底 5.02 / 淡底 #FEF0E9 4.75 */
   --oui-gradient-brand-2: #FF9F45;
   --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
@@ -216,7 +250,9 @@
   --oui-color-primary: #624AFF;
   --oui-color-primary-hover: #5036FF;
   --oui-color-primary-active: #4124FF;
-  --oui-color-on-primary: #FFFFFF;         /* 5.33:1 */
+  --oui-color-primary-solid: #624AFF;      /* 白字 5.33：本身达标，不压深，保住品牌色 */
+  --oui-color-primary-solid-hover: #5A44EB;  /* 6.07 */
+  --oui-color-primary-solid-active: #5440DB; /* 6.70 */
   --oui-color-primary-ink: #624AFF;        /* 5.33:1 */
   --oui-gradient-brand-2: #816DF8;
   --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
@@ -226,7 +262,9 @@
   --oui-color-primary: #0E9384;
   --oui-color-primary-hover: #0C8073;
   --oui-color-primary-active: #0B7065;
-  --oui-color-on-primary: #1A1728;         /* 白字 3.80 ⊂ 不合格；墨色 4.62 */
+  --oui-color-primary-solid: #0C8376;      /* 白字 4.64（原色 3.80） */
+  --oui-color-primary-solid-hover: #0B796D;  /* 5.29 */
+  --oui-color-primary-solid-active: #0A7165; /* 5.89 */
   --oui-color-primary-ink: #0B786C;        /* 白底 5.36 / primary 淡底 5.09 */
   --oui-gradient-brand-2: #3DD4BE;
   --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
@@ -236,7 +274,9 @@
   --oui-color-primary: #E5446D;
   --oui-color-primary-hover: #E3325F;
   --oui-color-primary-active: #E02253;
-  --oui-color-on-primary: #181522;         /* 白字 3.90 ⊂ 不合格；墨色 4.60 */
+  --oui-color-primary-solid: #E02353;      /* 白字 4.63（原色 3.90） */
+  --oui-color-primary-solid-hover: #CE204C;  /* 5.34 */
+  --oui-color-primary-solid-active: #C11E47; /* 5.93 */
   --oui-color-primary-ink: #D01B49;        /* 白底 5.34 / primary 淡底 5.06 */
   --oui-gradient-brand-2: #FF8FA3;
   --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
@@ -244,6 +284,10 @@
 
 /* ============================================================================
    4. 深色配色（只覆盖中性色 + 语义色 + 浮层，强调色由主题继续持有）
+   ---- 关于实心档：深色下 solid 档不重新取值 ----
+   白字要的是「背景足够深」，与页面底色无关，所以 primary / 语义色 / 装饰色的 solid 三档
+   在原处（§2 §3 §5）定义一次，深色主题直接继承。深色块里变亮的是 fill 与 ink ——
+   它们负责描边、图标、文字，不是实心背景。on-* 因此统一指向 on-solid。
    ========================================================================== */
 [data-oui-scheme="dark"] {
   color-scheme: dark;
@@ -260,17 +304,17 @@
   --oui-color-text-inverse: #12131A;
   --oui-color-shade: #FFFFFF;              /* 深色下 hover 提亮而非压暗 */
 
-  --oui-color-success: #3DD68C;            /* 9.87:1 */
-  --oui-color-on-success: #201D30;
+  --oui-color-success: #3DD68C;            /* 9.87:1 · 给 ink / 图标 / 描边 / 状态点 */
+  --oui-color-on-success: var(--oui-color-on-solid);
   --oui-color-success-ink: var(--oui-color-success);
   --oui-color-warning: #F0A22E;            /* 8.74:1 */
-  --oui-color-on-warning: #201D30;
+  --oui-color-on-warning: var(--oui-color-on-solid);
   --oui-color-warning-ink: var(--oui-color-warning);
   --oui-color-danger: #F87171;             /* 6.70:1 */
-  --oui-color-on-danger: #201D30;
+  --oui-color-on-danger: var(--oui-color-on-solid);
   --oui-color-danger-ink: var(--oui-color-danger);
   --oui-color-info: #7CA9FF;               /* 7.92:1 */
-  --oui-color-on-info: #201D30;
+  --oui-color-on-info: var(--oui-color-on-solid);
   --oui-color-info-ink: var(--oui-color-info);
 
   --oui-shadow-sm: 0 1px 2px rgba(0, 0, 0, .40);
@@ -283,6 +327,7 @@
 
 /* ============================================================================
    5. 强调色 · 深色微调（hover/active 提亮；primary-ink 换成能在深底上读的亮色）
+   solid 的 hover/active 不在这里提亮：那两个档位仍要保证白字 ≥4.5:1，提亮会跌破红线。
    ========================================================================== */
 :root[data-oui-scheme="dark"],
 [data-oui-theme="orange"][data-oui-scheme="dark"] {
@@ -309,10 +354,15 @@
   --oui-color-primary-ink: #EA5A7E;        /* 深底 5.52 / bg-subtle 5.17（原 E5446D 在 bg-subtle 只有 4.44） */
 }
 
-/* 无障碍：减少动态偏好下关掉所有循环动画（骨架退化为静态灰块） */
+/* 无障碍：减少动态偏好下关掉装饰性动画（骨架退化为静态灰块、过渡归零）。
+   ---- 加载指示器是唯一例外 ----
+   spinner 在 reduce 下只降速（1.6s/圈），不停止：WCAG 2.2.2 要求超过 5 秒的等待必须有
+   持续反馈，冻住的转圈会让用户分不清「在加载」和「卡死了」。
+   0.1.x 这里写的是 0ms，叠加 base.css 里的 0.001ms !important，结果加载图标完全静止 ——
+   jsdom 不做动画、测不出来，所以 0.2.0 起由 spinner-motion.test.ts 静态守着。 */
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --oui-spin-duration: 0ms;
+    --oui-spin-duration: 1600ms;
     --oui-shimmer-duration: 0ms;
     --oui-duration-fast: 0ms;
     --oui-duration: 0ms;

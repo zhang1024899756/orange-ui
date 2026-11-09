@@ -30,65 +30,65 @@
   .oui-tag[data-color='neutral'] {
     --oui-tag-accent: var(--oui-color-neutral);
     --oui-tag-ink: var(--oui-color-text);
-    --oui-tag-solid-bg: var(--oui-color-neutral);
+    --oui-tag-solid-bg: var(--oui-color-neutral-solid);
     --oui-tag-solid-fg: var(--oui-color-on-neutral);
   }
 
   .oui-tag[data-color='primary'] {
     --oui-tag-accent: var(--oui-color-primary);
     --oui-tag-ink: var(--oui-color-primary-ink);
-    --oui-tag-solid-bg: var(--oui-color-primary);
-    --oui-tag-solid-fg: var(--oui-color-on-primary);
+    --oui-tag-solid-bg: var(--oui-color-primary-solid);
+    --oui-tag-solid-fg: var(--oui-color-on-solid);
   }
 
   .oui-tag[data-color='success'] {
     --oui-tag-accent: var(--oui-color-success);
     --oui-tag-ink: var(--oui-color-success-ink);
-    --oui-tag-solid-bg: var(--oui-color-success);
-    --oui-tag-solid-fg: var(--oui-color-on-success);
+    --oui-tag-solid-bg: var(--oui-color-success-solid);
+    --oui-tag-solid-fg: var(--oui-color-on-solid);
   }
 
   .oui-tag[data-color='warning'] {
     --oui-tag-accent: var(--oui-color-warning);
     --oui-tag-ink: var(--oui-color-warning-ink);
-    --oui-tag-solid-bg: var(--oui-color-warning);
-    --oui-tag-solid-fg: var(--oui-color-on-warning);
+    --oui-tag-solid-bg: var(--oui-color-warning-solid);
+    --oui-tag-solid-fg: var(--oui-color-on-solid);
   }
 
   .oui-tag[data-color='danger'] {
     --oui-tag-accent: var(--oui-color-danger);
     --oui-tag-ink: var(--oui-color-danger-ink);
-    --oui-tag-solid-bg: var(--oui-color-danger);
-    --oui-tag-solid-fg: var(--oui-color-on-danger);
+    --oui-tag-solid-bg: var(--oui-color-danger-solid);
+    --oui-tag-solid-fg: var(--oui-color-on-solid);
   }
 
   /* 装饰色：文字一律走中性色，强调只给图标与底色 —— 这样永远不会掉对比度 */
   .oui-tag[data-color='cyan'] {
     --oui-tag-accent: var(--oui-accent-cyan);
     --oui-tag-ink: var(--oui-color-text);
-    --oui-tag-solid-bg: var(--oui-accent-cyan);
-    --oui-tag-solid-fg: var(--oui-color-on-accent);
+    --oui-tag-solid-bg: var(--oui-accent-cyan-solid);
+    --oui-tag-solid-fg: var(--oui-color-on-solid);
   }
 
   .oui-tag[data-color='teal'] {
     --oui-tag-accent: var(--oui-accent-teal);
     --oui-tag-ink: var(--oui-color-text);
-    --oui-tag-solid-bg: var(--oui-accent-teal);
-    --oui-tag-solid-fg: var(--oui-color-on-accent);
+    --oui-tag-solid-bg: var(--oui-accent-teal-solid);
+    --oui-tag-solid-fg: var(--oui-color-on-solid);
   }
 
   .oui-tag[data-color='amber'] {
     --oui-tag-accent: var(--oui-accent-amber);
     --oui-tag-ink: var(--oui-color-text);
-    --oui-tag-solid-bg: var(--oui-accent-amber);
-    --oui-tag-solid-fg: var(--oui-color-on-accent);
+    --oui-tag-solid-bg: var(--oui-accent-amber-solid);
+    --oui-tag-solid-fg: var(--oui-color-on-solid);
   }
 
   .oui-tag[data-color='magenta'] {
     --oui-tag-accent: var(--oui-accent-magenta);
     --oui-tag-ink: var(--oui-color-text);
-    --oui-tag-solid-bg: var(--oui-accent-magenta);
-    --oui-tag-solid-fg: var(--oui-color-on-accent);
+    --oui-tag-solid-bg: var(--oui-accent-magenta-solid);
+    --oui-tag-solid-fg: var(--oui-color-on-solid);
   }
 
   /* ---------- 形态 ---------- */

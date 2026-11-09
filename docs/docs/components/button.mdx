@@ -50,6 +50,12 @@ import { Button } from '@arvinzxy/orange-ui';
   </div>
 </Demo>
 
+`solid` 的底色不是主色本身，而是「实心档」`--oui-color-primary-solid`——比品牌色再深一档、
+压白字刚好过 4.5:1 的那个值（orange `#C74F0A` 4.61 / teal `#0C8376` 4.64 /
+rose `#E02353` 4.63 / violet `#624AFF` 5.33——violet 本来就够，不压深）。
+所以实心按钮看起来比图标和描边里的品牌色深一点，**这是故意的，不是主题没生效**。
+取值与理由见 [设计变量](/design/tokens)。
+
 ## 角色色 color
 
 `color` 声明这个按钮代表哪种语义，不代表「我想让它变彩色」。
@@ -149,7 +155,9 @@ import { Button } from '@arvinzxy/orange-ui';
 - 加载态自动带 `aria-busy="true"`，并阻断点击
 - 纯图标按钮必须传 `aria-label`
 - 焦点环只在键盘操作时出现（`:focus-visible`），鼠标点击不出现
-- 实心按钮上的文字按主题色**自动取深墨或白色**，保证 ≥ 4.5:1
+- 实心按钮**恒白字**（`--oui-color-on-solid` = `#FFFFFF`）：字不随主题变，变的是底——
+  每套主题用实心档保证金白对比度 4.61–5.33:1。中性色是唯一例外：亮色深底白字（14.43:1）、
+  暗色浅底深字（16.71:1），因为白字压浅底物理上到不了 4.5:1
 
 ## API
 

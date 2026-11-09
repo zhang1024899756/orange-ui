@@ -40,9 +40,15 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :where(.oui-root) *,
-    :where(.oui-root) *::before,
-    :where(.oui-root) *::after {
+    /* 加载指示器不能被冻结 —— 这是 0.1.x 一个真实 bug 的现场：
+       下面这条 animation-duration: 0.001ms !important 会把 spinner 一起压平，
+       再叠加 tokens 里的 --oui-spin-duration: 0ms，加载图标就完全静止了。
+       jsdom 不做动画、单测测不出来，只能靠 spinner-motion.test.ts 静态守着。
+       WCAG 2.2.2 要求超过 5 秒的等待必须有持续反馈，所以 spinner / 图标旋转只降速（1.6s），
+       不进入这条压缩规则；其余装饰性动画照旧压平。 */
+    :where(.oui-root) :where(*:not(.oui-spinner-glyph):not(.oui-icon--spin)),
+    :where(.oui-root) :where(*::before),
+    :where(.oui-root) :where(*::after) {
       animation-duration: 0.001ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;

@@ -1,7 +1,7 @@
 @layer oui.components {
   .oui-badge {
-    --oui-badge-bg: var(--oui-color-primary);
-    --oui-badge-fg: var(--oui-color-on-primary);
+    --oui-badge-bg: var(--oui-color-primary-solid);
+    --oui-badge-fg: var(--oui-color-on-solid);
 
     position: relative;
     display: inline-flex;
@@ -11,27 +11,27 @@
 
   /* ---------- 角色色 ---------- */
   .oui-badge[data-color='primary'] {
-    --oui-badge-bg: var(--oui-color-primary);
-    --oui-badge-fg: var(--oui-color-on-primary);
+    --oui-badge-bg: var(--oui-color-primary-solid);
+    --oui-badge-fg: var(--oui-color-on-solid);
   }
 
   .oui-badge[data-color='success'] {
-    --oui-badge-bg: var(--oui-color-success);
-    --oui-badge-fg: var(--oui-color-on-success);
+    --oui-badge-bg: var(--oui-color-success-solid);
+    --oui-badge-fg: var(--oui-color-on-solid);
   }
 
   .oui-badge[data-color='warning'] {
-    --oui-badge-bg: var(--oui-color-warning);
-    --oui-badge-fg: var(--oui-color-on-warning);
+    --oui-badge-bg: var(--oui-color-warning-solid);
+    --oui-badge-fg: var(--oui-color-on-solid);
   }
 
   .oui-badge[data-color='danger'] {
-    --oui-badge-bg: var(--oui-color-danger);
-    --oui-badge-fg: var(--oui-color-on-danger);
+    --oui-badge-bg: var(--oui-color-danger-solid);
+    --oui-badge-fg: var(--oui-color-on-solid);
   }
 
   .oui-badge[data-color='neutral'] {
-    --oui-badge-bg: var(--oui-color-neutral);
+    --oui-badge-bg: var(--oui-color-neutral-solid);
     --oui-badge-fg: var(--oui-color-on-neutral);
   }
 

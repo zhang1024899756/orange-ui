@@ -11,12 +11,13 @@ sidebar_position: 3
 
 ## 对比度
 
-所有正文与控件文字都跑过 WCAG AA（4.5:1）。三处值得说明：
+所有正文与控件文字都跑过 WCAG AA（4.5:1）。四处值得说明：
 
 | 项 | 值 | 说明 |
 |---|---|---|
 | 三级文字 `--oui-color-text-tertiary` | `#6B6D8E` · 5.00:1 | 原始读数值 `#8284A4` 只有 3.63:1，我们抬了一档 |
 | 主色当文字 `--oui-color-primary-ink` | 各主题单独派生 | 主色本身当文字不够，必须用 `*-ink` |
+| 实心背景上的字 `--oui-color-on-solid` | `#FFFFFF` · 实心档 4.60–5.34:1 | 实心底只用 `*-solid` 档：品牌色原色压白字只有 3.04–3.90 |
 | 禁用态 | `--oui-color-text-disabled` | **不参与检查**——WCAG 1.4.3 明确豁免禁用控件 |
 
 ## 焦点
@@ -57,8 +58,18 @@ sidebar_position: 3
 `prefers-reduced-motion: reduce` 下：
 
 - 骨架屏扫光 → 静态灰块
-- 过渡与动画时长 → 0.001ms
-- **转圈放慢但不停**（完全静止会被误读成卡死）
+- 过渡与装饰动画时长 → 0.001ms
+- **加载指示器是唯一例外：只降速，不停止**——转圈从 0.8s/圈降到 **1.6s/圈**，仍在转
+
+为什么不停：WCAG 2.2.2（Pause, Stop, Hide）针对的是自动更新内容本身，而「超过 5 秒的等待若
+没有任何持续反馈，用户分不清是在加载还是已经卡死」是同一个问题。两条摆在一起，加载转圈只能二选一：
+停（得罪 2.2.2 的实践意图与用户判断）或降速（照顾前庭敏感用户）。我们选降速——
+半速转圈既不制造闪烁，也保住「它还活着」这个信号。
+
+0.1.x 在这里是有 bug 的：`tokens.css` 把 `--oui-spin-duration` 写成 0ms，又叠加层叠里
+`animation-duration: 0.001ms !important` 的全局压缩，加载图标其实完全静止。jsdom 不做动画、
+单测测不出来，所以 0.2.0 起由 `spinner-motion.test.ts` 静态守着：tokens 的降速值、
+spinner 样式里的 `oui-spin`、以及 base.css 用 `:not(.oui-spinner-glyph)` 把它排除在压缩规则外。
 
 ## 测试
 
@@ -74,6 +85,6 @@ axe 只能覆盖「机械可判定」的规则（角色、标签、对比度）�
 
 ## 不支持
 
-- **不支持 IE**：CSS 用了 `color-mix()`、`:where()`、```layer`，IE 一个都不支持
+- **不支持 IE**：CSS 用了 `color-mix()`、`:where()`、`@layer`，IE 一个都不支持
 - **不做 RTL**：目前没有 `dir="rtl"` 适配
 - **不做高对比度模式**（`forced-colors`）特殊样式

@@ -1,8 +1,8 @@
 @layer oui.components {
   .oui-avatar {
     --oui-avatar-size: var(--oui-avatar-md);
-    --oui-avatar-bg: var(--oui-accent-cyan);
-    --oui-avatar-fg: var(--oui-color-on-accent);
+    --oui-avatar-bg: var(--oui-accent-cyan-solid);
+    --oui-avatar-fg: var(--oui-color-on-solid);
 
     position: relative;
     display: inline-flex;
@@ -44,26 +44,28 @@
     border-radius: var(--oui-radius-md);
   }
 
-  /* ---------- 6 档回退底色：4 个装饰色 + 2 档中性色 ---------- */
+  /* ---------- 6 档回退底色：4 个装饰 solid 档 + 2 档中性色 ----------
+     0.2.0 起装饰色底一律用 *-solid（白字 4.60–4.65）：装饰 fill 是亮色，压白字只有 2.02–3.50。
+     tone 4 是中性档，按明暗反转（亮色深底白字 / 暗色浅底深字）——白字压浅底不可能达标。 */
   .oui-avatar[data-tone='0'] {
-    --oui-avatar-bg: var(--oui-accent-cyan);
+    --oui-avatar-bg: var(--oui-accent-cyan-solid);
   }
 
   .oui-avatar[data-tone='1'] {
-    --oui-avatar-bg: var(--oui-accent-teal);
+    --oui-avatar-bg: var(--oui-accent-teal-solid);
   }
 
   .oui-avatar[data-tone='2'] {
-    --oui-avatar-bg: var(--oui-accent-amber);
+    --oui-avatar-bg: var(--oui-accent-amber-solid);
   }
 
   .oui-avatar[data-tone='3'] {
-    --oui-avatar-bg: var(--oui-accent-magenta);
+    --oui-avatar-bg: var(--oui-accent-magenta-solid);
   }
 
   .oui-avatar[data-tone='4'] {
-    --oui-avatar-bg: var(--oui-color-text-secondary);
-    --oui-avatar-fg: var(--oui-color-text-inverse);
+    --oui-avatar-bg: var(--oui-color-neutral-solid);
+    --oui-avatar-fg: var(--oui-color-on-neutral);
   }
 
   .oui-avatar[data-tone='5'] {

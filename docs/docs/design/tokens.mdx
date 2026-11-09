@@ -43,11 +43,14 @@ computed style，不是凭感觉调的），再用 WCAG 对比度公式校过一
 
 <div className="oui-swatches">
   <Swatch name="--oui-color-primary" value="随主题" usage="主按钮、选中态、进度" />
-  <Swatch name="--oui-color-primary-hover" value="混 8% 黑" usage="hover" />
-  <Swatch name="--oui-color-primary-active" value="混 14% 黑" usage="按下（仍 ≥4.5:1 的最深一档）" />
+  <Swatch name="--oui-color-primary-hover" value="混 8% 黑" usage="fill 层 hover（描边/浅底用）" />
+  <Swatch name="--oui-color-primary-active" value="混 14% 黑" usage="fill 层按下" />
+  <Swatch name="--oui-color-primary-solid" value="随主题" usage="实心按钮/徽章/标签的底（白字 ≥4.5:1）" />
+  <Swatch name="--oui-color-primary-solid-hover" value="逐档写死" usage="实心档 hover" />
+  <Swatch name="--oui-color-primary-solid-active" value="逐档写死" usage="实心档按下" />
+  <Swatch name="--oui-color-on-solid" value="#FFFFFF" usage="实心背景上的字——全库唯一取值" />
   <Swatch name="--oui-color-primary-subtle" value="10% 透明" usage="浅底/选中底" checker />
   <Swatch name="--oui-color-primary-border" value="32% 透明" usage="描边/焦点环" checker />
-  <Swatch name="--oui-color-on-primary" value="按对比度自动取" usage="主色上的字" />
   <Swatch name="--oui-color-primary-ink" value="随主题" usage="主色当文字用" />
   <Swatch name="--oui-color-success" usage="成功" />
   <Swatch name="--oui-color-warning" usage="警告" />
@@ -62,9 +65,51 @@ computed style，不是凭感觉调的），再用 WCAG 对比度公式校过一
   <Tag color="primary">标签</Tag>
 </Demo>
 
+## 实心档：为什么按钮要比品牌色深一档
+
+白字是硬要求，而品牌色压白字过不了 AA：蜜橘 `#F26B21` 只有 **3.04:1**、青屿 `#0E9384` 3.80、
+珊瑚 `#E5446D` 3.90。0.1.x 的解法是把字换成墨色；0.2.0 改成**把底压深一档**——
+每个角色因此多出一条「实心档」（`*-solid` / `-solid-hover` / `-solid-active`），
+取值一律是「白色文字刚好 ≥4.5:1 的最浅一档」。压深多少不是审美：下面每一个数字都是算出来的。
+
+所以 0.2.0 起颜色分成两层：
+
+| 层 | 变量 | 用在哪 |
+|---|---|---|
+| fill | `--oui-color-primary` / `--oui-color-success` … | 描边、16px 图标、焦点环、10% 浅底、渐变副色、状态点 |
+| solid | `--oui-color-primary-solid` … `-solid-hover` / `-solid-active` | 所有**实心背景**：solid 按钮、徽章、solid 标签、头像回退底 |
+| 字 | `--oui-color-on-solid` = `#FFFFFF` | 实心背景上的字，**全库唯一取值** |
+
+| 角色 | solid（白字） | solid-hover | solid-active |
+|---|---|---|---|
+| primary · orange 蜜橘 | `#C74F0A` · 4.61 | `#B74909` · 5.29 | `#AB4409` · 5.89 |
+| primary · violet 紫罗兰 | `#624AFF` · 5.33 | `#5A44EB` · 6.07 | `#5440DB` · 6.70 |
+| primary · teal 青屿 | `#0C8376` · 4.64 | `#0B796D` · 5.29 | `#0A7165` · 5.89 |
+| primary · rose 珊瑚 | `#E02353` · 4.63 | `#CE204C` · 5.34 | `#C11E47` · 5.93 |
+| success | `#0B7A55` · 5.34 | `#0A704E` · 6.10 | `#096949` · 6.71 |
+| warning | `#A9610B` · 4.77 | `#9B590A` · 5.49 | `#915309` · 6.10 |
+| danger | `#CF3A34` · 4.87 | `#BE3530` · 5.61 | `#B2322D` · 6.20 |
+| info | `#2D6EED` · 4.60 | `#2965DA` · 5.29 | `#275FCC` · 5.84 |
+| accent · cyan | `#057BB9` · 4.63 | `#0571AA` · 5.32 | `#046A9F` · 5.89 |
+| accent · teal | `#228275` · 4.65 | `#1F786C` · 5.30 | `#1D7065` · 5.90 |
+| accent · amber | `#A46808` · 4.60 | `#976007` · 5.26 | `#8D5907` · 5.89 |
+| accent · magenta | `#D72886` · 4.63 | `#C6257B` · 5.31 | `#B92273` · 5.93 |
+
+四条附带的规则，省得你到处找：
+
+- **violet 没被压深**。`#624AFF` 压白字本来就有 5.33，实心档直接用原色——它是 4 套主题里唯一不需要
+  为白字让步的品牌色。
+- **深色方案下 solid 三档不再重新取值**。白字要的是「背景足够深」，跟页面底色无关；深色变亮的是
+  fill 与 ink（它们负责描边、图标、文字），`on-*` 因此统一指向 `on-solid`。
+- **中性色是唯一例外**。黑白按钮/徽章没有「压深」的余地：亮色用深底白字（`#27254C` 底，14.43:1），
+  暗色反转成浅底深字（`#F2F3F8` 底 + `#12131A` 字，16.71:1）。白字压浅底物理上不可能到 4.5:1，
+  所以这一档由 `--oui-color-on-neutral` 跟随明暗反转，实心底仍是 `--oui-color-neutral-solid`。
+- **`--oui-color-on-primary` 现在只是 `--oui-color-on-solid` 的别名**（`#FFFFFF`），留给只关心
+  主色的旧代码；新代码直接用 `on-solid`。
+
 ## 装饰图标色（唯一允许出现彩色的地方）
 
-只给 16px 图标用，**不进文字、不进大色块**。这是「活泼」的全部预算：
+fill 那一档只给 16px 图标用，**不进文字**。这是「活泼」的全部预算：
 
 <div className="oui-swatches">
   <Swatch name="--oui-accent-cyan" value="#54C1FA" usage="文本生成" />
@@ -72,6 +117,19 @@ computed style，不是凭感觉调的），再用 WCAG 对比度公式校过一
   <Swatch name="--oui-accent-amber" value="#F5A524" usage="图像生成" />
   <Swatch name="--oui-accent-magenta" value="#E056A0" usage="语音合成" />
 </div>
+
+装饰色也要承担实心底（头像回退底色、solid 标签），所以同样有一条 solid 档。
+fill 是亮色，压白字只有 2.02–3.50，实心底必须换这一层：
+
+<div className="oui-swatches">
+  <Swatch name="--oui-accent-cyan-solid" value="#057BB9 · 4.63" usage="头像 tone 0" />
+  <Swatch name="--oui-accent-teal-solid" value="#228275 · 4.65" usage="头像 tone 1" />
+  <Swatch name="--oui-accent-amber-solid" value="#A46808 · 4.60" usage="头像 tone 2" />
+  <Swatch name="--oui-accent-magenta-solid" value="#D72886 · 4.63" usage="头像 tone 3" />
+</div>
+
+> 把头像回退底色从亮装饰色换成 solid 档，观感确实变深了：这是「白字」的必然代价，
+> 比把 12px 的小字压成墨色更统一——一个小色块里的字和一个按钮上的字，应该是同一种白。
 
 ## 圆角
 
@@ -161,8 +219,11 @@ computed style，不是凭感觉调的），再用 WCAG 对比度公式校过一
 
 `--oui-duration-fast 120ms` / `--oui-duration 200ms` / `--oui-ease cubic-bezier(.2,.8,.2,1)`。
 
-骨架屏扫光 1.4s；按钮 loading 转圈 0.8s linear；**`prefers-reduced-motion: reduce` 下全部关闭**
-（骨架退化为静态灰块，转圈放慢但不停——完全静止会被误读成卡死）。
+骨架屏扫光 1.4s；按钮 loading 转圈 `--oui-spin-duration` 0.8s linear。
+
+`prefers-reduced-motion: reduce` 下**装饰性动效全部关掉**（扫光变静态灰块、过渡归零），
+但**加载指示器是唯一例外：只降速到 1.6s/圈，不停止**。这不是宽容，是 WCAG 2.2.2 的要求——
+超过 5 秒的等待必须有持续反馈，冻住的转圈会让用户分不清「在加载」和「卡死了」。
 
 ## 换一组值，就换一个站点人格
 

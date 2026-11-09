@@ -6,6 +6,27 @@ sidebar_position: 9
 
 # 更新日志
 
+## 0.2.0 — 2026-11-09
+
+**白字实心体系**：实心背景上的字统一为白色 `--oui-color-on-solid`（`#FFFFFF`，全库唯一取值）。
+为了让白字过 AA，颜色分成 **fill / solid 两层**：每个角色多一条实心档
+（`--oui-color-<role>-solid` / `-solid-hover` / `-solid-active`），逐档压到「白字刚好 ≥4.5:1 的最浅值」——
+orange `#C74F0A` 4.61、teal `#0C8376` 4.64、rose `#E02353` 4.63；violet `#624AFF` 本身 5.33，直接用原色。
+`--oui-color-<role>` 退回 fill 层（描边、图标、焦点环、10% 浅底、渐变副色），`-ink` 继续负责文本级用法，
+`--oui-color-on-primary` 变成 `on-solid` 的别名。中性色（黑/白）是例外：
+亮色深底白字、暗色浅底深字，文字色由 `--oui-color-on-neutral` 跟随明暗反转。
+
+**徽章与头像**：Badge 的主题色底、Avatar 六档回退底色的前四档改用 `*-solid` 实心档（白字 4.60–4.65）；
+Avatar Tone 4 走中性档（按明暗反转）、Tone 5 保持弱化档；`Tag` 的 `solid` 形态同步恒白字。
+
+**加载动效**：`prefers-reduced-motion: reduce` 下 spinner 不再冻结，改为降速 **1.6s/圈**。
+0.1.x 的 `--oui-spin-duration: 0ms` 叠加 `animation-duration: 0.001ms !important` 会把加载图标压成完全静止
+（jsdom 不做动画，单测测不出来）；现在 base.css 用 `:not(.oui-spinner-glyph)` 把它排除在压缩规则外，
+并由 `spinner-motion.test.ts` 静态守着 —— 超过 5 秒的等待必须有持续反馈（WCAG 2.2.2）。
+
+**升级注意**：自定义品牌色现在要同时给 `--oui-color-primary-solid`，否则实心按钮会沿用默认主题的实心档
+（CSS 无法从品牌色反解出「白字达标」的那一档）。解法见 [主题定制](/guide/theming)。
+
 ## 0.1.0 — 2026-11-09
 
 第一个版本。

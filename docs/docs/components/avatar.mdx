@@ -16,6 +16,14 @@ import { PropsTable } from '@site/src/components/PropsTable';
 实现是三件套：`<img>`（`onError` 自动回退）、首字母（按名字哈希到 6 档底色，**同一个人每次都是同一个颜色**）、
 以及没有名字时的 user 图标。读屏始终能拿到完整名字：首字母本身 `aria-hidden`，完整名字放在 `.oui-sr-only` 里。
 
+:::note 六档底色：四深两浅
+名字哈希到 6 档，其中 **tone 0–3 是四个装饰色的实心档**（`--oui-accent-*-solid`，白字 4.60–4.65）；
+**tone 4 是中性档**，亮色深底白字、暗色浅底深字（`--oui-color-on-neutral` 跟随明暗反转）；
+**tone 5 是弱化档**，底色取 `--oui-color-bg-muted`、字用正文色。
+0.2.0 把前四档从亮装饰色换成了实心档——白字压在 `#54C1FA` 上只有 2.02:1，读不出来。
+代价是头像比以前深一档，我们用「同一个色块里的字和按钮上的字是同一种白」换它。
+:::
+
 ```tsx
 import { Avatar, AvatarGroup } from '@arvinzxy/orange-ui';
 ```
@@ -173,6 +181,8 @@ export const SAMPLE_SRC = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 - 状态点本身 `aria-hidden`，状态通过一句隐藏文本表达——**不靠颜色单独传递信息**
 - 头像组是 `role="group"`，默认读屏名「共 N 位成员」；`+N` 气泡是纯视觉（`aria-hidden`）
 - 头像是识别物，不参与 Tab 序列；需要点击时用外面包一层真正的按钮或链接
+- 回退底色走实心档，首字母白字对比度 4.60–4.65:1（中性档 14.43:1，暗色反转 16.71:1）——
+  首字母是**文字**不是装饰，它和按钮上的白字用同一个 `--oui-color-on-solid`
 
 ## API
 

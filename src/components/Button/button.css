@@ -67,19 +67,19 @@
 
   /* ---------- 角色色：一套变量，五种形态共用 ---------- */
   .oui-button[data-color='primary'] {
-    --oui-btn-solid-bg: var(--oui-color-primary);
-    --oui-btn-solid-bg-hover: var(--oui-color-primary-hover);
-    --oui-btn-solid-bg-active: var(--oui-color-primary-active);
-    --oui-btn-solid-fg: var(--oui-color-on-primary);
+    --oui-btn-solid-bg: var(--oui-color-primary-solid);
+    --oui-btn-solid-bg-hover: var(--oui-color-primary-solid-hover);
+    --oui-btn-solid-bg-active: var(--oui-color-primary-solid-active);
+    --oui-btn-solid-fg: var(--oui-color-on-solid);
     --oui-btn-ink: var(--oui-color-primary-ink);
     --oui-btn-subtle: var(--oui-color-primary-subtle);
     --oui-btn-border: var(--oui-color-primary-border);
   }
 
   .oui-button[data-color='neutral'] {
-    --oui-btn-solid-bg: var(--oui-color-neutral);
-    --oui-btn-solid-bg-hover: color-mix(in srgb, var(--oui-color-neutral) 88%, var(--oui-color-shade));
-    --oui-btn-solid-bg-active: color-mix(in srgb, var(--oui-color-neutral) 78%, var(--oui-color-shade));
+    --oui-btn-solid-bg: var(--oui-color-neutral-solid);
+    --oui-btn-solid-bg-hover: var(--oui-color-neutral-solid-hover);
+    --oui-btn-solid-bg-active: var(--oui-color-neutral-solid-active);
     --oui-btn-solid-fg: var(--oui-color-on-neutral);
     --oui-btn-ink: var(--oui-color-text);
     --oui-btn-subtle: var(--oui-color-neutral-subtle);
@@ -87,30 +87,30 @@
   }
 
   .oui-button[data-color='success'] {
-    --oui-btn-solid-bg: var(--oui-color-success);
-    --oui-btn-solid-bg-hover: color-mix(in srgb, var(--oui-color-success) 92%, var(--oui-color-shade));
-    --oui-btn-solid-bg-active: color-mix(in srgb, var(--oui-color-success) 86%, var(--oui-color-shade));
-    --oui-btn-solid-fg: var(--oui-color-on-success);
+    --oui-btn-solid-bg: var(--oui-color-success-solid);
+    --oui-btn-solid-bg-hover: var(--oui-color-success-solid-hover);
+    --oui-btn-solid-bg-active: var(--oui-color-success-solid-active);
+    --oui-btn-solid-fg: var(--oui-color-on-solid);
     --oui-btn-ink: var(--oui-color-success-ink);
     --oui-btn-subtle: var(--oui-color-success-subtle);
     --oui-btn-border: var(--oui-color-success-border);
   }
 
   .oui-button[data-color='warning'] {
-    --oui-btn-solid-bg: var(--oui-color-warning);
-    --oui-btn-solid-bg-hover: color-mix(in srgb, var(--oui-color-warning) 92%, var(--oui-color-shade));
-    --oui-btn-solid-bg-active: color-mix(in srgb, var(--oui-color-warning) 86%, var(--oui-color-shade));
-    --oui-btn-solid-fg: var(--oui-color-on-warning);
+    --oui-btn-solid-bg: var(--oui-color-warning-solid);
+    --oui-btn-solid-bg-hover: var(--oui-color-warning-solid-hover);
+    --oui-btn-solid-bg-active: var(--oui-color-warning-solid-active);
+    --oui-btn-solid-fg: var(--oui-color-on-solid);
     --oui-btn-ink: var(--oui-color-warning-ink);
     --oui-btn-subtle: var(--oui-color-warning-subtle);
     --oui-btn-border: var(--oui-color-warning-border);
   }
 
   .oui-button[data-color='danger'] {
-    --oui-btn-solid-bg: var(--oui-color-danger);
-    --oui-btn-solid-bg-hover: color-mix(in srgb, var(--oui-color-danger) 92%, var(--oui-color-shade));
-    --oui-btn-solid-bg-active: color-mix(in srgb, var(--oui-color-danger) 86%, var(--oui-color-shade));
-    --oui-btn-solid-fg: var(--oui-color-on-danger);
+    --oui-btn-solid-bg: var(--oui-color-danger-solid);
+    --oui-btn-solid-bg-hover: var(--oui-color-danger-solid-hover);
+    --oui-btn-solid-bg-active: var(--oui-color-danger-solid-active);
+    --oui-btn-solid-fg: var(--oui-color-on-solid);
     --oui-btn-ink: var(--oui-color-danger-ink);
     --oui-btn-subtle: var(--oui-color-danger-subtle);
     --oui-btn-border: var(--oui-color-danger-border);

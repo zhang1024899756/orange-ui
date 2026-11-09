@@ -12,6 +12,9 @@
     }
   }
 
+  /* 减少动态偏好下只降速、不停止：loading 是状态指示器，不是装饰（WCAG 2.2.2）。
+     0.1.x 这里被 base.css 的 0.001ms !important 完全覆盖，等于从未生效；
+     0.2.0 起 base.css 显式排除 .oui-spinner-glyph，这条才真正接管。 */
   @media (prefers-reduced-motion: reduce) {
     .oui-spinner-glyph {
       animation-duration: 1.6s;

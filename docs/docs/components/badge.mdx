@@ -104,6 +104,12 @@ import { PropsTable } from '@site/src/components/PropsTable';
 五种角色色（和 [Button](/components/button) 的 color 同一套语义）；两档尺寸：`sm` 16px（默认）、`md` 24px。
 `offset` 是相对右上角的微调，单位 px——只用来避让，不要拿它排版。
 
+徽章的文字**恒白**（`--oui-color-on-solid`），底色走 `*-solid` 实心档：数字只有 10–11px，
+压在品牌色原色上（orange 只有 3.04:1）根本读不出来，所以底色必须比品牌色深一档
+（primary 4.61 / success 5.34 / warning 4.77 / danger 4.87）。中性徽章是例外：
+亮色深底白字（14.43:1），暗色浅底深字（16.71:1）——白字压浅底到不了 4.5:1。
+所以「徽章色比图标色深」是设计决定，不是主题错位，取值见 [设计变量](/design/tokens)。
+
 <Demo>
   <Badge count={1} color="primary" />
   <Badge count={2} color="neutral" />
@@ -131,6 +137,8 @@ import { PropsTable } from '@site/src/components/PropsTable';
 - 文字徽章（`NEW`）**不套 `role="img"`**：文案本身可读，多套一层反而会被念两遍
 - 气泡是 `pointer-events: none`：点击穿透到被标注的元素上，不会出现「点了红点没反应」
 - 气泡边缘有一圈 `box-shadow` 描边（等于底色），压在任何背景上都能分出边界
+- 文字恒白、底色走实心档，白字对比度 4.60–5.34:1（中性徽章按明暗反转）；
+  这是数字能被读出来的前提，不要用自定义背景色绕开它
 - **不要只用颜色表达状态**：dot 的含义必须由 `label` 或旁边文字承担，色盲用户看不到「红」
 
 ## API

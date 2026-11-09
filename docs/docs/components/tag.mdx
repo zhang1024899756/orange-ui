@@ -14,7 +14,8 @@ import { PropsTable } from '@site/src/components/PropsTable';
 超过六个字，就该换成一句说明或者一张卡片。
 
 它也是这套设计里**少数允许出现彩色**的地方之一——但彩色只给 16px 的图标和底色，
-文字永远走中性色或 ink 档，这样换成任何主题都不会掉对比度。
+`subtle` / `outlined` 的文字走中性色或 ink 档，换成任何主题都不会掉对比度。
+`solid` 形态是另一套规则：底色换成实心档，文字与图标一起改用白字（`--oui-color-on-solid`）。
 
 ## 基础用法
 
@@ -91,7 +92,7 @@ import { PropsTable } from '@site/src/components/PropsTable';
 ## 带图标
 
 `icon` 是唯一允许「上色」的位置：传一个 16px 的 [Icon](/components/icon)，它会拿到当前标签的角色色；
-`solid` 形态下自动反白，不需要你手动改颜色。
+`solid` 形态下图标与文字一起换成白字（`--oui-color-on-solid`），不需要你手动改颜色。
 
 <Demo>
   <Tag icon={<Icon name="check-circle" size={16} />} color="success">已通过</Tag>
@@ -156,7 +157,9 @@ HTML 不允许嵌套交互元素。需要既能选中又能删除时，把删除
 
 - 可点击标签渲染成 `<button type="button">`，天然可 Tab 聚焦、可回车触发，并带 `aria-pressed` 表示是否选中
 - **选中态不只靠颜色**：还有对勾图标，色盲用户与灰度截图都能看出选中
-- `solid` 形态的文字色来自 `--oui-color-on-*`（按主题解算，白字/深墨自动选，≥ 4.5:1）；四种装饰色上的文字走中性色 token，永不掉对比度
+- `solid` 形态的文字与图标**恒白**（`--oui-color-on-solid`），底色走 `*-solid` 实心档，白字对比度 4.60–5.34:1；
+  `subtle` / `outlined` 的文字走 `*-ink` 或中性色 token，不受实心底影响
+- 中性色的 solid 是唯一例外：亮色深底白字（14.43:1）、暗色浅底深字（16.71:1）——白字压浅底到不了 4.5:1
 - 关闭按钮有 `aria-label`（「移除 xxx」），视觉 12px、命中区 24×24
 - `disabled` 时关闭按钮同时禁用，键盘与鼠标都无法触发
 - 标签文字保持简短：读屏会把每个标签都念一遍，十个长句会毁掉整页的可听读性

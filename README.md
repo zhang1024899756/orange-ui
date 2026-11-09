@@ -100,14 +100,19 @@ if(t)document.documentElement.setAttribute('data-oui-scheme',t);}catch(e){}})();
 2. **静态卡片零阴影**，只有浮层（Dialog / Tooltip）有阴影；分组靠间距和 1px 边框。
 3. **字号只有 6 档**（12/14/16/20/24/32），需要强调就换字重或换色，不出现第 7 个字号。
 
-对比度按 WCAG AA 校准：三级文字色 `#6B6D8E`（白底 5.00:1）、主色作为文字用 `--oui-color-primary-ink`（5.29:1）、亮色底上的文字按主题自动取墨色（每套各自解到仍是 ≥4.5:1 的最浅一档，orange 主题 5.17:1）。禁用态不参与对比度要求（WCAG 1.4.3 豁免），但命中区按 WCAG 2.5.8 用伪元素扩到 24×24。
+对比度按 WCAG AA 校准：三级文字色 `#6B6D8E`（白底 5.00:1）、主色作为文字用 `--oui-color-primary-ink`（5.29:1）、
+**实心背景上的字恒白**（`--oui-color-on-solid` = `#FFFFFF`）——为此每个角色配一条实心档，压到「白字刚好过线」的最浅值
+（orange `#C74F0A` 4.61、teal `#0C8376` 4.64、rose `#E02353` 4.63、violet `#624AFF` 5.33 本身达标）。
+中性色是例外：亮色深底白字（14.43:1）、暗色浅底深字（16.71:1）。
+禁用态不参与对比度要求（WCAG 1.4.3 豁免），但命中区按 WCAG 2.5.8 用伪元素扩到 24×24。
 
 ## 无障碍
 
 - 每个组件都有 `jest-axe` 零违规断言
 - 键盘可达：Tag 的 chip、Switch、Slider（←/→/Home/End）、Dialog（焦点陷阱 + ESC）、Tooltip（focus 也显示）
 - 焦点环只用 `:focus-visible`，不干扰鼠标用户
-- `prefers-reduced-motion: reduce` 下关闭所有动效，骨架屏退化为静态灰块
+- `prefers-reduced-motion: reduce` 下关闭装饰性动效（骨架屏退化为静态灰块、过渡归零）；
+  **加载指示器是唯一例外**，只降速到 1.6s/圈 —— 超过 5 秒的等待必须有持续反馈（WCAG 2.2.2）
 
 ## 文档站
 
