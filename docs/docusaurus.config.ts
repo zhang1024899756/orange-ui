@@ -20,6 +20,31 @@ const config: Config = {
   organizationName: 'zhang1024899756',
   projectName: 'orange-ui',
   trailingSlash: false,
+
+  // 主题选择要跨页面、跨刷新活下来。必须在首屏绘制前把属性写回 <html>，
+  // 否则每次跳转都会先闪一下橙色再变成你选的主题。
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: { 'data-oui-theme-restore': 'v1' },
+      innerHTML: [
+        '(function () {',
+        '  try {',
+        "    var raw = localStorage.getItem('orange-ui-docs-theme');",
+        '    if (!raw) return;',
+        '    var t = JSON.parse(raw) || {};',
+        "    var theme = t.theme || 'orange';",
+        "    var scheme = t.scheme === 'dark' ? 'dark' : 'light';",
+        '    var h = document.documentElement;',
+        "    h.setAttribute('data-oui-theme', theme);",
+        "    h.setAttribute('data-oui-scheme', scheme);",
+        "    h.setAttribute('data-theme', scheme);",
+        '  } catch (e) {}',
+        '})();',
+      ].join('\n'),
+    },
+  ],
+
   onBrokenLinks: 'warn',
   i18n: { defaultLocale: 'zh-Hans', locales: ['zh-Hans'] },
   markdown: { format: 'mdx', hooks: { onBrokenMarkdownLinks: 'warn' } },
