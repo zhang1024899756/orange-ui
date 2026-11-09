@@ -133,9 +133,6 @@ export default function Home() {
     <Layout title="Orange UI" description="20 个元素组件 · 4 套可切换主题 · 零运行时依赖">
       <main className="oui-home">
         <section className="oui-hero">
-          <div className="oui-hero__kicker">
-            <span aria-hidden="true">●</span> React 19 · 20 个元素组件 · 4 套主题
-          </div>
           <h1 className="oui-hero__title">
             为「信息密集但仍要有温度」的界面，<em>造一套组件</em>
           </h1>
