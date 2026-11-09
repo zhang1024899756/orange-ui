@@ -1,0 +1,168 @@
+---
+title: 设计变量
+description: 颜色、圆角、间距、阴影、动效的全部取值——每一个都有依据。
+sidebar_position: 2
+---
+
+import { Swatch } from '@site/src/components/Swatch';
+import { Demo } from '@site/src/components/Demo';
+import { Button, Tag } from '@arvinzxy/orange-ui';
+
+# 设计变量
+
+这套 token 不是拍脑袋定的：**中性色、字号、圆角、间距全部来自对参照站（ModelScope 魔搭社区）的实测**，
+再用 WCAG 对比度公式校过一遍。所有变量都在 `tokens.css` 里，一个文件就是主题的全部接口。
+
+## 中性色（6 档，所有主题共用）
+
+从页面底到最深一档文字，同一色相（240° 带 4% 紫调）。**换主题时它们不变**——
+变的是下面的强调色，中性色是骨架。
+
+> 色块显示的是**当前主题下的实际颜色**，文字里的 hex 是亮色主题的值（暗色主题另有一套，见 `tokens.css` 的 `[data-oui-scheme='dark']` 段）。
+> 右边那个"60%"的说明不是随手写的：每档都标了它压在白底上的对比度。
+
+<div className="oui-swatches">
+  <Swatch name="--oui-color-bg" value="#FFFFFF" usage="页面/卡片底" />
+  <Swatch name="--oui-color-bg-subtle" value="#F7F9FD" usage="次级底、输入框填充" />
+  <Swatch name="--oui-color-bg-muted" value="#EFF2F9" usage="hover 底、三段底" />
+  <Swatch name="--oui-color-border" value="#ECEFF6" usage="1px 分隔线" />
+  <Swatch name="--oui-color-border-strong" value="#DDE2EE" usage="输入框边" />
+  <Swatch name="--oui-color-text-tertiary" value="#6B6D8E · 5.00:1" usage="元信息" />
+  <Swatch name="--oui-color-text-secondary" value="#464D5B · 8.51:1" usage="正文" />
+  <Swatch name="--oui-color-text" value="#27254C · 14.41:1" usage="标题" />
+  <Swatch name="--oui-color-text-disabled" value="#C4C3D9" usage="禁用（WCAG 豁免）" />
+</div>
+
+:::note 为什么三级文字不用魔搭的 #8284A4
+参照站的三级文字色压在白底只有 **3.63:1**，达不到 AA 的 4.5:1。我们抬到 `#6B6D8E`（5.00:1），
+视觉上只暗一档，肉眼几乎看不出差别，但过了线。
+:::
+
+## 强调色（切主题时变的就是这一组）
+
+<div className="oui-swatches">
+  <Swatch name="--oui-color-primary" value="随主题" usage="主按钮、选中态、进度" />
+  <Swatch name="--oui-color-primary-hover" value="混 8% 黑" usage="hover" />
+  <Swatch name="--oui-color-primary-active" value="混 14% 黑" usage="按下（仍 ≥4.5:1 的最深一档）" />
+  <Swatch name="--oui-color-primary-subtle" value="10% 透明" usage="浅底/选中底" checker />
+  <Swatch name="--oui-color-primary-border" value="32% 透明" usage="描边/焦点环" checker />
+  <Swatch name="--oui-color-on-primary" value="按对比度自动取" usage="主色上的字" />
+  <Swatch name="--oui-color-primary-ink" value="随主题" usage="主色当文字用" />
+  <Swatch name="--oui-color-success" usage="成功" />
+  <Swatch name="--oui-color-warning" usage="警告" />
+  <Swatch name="--oui-color-danger" usage="危险/错误" />
+  <Swatch name="--oui-color-info" usage="信息" />
+</div>
+
+<Demo caption="同一个组件在不同主题下的样子——切换右上角的圆点看效果。">
+  <Button>主操作</Button>
+  <Button variant="outlined">次要操作</Button>
+  <Button variant="soft">浅底</Button>
+  <Tag color="primary">标签</Tag>
+</Demo>
+
+## 装饰图标色（唯一允许出现彩色的地方）
+
+只给 16px 图标用，**不进文字、不进大色块**。这是「活泼」的全部预算：
+
+<div className="oui-swatches">
+  <Swatch name="--oui-accent-cyan" value="#54C1FA" usage="文本生成" />
+  <Swatch name="--oui-accent-teal" value="#2FB3A1" usage="数据处理" />
+  <Swatch name="--oui-accent-amber" value="#F5A524" usage="图像生成" />
+  <Swatch name="--oui-accent-magenta" value="#E056A0" usage="语音合成" />
+</div>
+
+## 圆角
+
+**越大的面越大圆角**，不是统一 8px：小元件几乎方角（4px，信息密度优先），卡片 8px，
+浮层 12px，封面 16–24px，胶囊 9999px。
+
+<div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', margin: '16px 0 24px' }}>
+  {[
+    ['--oui-radius-xs', '2px'],
+    ['--oui-radius-sm', '4px'],
+    ['--oui-radius-md', '6px'],
+    ['--oui-radius-lg', '8px'],
+    ['--oui-radius-xl', '12px'],
+    ['--oui-radius-2xl', '16px'],
+    ['--oui-radius-3xl', '24px'],
+    ['--oui-radius-full', '9999px'],
+  ].map(([name, value]) => (
+    <div key={name} style={{ textAlign: 'center' }}>
+      <div
+        style={{
+          width: 72,
+          height: 72,
+          border: '1px solid var(--oui-color-border-strong)',
+          borderRadius: 'var(' + name + ')',
+          background: 'var(--oui-color-bg-subtle)',
+        }}
+      />
+      <div style={{ marginTop: 6, fontSize: 11, color: 'var(--oui-color-text-tertiary)', fontFamily: 'var(--oui-font-mono)' }}>{value}</div>
+    </div>
+  ))}
+</div>
+
+## 间距
+
+只有 7 个值，**没有第 8 个**。写布局时从这里选，不要临时想一个像素数。
+
+<div style={{ display: 'grid', gap: 8, margin: '16px 0 24px' }}>
+  {[4, 8, 12, 16, 24, 32, 48].map((value) => (
+    <div key={value} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <code style={{ width: 48, fontSize: 12 }}>{value}</code>
+      <div style={{ width: value * 5, height: 12, background: 'var(--oui-color-primary-subtle)', borderLeft: '2px solid var(--oui-color-primary)' }} />
+    </div>
+  ))}
+</div>
+
+## 控件高度
+
+| 尺寸 | 高度 | 用在哪 |
+|---|---|---|
+| `xs` | 24px | 表格行内、密排标签 |
+| `sm` | 28px | 工具栏 |
+| `md` | **32px** | 默认，与参照站一致 |
+| `lg` | 40px | 落地页主 CTA |
+
+## 字号阶梯（6 档，不许加第 7 档）
+
+| token | 字号 / 行高 | 用途 |
+|---|---|---|
+| `--oui-font-xs` | 12 / 18 | 元信息、标签、徽章 |
+| `--oui-font-sm` | 14 / 22 | 正文默认 |
+| `--oui-font-md` | 16 / 24 | 卡片标题、弹窗标题 |
+| `--oui-font-lg` | 20 / 28 | 区块标题 |
+| `--oui-font-xl` | 24 / 32 | 页面标题 |
+| `--oui-font-2xl` | 32 / 40 | hero |
+
+字重只有 400 / 500 / 600 三档。需要更强，换字号或换颜色，不要加第 4 个字重。
+
+## 阴影（只给浮层）
+
+静态卡片**零阴影**，只有 1px 边框。这是「不廉价」的直接来源——一堆 box-shadow 撑立体感，
+是后台管理系统的味道。
+
+<div style={{ display: 'flex', gap: 16, margin: '16px 0 24px', flexWrap: 'wrap' }}>
+  {[
+    ['--oui-shadow-sm', '0 1px 2px'],
+    ['--oui-shadow-md', '0 6px 16px'],
+    ['--oui-shadow-lg', '0 16px 48px'],
+  ].map(([name, label]) => (
+    <div key={name} style={{ padding: '18px 22px', borderRadius: 8, background: 'var(--oui-color-bg)', border: '1px solid var(--oui-color-border)', boxShadow: 'var(' + name + ')' }}>
+      <div style={{ fontSize: 12, fontFamily: 'var(--oui-font-mono)', color: 'var(--oui-color-text-tertiary)' }}>{name}</div>
+      <div style={{ fontSize: 11, color: 'var(--oui-color-text-tertiary)', marginTop: 4 }}>{label}</div>
+    </div>
+  ))}
+</div>
+
+## 动效
+
+`--oui-duration-fast 120ms` / `--oui-duration 200ms` / `--oui-ease cubic-bezier(.2,.8,.2,1)`。
+
+骨架屏扫光 1.4s；按钮 loading 转圈 0.8s linear；**`prefers-reduced-motion: reduce` 下全部关闭**
+（骨架退化为静态灰块，转圈放慢但不停——完全静止会被误读成卡死）。
+
+## 换一组值，就换一个站点人格
+
+上面每一个变量都能被使用方覆盖。参考 [主题定制](/guide/theming)。

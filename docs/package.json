@@ -1,0 +1,26 @@
+{
+  "name": "@arvinzxy/orange-ui-docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/gen-props.mjs && docusaurus start --port 3200 --no-open",
+    "build": "node scripts/gen-props.mjs && docusaurus build",
+    "serve": "docusaurus serve --port 3200 --no-open",
+    "clear": "docusaurus clear",
+    "props": "node scripts/gen-props.mjs"
+  },
+  "dependencies": {
+    "@docusaurus/core": "3.10.2",
+    "@docusaurus/preset-classic": "3.10.2",
+    "@easyops-cn/docusaurus-search-local": "0.55.3",
+    "@mdx-js/react": "^3.0.0",
+    "clsx": "2.1.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "6.0.3"
+  }
+}

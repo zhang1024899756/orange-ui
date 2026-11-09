@@ -1,0 +1,119 @@
+---
+title: Divider 分割线
+description: 用间距分组，用线兜底：水平、带文字、垂直、虚线、纯装饰。线是最后手段，先试间距。
+sidebar_position: 24
+---
+
+import { Divider, Text, Tag } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Divider 分割线
+
+分隔线的正确用法是**先试间距，不行再画线**。一条 1px 线会把界面切碎；
+真正需要它的地方，通常是「两组内容属于同一个区块，但确实是两件事」。
+
+它还有一个常被滥用的形态：**带文字的分隔**。那种情况下它不是装饰，而是小标题——
+如果这个标题很重要，请直接用 `h3`，别藏在一条线中间。
+
+## 基础用法
+
+默认水平、`spacing="md"`（上下各 12px）。三档间距对应三种分组强度：
+`sm` 8px（组内微分割）、`md` 12px（默认）、`lg` 24px（大区块之间）。
+
+<Demo layout="block">
+  <div>
+    <Text>spacing="sm" 之前</Text>
+    <Divider spacing="sm" />
+    <Text>spacing="sm" 之后</Text>
+    <Divider spacing="md" />
+    <Text>md 是默认档</Text>
+    <Divider spacing="lg" />
+    <Text>lg 用于大区块之间</Text>
+  </div>
+</Demo>
+
+```tsx
+<Divider />
+<Divider spacing="lg" />
+```
+
+## 带文字
+
+文字居中、两侧各一条线。用于「最近访问」「其他设置」这类**弱标题**——
+它把内容分组，但不值得占一个标题的层级。
+
+<Demo layout="block">
+  <Divider>最近访问</Divider>
+  <Divider spacing="lg">其他设置</Divider>
+</Demo>
+
+```tsx
+<Divider>最近访问</Divider>
+```
+
+## 虚线、缩进与垂直
+
+`dashed` 把线换成虚线，视觉更轻；`inset` 让线左右各缩进 16px，用于「卡片内、文字块之间」的分割——
+线不顶到边，才不会和卡片圆角打架。
+
+水平以外还有垂直：`orientation="vertical"` 在行内信息之间画一条竖线。
+
+<Demo layout="block">
+  <div>
+    <Text>虚线（dashed）更轻，适合卡片内部</Text>
+    <Divider dashed />
+    <Text>缩进（inset）让线不顶到容器边缘</Text>
+    <Divider inset />
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, height: 40 }}>
+      <Text>模型</Text>
+      <Divider orientation="vertical" />
+      <Text>数据集</Text>
+      <Divider orientation="vertical" dashed />
+      <Text>创空间</Text>
+    </div>
+  </div>
+</Demo>
+
+```tsx
+<Divider dashed />
+<Divider inset />
+<Divider orientation="vertical" />
+```
+
+垂直分隔线用 `align-self: stretch` 撑满父容器的高度——**不要给它写死 height**，
+否则换个行高就短一截。
+
+## 纯装饰
+
+纯视觉的分隔线没有任何语义，传 `decorative` 让它 `aria-hidden="true"`：
+读屏用户不需要听十次「分隔线」。
+
+<Demo layout="block">
+  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+    <Tag color="primary">设计</Tag>
+    <Divider orientation="vertical" decorative />
+    <Tag color="cyan" variant="outlined">前端</Tag>
+  </div>
+  <Divider decorative spacing="lg" />
+  <Text tone="tertiary">上面这条线对读屏完全不可见，它只是一个视觉节奏。</Text>
+</Demo>
+
+```tsx
+<Divider decorative />
+```
+
+## 无障碍
+
+- 水平与垂直都带 `role="separator"` 与 `aria-orientation`（horizontal / vertical），读屏能报出「分隔线」而不是静默跳过
+- 纯装饰的线传 `decorative`：`aria-hidden="true"` 且不挂 role，避免读屏把一页里的线全念一遍
+- 垂直分隔线在 flex 行内 `align-self: stretch` 自适应高度，换字号、换行高都不会短一截
+- 带文字的分隔线，文字居中、两侧线走伪元素——**不额外加 DOM**，语义也不会因为多包一层而变乱
+- 分隔线本身不可聚焦、不响应交互，它永远不是 Tab 的停靠点
+
+## API
+
+<PropsTable
+  name="Divider"
+  native="其余属性透传给外层 div（id、data-*、aria-* 等）。ref 是普通 prop。"
+/>

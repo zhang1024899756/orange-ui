@@ -1,0 +1,123 @@
+---
+title: Icon 图标
+description: 24×24 线性图标集，49 个内置，统一 1.75 描边、跟随 currentColor，默认对读屏隐藏。
+sidebar_position: 11
+---
+
+import { Icon } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Icon 图标
+
+图标是界面里最便宜的「活泼」来源。49 个内置图标全部是 24×24 viewBox、1.75 圆头描边，
+颜色跟随 `currentColor` —— 换主题、换明暗，不需要改任何一行图标代码。
+
+**默认对读屏隐藏**（`aria-hidden="true"`）。图标几乎总在陪衬文字，读屏念出来反而吵；
+只有图标**独立承载信息**时（纯图标按钮、状态指示）才传 `label`，它会让图标变成 `role="img"` 并带 `<title>`。
+
+## 基础用法
+
+四档尺寸对应四种语境：12 给行内元信息，16 是正文默认，20 给按钮与工具条，24 给标题与空状态。
+
+<Demo>
+  <Icon name="search" size={12} />
+  <Icon name="search" size={16} />
+  <Icon name="search" size={20} />
+  <Icon name="search" size={24} />
+  <Icon name="heart" />
+  <Icon name="download" />
+  <Icon name="sparkles" />
+</Demo>
+
+```tsx
+<Icon name="search" size={12} />
+<Icon name="search" size={16} />
+<Icon name="search" size={20} />
+<Icon name="search" size={24} />
+```
+
+图标和文字混排时不需要额外对齐：`.oui-icon` 自带 `vertical-align: -0.15em`，视觉上落在中文的字面中线附近。
+
+## 图标墙
+
+内置图标全部走同一套描边参数，所以它们放在一起不会「有粗有细」。名称就是 `name` 的字符串值。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 8 }}>
+    {['search','close','check','plus','minus','chevron-down','chevron-right','chevron-left','chevron-up','arrow-right','arrow-up-right','arrow-left','heart','star','download','upload','share','copy','link','external-link','filter','sort','more','fire','sparkles','eye','trash','edit','refresh','info','alert-circle','check-circle','x-circle','sun','moon','user','image','code','clock','lock','setting','bell','home','tag','layers','play','log-out','menu','grid'].map((name) => (
+      <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: '10px 4px', border: '1px solid var(--oui-color-border)', borderRadius: 6 }}>
+        <Icon name={name} size={20} />
+        <span style={{ fontSize: 11, lineHeight: 1.4, color: 'var(--oui-color-text-tertiary)', wordBreak: 'break-all', textAlign: 'center' }}>{name}</span>
+      </div>
+    ))}
+  </div>
+</Demo>
+
+```tsx
+{ICON_NAMES.map((name) => (
+  <Icon key={name} name={name} size={20} />
+))}
+```
+
+## 颜色 color
+
+`color` 只接受语义名，或者任意 CSS 颜色字符串。**默认 `currentColor`**：图标跟着上层文字变，
+这是绝大多数场景该用的方式——给图标单独上色，通常是重复了已经由文字表达过的信息。
+
+<Demo>
+  <Icon name="check-circle" color="success" size={20} />
+  <Icon name="alert-circle" color="warning" size={20} />
+  <Icon name="x-circle" color="danger" size={20} />
+  <Icon name="info" color="primary" size={20} />
+  <Icon name="sparkles" color="cyan" size={20} />
+  <Icon name="fire" color="amber" size={20} />
+  <Icon name="heart" color="magenta" size={20} />
+  <Icon name="layers" color="teal" size={20} />
+</Demo>
+
+```tsx
+<Icon name="check-circle" color="success" />
+<Icon name="sparkles" color="cyan" />
+<Icon name="fire" color="amber" />
+```
+
+前四个是**语义色**：表示成功、警告、错误、信息。后四个是**装饰色**（cyan / teal / amber / magenta），
+只该出现在 16px 的图标上，用来给卡片、标签、空状态加一点色彩——它们不表达任何状态。
+
+## 旋转与自定义图形
+
+`spin` 会套上 `0.8s` 的线性旋转，用于跟随异步操作；`prefers-reduced-motion: reduce` 下自动降到 `1.6s`（不会完全静止，避免看起来像卡死）。
+
+`children` 优先级高于 `name`：传了自己的 `<path>` 就忽略 `name`，适合把品牌图标塞进来。
+
+<Demo>
+  <Icon name="refresh" spin size={20} />
+  <Icon name="sparkles" size={20} label="AI 生成" />
+  <Icon size={20} color="primary">
+    <path d="M12 3 L14 9 L20 12 L14 15 L12 21 L10 15 L4 12 L10 9 Z" />
+  </Icon>
+</Demo>
+
+```tsx
+<Icon name="refresh" spin />
+<Icon name="sparkles" label="AI 生成" />
+<Icon color="primary">
+  <path d="M12 3 L14 9 L20 12 L14 15 L12 21 L10 15 L4 12 L10 9 Z" />
+</Icon>
+```
+
+## 无障碍
+
+- 默认 `aria-hidden="true"` + `focusable="false"`：图标不进无障碍树，也不会在 IE/旧 WebView 里被 Tab 聚焦
+- 传了 `label` 才有 `role="img"` 和 `<title>`；**纯图标按钮必须给按钮本身 `aria-label`**，而不是给图标加 label（否则读屏会念两遍）
+- 尺寸只用 12 / 16 / 20 / 24 四档，与控件高度 24 / 28 / 32 / 40 对齐，避免「图标比文字高半像素」
+- 颜色默认继承 `currentColor`，所以文字与图标天然同色；单独上色时用语义 token，不要写死 hex
+- 图标不可聚焦、不响应键盘事件——它永远不是交互目标，交互目标是包着它的按钮或链接
+
+## API
+
+<PropsTable
+  name="Icon"
+  native="其余属性透传给底层 <svg>（onClick、data-*、aria-* 等）。"
+/>

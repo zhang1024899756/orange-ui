@@ -1,0 +1,142 @@
+---
+title: Number 数值
+description: 等宽、千分位、紧凑写法的数值组件，涨跌不只靠颜色——箭头与读屏文案一起给。
+sidebar_position: 14
+---
+
+import { Number, Button } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+import { useState } from 'react';
+
+export function CountUpDemo() {
+  const [value, setValue] = useState(1200);
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+      <Number value={value} size="lg" compact animated suffix="次" />
+      <Button size="sm" variant="outlined" onClick={() => setValue((prev) => prev + 3600)}>
+        加 3600
+      </Button>
+      <Button size="sm" variant="ghost" onClick={() => setValue(1200)}>
+        重置
+      </Button>
+    </div>
+  );
+}
+
+# Number 数值
+
+数字排版最容易被跳过，也最容易坏：比例字符会跳、千分位各写各的、单位飘在最后。
+Number 把三件事一次做对：**等宽（tabular-nums）**、**统一格式化**、**涨跌的颜色与符号成对出现**。
+
+它永远输出 `font-variant-numeric: tabular-nums`——不是「看起来整齐」，是**每一行的数字位对齐**。
+表格里 1 和 8 占同样宽度，纵向扫读才有可能。
+
+## 基础用法
+
+默认按整数 + 千分位格式化；`precision` 控制小数位。
+
+<Demo>
+  <Number value={128640} />
+  <Number value={1234567} />
+  <Number value={1234.5} precision={2} />
+  <Number value={0.875} precision={3} />
+</Demo>
+
+```tsx
+<Number value={128640} />
+<Number value={1234.5} precision={2} />
+```
+
+## 紧凑写法 compact
+
+`compact` 的边界是**一万**：小于一万用 k（1200 → 1.2k），大于等于一万用 万（14000 → 1.4万）。
+保留一位小数，整数不带 `.0`——所以 20000 是「2万」而不是「2.0万」。
+
+<Demo>
+  <Number value={1200} compact />
+  <Number value={14000} compact />
+  <Number value={20000} compact />
+  <Number value={1280000} compact />
+</Demo>
+
+```tsx
+<Number value={1200} compact />
+<Number value={14000} compact />
+<Number value={20000} compact />
+```
+
+末尾没有单位时读者不知道量纲，所以紧凑写法建议配 `suffix` 一起用。
+
+## 涨跌 trend
+
+`trend` 是**变化量**，不是显示值：正数绿箭头向上、负数红箭头向下、0 中性不给箭头。
+颜色只落在箭头和数字上，不加背景色块——涨跌是一句话，不是一块贴纸。
+
+<Demo>
+  <Number value={12.4} precision={1} trend={1} suffix="%" />
+  <Number value={-3.8} precision={1} trend={-1} suffix="%" />
+  <Number value={0} precision={1} trend={0} suffix="%" />
+  <Number value={8862} trend={12} suffix="· 今日" />
+</Demo>
+
+```tsx
+<Number value={12.4} precision={1} trend={1} suffix="%" />
+<Number value={-3.8} precision={1} trend={-1} suffix="%" />
+```
+
+**涨跌不要只靠颜色**：这里的箭头是对色盲用户的兜底，读屏还会念出「上升 / 下降」。
+
+## 前后缀与加载
+
+`prefix` / `suffix` 是任意 ReactNode，用来放货币符号、单位、量纲。
+`loading` 渲染一条**与行高等高**的骨架，宽度固定，不会把旁边的元素挤开。
+
+<Demo>
+  <Number value={1280} prefix="¥" />
+  <Number value={98} suffix="%" />
+  <Number value={36800} prefix="约" suffix="次" />
+  <Number value={0} loading />
+  <Number value={0} loading size="lg" />
+</Demo>
+
+```tsx
+<Number value={1280} prefix="¥" />
+<Number value={0} loading />
+```
+
+## 数字滚动 animated
+
+`animated` 在数值变化时做 600ms 的 count-up（缓出曲线）。它适合指标卡——
+**不适合**高频刷新的表格：一秒变三次的数字滚动起来只会让人头晕。
+
+<Demo layout="block">
+  <CountUpDemo />
+</Demo>
+
+```tsx
+<Number value={value} animated compact />
+```
+
+```tsx
+const [value, setValue] = useState(1200);
+<Button size="sm" onClick={() => setValue((v) => v + 3600)}>加 3600</Button>
+<Number value={value} animated compact suffix="次" />
+```
+
+`prefers-reduced-motion: reduce` 下动画直接关闭，跳到终值。
+
+## 无障碍
+
+- 恒 `font-variant-numeric: tabular-nums`：表格里数字按位对齐，纵向比较不用重新找小数点
+- 涨跌**同时**给颜色、箭头和一段 `oui-sr-only` 的「上升 / 下降」——不只靠颜色，色盲与灰度截图都能读
+- `loading` 带 `aria-busy="true"` 和 `oui-sr-only` 的「加载中」，骨架高度等于行高，加载完成不抖动
+- `animated` 在 `prefers-reduced-motion: reduce` 下关闭，不强迫前庭敏感用户看数字滚
+- 数字是文本，不是图片：读屏能读、能复制、能搜索，也能被翻译
+
+## API
+
+<PropsTable
+  name="Number"
+  native="其余属性透传给外层 span（title、id、aria-* 等）。ref 是普通 prop。"
+/>

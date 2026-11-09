@@ -1,0 +1,32 @@
+---
+title: 更新日志
+description: 版本历史。
+sidebar_position: 9
+---
+
+# 更新日志
+
+## 0.1.0 — 2026-11-09
+
+第一个版本。
+
+**20 个元素组件**：Button、Icon、Link、Text、Number、Image、Input、Switch、Slider、
+Tag、Badge、Avatar（含 AvatarGroup）、Card、Progress、Divider、Dialog、Tooltip、
+Spinner、Skeleton、Empty。
+
+**主题**：4 套品牌主题（orange / modelscope / teal / rose）× 明暗，切 `data-oui-theme` /
+`data-oui-scheme` 即生效；内置 `ThemeProvider` 支持局部作用域。
+
+**工程**：
+
+- React 19（ref 直接是 prop，不用 `forwardRef`）
+- tsup 出 ESM + CJS + `.d.ts` / `.d.cts` + 每组件独立 CSS
+- 运行时依赖只有 `clsx`
+- 每个组件有独立子路径（`/button`、`/button/style.css`）
+- 20 个测试文件 / 186 条断言，含 `jest-axe` 零违规校验
+- 100 个 Storybook story
+
+**无障碍**：所有文字对比度过 AA；焦点环 `:focus-visible`；命中区补到 24×24；
+Dialog 焦点陷阱；`prefers-reduced-motion` 退化为静态。
+
+**已知限制**：不支持 IE（用了 `color-mix()` / `:layer`）、不做 RTL、不做 `forced-colors` 适配。

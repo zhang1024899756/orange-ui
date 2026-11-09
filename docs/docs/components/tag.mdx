@@ -1,0 +1,169 @@
+---
+title: Tag 标签
+description: 一个词的分类标记：九种颜色、三种形态、可选中、可关闭，但始终是「一个词」而不是一段话。
+sidebar_position: 19
+---
+
+import { Tag, Icon } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Tag 标签
+
+标签是**一个词的分类标记**，不是一段话的容器。它的长度上限就是你能接受的宽度：
+超过六个字，就该换成一句说明或者一张卡片。
+
+它也是这套设计里**少数允许出现彩色**的地方之一——但彩色只给 16px 的图标和底色，
+文字永远走中性色或 ink 档，这样换成任何主题都不会掉对比度。
+
+## 基础用法
+
+两档高度：`sm` 20px（默认，给列表和表格）、`md` 24px（给详情页和筛选条）。
+同一组标签必须同尺寸，混排会显得整行没对齐。
+
+<Demo>
+  <Tag>默认</Tag>
+  <Tag size="md">md 尺寸</Tag>
+  <Tag color="primary">primary</Tag>
+  <Tag color="success">success</Tag>
+  <Tag color="danger">danger</Tag>
+</Demo>
+
+```tsx
+<Tag>默认</Tag>
+<Tag color="primary" size="md">primary</Tag>
+```
+
+## 形态 variant
+
+三种形态按视觉重量排序：`subtle` 最轻（默认，社区站用得最多）、`outlined` 用于需要描边分隔的场景、
+`solid` 最重——**一屏里 solid 标签不该超过两个**，否则整页都在喊。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 10 }}>
+    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <Tag variant="subtle">subtle</Tag>
+      <Tag variant="outlined">outlined</Tag>
+      <Tag variant="solid">solid</Tag>
+    </div>
+    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <Tag variant="subtle" color="primary">subtle primary</Tag>
+      <Tag variant="outlined" color="primary">outlined primary</Tag>
+      <Tag variant="solid" color="primary">solid primary</Tag>
+    </div>
+  </div>
+</Demo>
+
+```tsx
+<Tag variant="subtle">subtle</Tag>
+<Tag variant="outlined">outlined</Tag>
+<Tag variant="solid">solid</Tag>
+```
+
+## 颜色 color
+
+九个颜色分两类：五个**语义色**（neutral / primary / success / warning / danger）表达状态；
+四个**装饰色**（cyan / teal / amber / magenta）只用来给卡片、标签墙加一点色彩，不表达任何含义。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 10 }}>
+    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <Tag color="neutral">neutral</Tag>
+      <Tag color="primary">primary</Tag>
+      <Tag color="success">success</Tag>
+      <Tag color="warning">warning</Tag>
+      <Tag color="danger">danger</Tag>
+    </div>
+    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <Tag color="cyan" variant="outlined">cyan</Tag>
+      <Tag color="teal" variant="outlined">teal</Tag>
+      <Tag color="amber" variant="outlined">amber</Tag>
+      <Tag color="magenta" variant="outlined">magenta</Tag>
+    </div>
+  </div>
+</Demo>
+
+```tsx
+<Tag color="success">已完成</Tag>
+<Tag color="cyan" variant="outlined">Dataset</Tag>
+```
+
+## 带图标
+
+`icon` 是唯一允许「上色」的位置：传一个 16px 的 [Icon](/components/icon)，它会拿到当前标签的角色色；
+`solid` 形态下自动反白，不需要你手动改颜色。
+
+<Demo>
+  <Tag icon={<Icon name="check-circle" size={16} />} color="success">已通过</Tag>
+  <Tag icon={<Icon name="alert-circle" size={16} />} color="warning">待确认</Tag>
+  <Tag icon={<Icon name="star" size={16} />} color="amber" variant="outlined">精选</Tag>
+  <Tag icon={<Icon name="fire" size={16} />} color="magenta" variant="solid">热门</Tag>
+</Demo>
+
+```tsx
+<Tag icon={<Icon name="check-circle" size={16} />} color="success">已通过</Tag>
+```
+
+## 可选中 chip
+
+传了 `onClick` 就渲染成 `<button>`，自动获得键盘可达性与 `aria-pressed`，
+配合 `selected` 显示对勾。用于筛选条：**选中态必须同时有底色和勾**，只变颜色色弱用户看不出来。
+
+<Demo>
+  <Tag onClick={() => undefined} selected>已选中</Tag>
+  <Tag onClick={() => undefined}>可点击</Tag>
+  <Tag onClick={() => undefined} selected color="primary" size="md">模型</Tag>
+  <Tag onClick={() => undefined} color="primary" size="md">数据集</Tag>
+</Demo>
+
+```tsx
+<Tag selected onClick={handleClick}>已选中</Tag>
+<Tag onClick={handleClick}>可点击</Tag>
+```
+
+## 可关闭
+
+`closable` 会在文字后加一个 12px 的关闭按钮，命中区补到 24×24。
+注意：**`onClick` 与 `closable` 请二选一**——两者同时传会渲染成「按钮里套按钮」，
+HTML 不允许嵌套交互元素。需要既能选中又能删除时，把删除放到标签外侧的菜单里。
+
+<Demo>
+  <Tag closable>可关闭</Tag>
+  <Tag closable color="primary">CSS 变量</Tag>
+  <Tag closable color="danger" variant="outlined">已删除</Tag>
+</Demo>
+
+```tsx
+<Tag closable onClose={handleClose}>可关闭</Tag>
+```
+
+## 禁用
+
+`disabled` 会降低不透明度并阻断点击与关闭，但**保持原有语义色**——它还是「一个成功的标签」，只是暂时不能被操作。
+
+<Demo>
+  <Tag disabled>禁用</Tag>
+  <Tag disabled color="success" icon={<Icon name="check-circle" size={16} />}>已通过</Tag>
+  <Tag disabled closable>禁用 + 可关闭</Tag>
+</Demo>
+
+```tsx
+<Tag disabled>禁用</Tag>
+<Tag disabled closable>禁用 + 可关闭</Tag>
+```
+
+## 无障碍
+
+- 可点击标签渲染成 `<button type="button">`，天然可 Tab 聚焦、可回车触发，并带 `aria-pressed` 表示是否选中
+- **选中态不只靠颜色**：还有对勾图标，色盲用户与灰度截图都能看出选中
+- `solid` 形态的文字色来自 `--oui-color-on-*`（按主题解算，白字/深墨自动选，≥ 4.5:1）；四种装饰色上的文字走中性色 token，永不掉对比度
+- 关闭按钮有 `aria-label`（「移除 xxx」），视觉 12px、命中区 24×24
+- `disabled` 时关闭按钮同时禁用，键盘与鼠标都无法触发
+- 标签文字保持简短：读屏会把每个标签都念一遍，十个长句会毁掉整页的可听读性
+
+## API
+
+<PropsTable
+  name="Tag"
+  native="其余属性透传给根元素；有 onClick 时透传给 <button>。ref 是普通 prop。"
+/>

@@ -1,0 +1,157 @@
+---
+title: Text 文字
+description: 把字号、字重、色调、截断收敛到一组 token 的文字原语，用 as 保留语义标签。
+sidebar_position: 13
+---
+
+import { Text } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Text 文字
+
+Text 不是「样式的快捷方式」，而是**把排版决策收敛到 token**：字号 6 档、字重 3 档、色调 8 档、
+三种截断方式。直接写 `<span style={{ fontSize: 14 }}>` 的问题是——14 在这套设计里会慢慢变成 13、15、14.5，
+半年后没人说得清哪个才是正文。
+
+它还有一个常被忽略的职责：`as` 让你在**不牺牲语义**的前提下换样式。
+标题就用 `h2`，不要用「看起来像标题的 span」——读屏、大纲、锚点链接都依赖真实的标签。
+
+## 字号阶梯
+
+六档字号严格对应 `--oui-font-*` 与 `--oui-leading-*`：字号和行高成对出现，所以永远不会出现「字大了但行高没跟上」。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 10 }}>
+    <Text size="2xl">2xl · 32/40 · 只有页面主标题用</Text>
+    <Text size="xl">xl · 24/32 · 页面标题</Text>
+    <Text size="lg">lg · 20/28 · 区块标题</Text>
+    <Text size="md">md · 16/24 · 卡片标题</Text>
+    <Text size="sm">sm · 14/22 · 正文默认</Text>
+    <Text size="xs" tone="tertiary">xs · 12/18 · 元信息、时间戳</Text>
+  </div>
+</Demo>
+
+```tsx
+<Text size="xl">xl · 24/32 · 页面标题</Text>
+<Text size="sm">sm · 14/22 · 正文默认</Text>
+<Text size="xs" tone="tertiary">xs · 12/18 · 元信息</Text>
+```
+
+## 字重与色调
+
+`weight` 只有 400 / 500 / 600 三档。中文没有真正的 bold 层级感，**用字重区分层级，比用字号更省空间**——
+表格里的「主字段 / 次字段」靠 500/400 就够了，不需要两档字号。
+
+`tone` 八档全部映射到语义 token，不是八个手挑的颜色。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 8 }}>
+    <Text weight={400}>weight 400 · 正文与长文本</Text>
+    <Text weight={500}>weight 500 · 强调、表格主字段</Text>
+    <Text weight={600}>weight 600 · 标题</Text>
+  </div>
+  <div style={{ display: 'grid', gap: 8, marginTop: 16 }}>
+    <Text tone="default">default · 主文本</Text>
+    <Text tone="secondary">secondary · 辅助说明</Text>
+    <Text tone="tertiary">tertiary · 元信息（5.00:1）</Text>
+    <Text tone="disabled">disabled · 失效内容</Text>
+    <Text tone="primary">primary · 品牌强调（primary-ink）</Text>
+    <Text tone="danger">danger · 错误（danger-ink）</Text>
+    <Text tone="success">success · 成功（success-ink）</Text>
+    <span style={{ background: 'var(--oui-color-text)', borderRadius: 4, padding: '2px 8px', justifySelf: 'start' }}>
+      <Text tone="inverse">inverse · 深底上的字</Text>
+    </span>
+  </div>
+</Demo>
+
+```tsx
+<Text weight={500}>表格主字段</Text>
+<Text tone="tertiary">元信息</Text>
+<Text tone="danger">保存失败：网络异常</Text>
+```
+
+## 截断
+
+`truncate={true}` 是单行省略，传数字是多行 clamp（`truncate={2}` 即最多两行）。
+两种都自带 `min-width: 0`，所以在 flex / grid 子项里也真的会省略——少了这一条，省略号永远不出现。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 12, maxWidth: 320 }}>
+    <Text truncate title="悬停可看到 title 里的全文">
+      单行省略：这是一段很长很长的说明文字，容器只有 320 宽，超出部分会被裁掉并以省略号收尾。
+    </Text>
+    <Text truncate={2}>
+      两行截断：这是一段很长很长的说明文字，用来演示多行 clamp。超过两行以后，剩下的内容会被裁掉，
+      并在第二行结尾补上省略号。
+    </Text>
+  </div>
+</Demo>
+
+```tsx
+<Text truncate>单行省略，容器多宽都只占一行</Text>
+<Text truncate={2}>两行截断，第三行开始被裁掉</Text>
+```
+
+截断只影响**视觉**：完整文本仍在 DOM 里，读屏和搜索都能拿到。
+
+## 可复制
+
+`copyable` 会在右侧加一个 16px 的复制按钮（命中区 24×24），点击后变成勾并保持 1.2 秒。
+复制的是**传入的字符串 children**：`truncate` 截掉的只是视觉，复制到的仍是全文；如果 children 是节点而不是字符串，它不会替你序列化。
+
+<Demo>
+  <Text copyable>npm i @arvinzxy/orange-ui</Text>
+  <Text copyable mono tone="secondary">91320594MA1MNBPN3Q</Text>
+</Demo>
+
+```tsx
+<Text copyable>npm i @arvinzxy/orange-ui</Text>
+```
+
+## 语义标签 as
+
+默认渲染 `span`。段落用 `p`、标题用 `h1`–`h6`、代码用 `code`：**样式由 size 决定，语义由 as 决定，两者互不绑架**。
+
+{/* 这组 demo 必须写成导出的组件，不能直接写在 MDX 里：
+   MDX 会把 JSX 块里的内联子元素包进 <p>，于是 as="p" / as="h3" 会变成 p 套 p。
+   服务端 HTML 被浏览器纠正、客户端按原样渲染 → hydration 报错（React #418）。
+   放进函数体里 JSX 就是纯 JS，不受 markdown 段落规则影响。 */}
+export function AsSemanticsDemo() {
+  return (
+    <div style={{ display: 'grid', gap: 10 }}>
+      <Text as="h3" size="xl" weight={600}>用 as 保留标题语义</Text>
+      <Text as="p" tone="secondary">
+        这一段是 p 而不是 span，读屏可以按段落跳转，浏览器也能正确选择「按段落选中」。
+      </Text>
+      <Text as="code" mono size="sm">const value = 128640;</Text>
+      <Text italic tone="tertiary">斜体用于引用、注释与占位说明</Text>
+    </div>
+  );
+}
+
+<Demo layout="block">
+  <AsSemanticsDemo />
+</Demo>
+
+```tsx
+<Text as="h3" size="xl" weight={600}>用 as 保留标题语义</Text>
+<Text as="p" tone="secondary">段落用 p</Text>
+<Text as="code" mono>const value = 128640;</Text>
+```
+
+## 无障碍
+
+- **用 as 保留文档结构**：标题层级、列表、段落都用真实标签，读屏靠标题跳转，搜索引擎靠大纲理解页面；不要用「字号 24 的 span」冒充标题
+- `tone` 的八档全部是解算过的 token：`tertiary` 在白底 5.00:1、`primary` 5.29:1、`danger` 6.29:1，都过 AA
+- `tone="disabled"` 对比度是 1.54–1.76:1，这是**故意的**：WCAG 2.2 在 1.4.3 里明确把「失效的控件」排除在对比度要求之外，禁用态就该看起来点不动
+- `copyable` 的按钮有 `aria-label`（「复制」/「已复制」），视觉 16px、命中区补到 24×24，触屏也点得到
+- `truncate` 不删 DOM 文本：读屏读到的是全文；如果要让鼠标用户也能看到全文，补 `title`
+- 等宽与数字对齐走 `mono`（`tabular-nums`），表格里的 ID、金额不会左右跳
+
+## API
+
+<PropsTable
+  name="Text"
+  native="其余属性透传给底层元素（title、id、onClick、aria-* 等）。ref 是普通 prop。as 决定标签，其余 props 按 span 收窄。"
+/>

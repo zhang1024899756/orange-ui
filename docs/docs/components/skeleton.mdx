@@ -1,0 +1,101 @@
+---
+title: Skeleton 骨架屏
+description: 用和真实内容同尺寸的灰块占住位置，让页面在加载时不跳动。
+sidebar_position: 4
+---
+
+import { Skeleton, Card, Avatar, Text } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Skeleton 骨架屏
+
+骨架屏的价值不在「好看」，在**占位**：加载完成时内容直接换上来，而不是把下面的内容顶下去。
+所以它的尺寸必须照抄真实内容的尺寸——随便画几个灰条，比不做还糟。
+
+两种用法：**占位**（自身就是骨架）和**包裹**（`loading` 切换内容与骨架）。
+
+## 基础用法
+
+`lines` 控制行数（默认 3），最后一行固定 60% 宽——所有文本最后一行都短一截，照着做才像真的。
+
+<Demo layout="block">
+  <div style={{ maxWidth: 420 }}>
+    <Skeleton />
+  </div>
+</Demo>
+
+## 四种形态
+
+<Demo layout="block">
+  <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+    <Skeleton variant="circle" width={40} height={40} />
+    <Skeleton variant="button" width={96} />
+    <Skeleton variant="rect" width={160} height={72} />
+    <Skeleton variant="text" width={200} lines={2} />
+  </div>
+</Demo>
+
+## 按真实内容画骨架
+
+把组件自己的形状拆成骨架，加载完成后尺寸完全一致，页面不会跳一下。
+
+<Demo layout="block">
+  <Card
+    header={
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <Skeleton variant="circle" width={28} height={28} />
+        <div style={{ display: 'grid', gap: 6, flex: 1 }}>
+          <Skeleton variant="text" width={140} lines={1} />
+          <Skeleton variant="text" width={90} lines={1} />
+        </div>
+      </div>
+    }
+  >
+    <div style={{ display: 'grid', gap: 8 }}>
+      <Skeleton variant="text" lines={2} />
+      <Skeleton variant="rect" height={56} />
+    </div>
+  </Card>
+</Demo>
+
+## 包裹模式
+
+`loading={true}` 显示骨架，`false` 直接渲染 children。外层自动带 `aria-busy`。
+适合局部刷新：一块内容重新取数时，别把整页都换成骨架。
+
+<Demo layout="block">
+  <div style={{ maxWidth: 420 }}>
+    <Skeleton loading={true}>
+      <Text>这段内容在骨架形态下不会渲染出来。</Text>
+    </Skeleton>
+    <Skeleton loading={false}>
+      <Text>loading=false 时，这里就是真实内容。</Text>
+    </Skeleton>
+  </div>
+</Demo>
+
+## 动效
+
+`animated` 默认开启扫光。`prefers-reduced-motion: reduce` 下自动退化成静态灰块——
+骨架屏是「没有信息」的表示，在减少动态偏好下它更应该安静。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 10, maxWidth: 360 }}>
+    <Skeleton variant="text" lines={1} animated />
+    <Skeleton variant="text" lines={1} animated={false} />
+  </div>
+</Demo>
+
+## 无障碍
+
+- 骨架块本身对读屏隐藏（`aria-hidden`）：读屏用户不需要知道「有几个灰条」
+- 包裹模式下外层带 `aria-busy="true"`，内容出现后自动移除
+- 不要在骨架里放文字（哪怕是「加载中」）——那是 Spinner 的职责，两者同时出现会互相抵消
+
+## API
+
+<PropsTable
+  name="Skeleton"
+  native="其余属性透传给外层 div。"
+/>

@@ -1,0 +1,109 @@
+---
+title: 快速开始
+description: 三分钟把第一个组件跑起来。
+sidebar_position: 1
+---
+
+import { Button, Tag, Card } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+
+# 快速开始
+
+## 安装
+
+```bash
+pnpm add @arvinzxy/orange-ui
+# 或 npm i @arvinzxy/orange-ui / yarn add @arvinzxy/orange-ui
+```
+
+对等依赖只有 React 19：`react ^19.0.0`、`react-dom ^19.0.0`。
+运行时依赖只有 `clsx`（200 字节）。
+
+## 引入样式
+
+样式是**纯 CSS 文件**，不是 CSS-in-JS，所以必须显式引一次。两种方式二选一：
+
+```tsx
+// 方式 A：全量（简单，适合先用起来）
+import '@arvinzxy/orange-ui/style.css';
+
+// 方式 B：按需（每个组件一份 CSS，只带上用到的）
+import '@arvinzxy/orange-ui/tokens.css';      // 变量只引一次
+import '@arvinzxy/orange-ui/button/style.css';
+```
+
+## 第一个组件
+
+<Demo>
+  <Button>开始</Button>
+  <Button variant="outlined">取消</Button>
+  <Tag color="primary">v0.1.0</Tag>
+</Demo>
+
+```tsx
+import '@arvinzxy/orange-ui/style.css';
+import { Button, Tag } from '@arvinzxy/orange-ui';
+
+export function Demo() {
+  return (
+    <>
+      <Button>开始</Button>
+      <Button variant="outlined">取消</Button>
+      <Tag color="primary">v0.1.0</Tag>
+    </>
+  );
+}
+```
+
+## 按需引入
+
+每个组件都有独立子路径，JS 与 CSS 分开：
+
+```tsx
+import { Button } from '@arvinzxy/orange-ui/button';
+import '@arvinzxy/orange-ui/button/style.css';
+```
+
+子路径的 `package.json` 里写了 `exports` 的 `types` / `import` / `require` 三个条件，
+所以 ESM、CJS、TS 三种消费方式都不需要额外配置。整个包通过了 `publint` 检查。
+
+## 全局主题
+
+主题写在 `<html>` 上就全站生效：
+
+```html
+<html data-oui-theme="orange" data-oui-scheme="light">
+```
+
+也可以在局部作用域里嵌一套不同的主题，做「站点里的产品截图」这类需求：
+
+```tsx
+import { ThemeProvider, Button } from '@arvinzxy/orange-ui';
+
+<ThemeProvider theme="modelscope" scheme="dark">
+  <Button>这块是紫色暗色的</Button>
+</ThemeProvider>
+```
+
+## SSR / Next.js
+
+样式是静态 CSS，主题是 HTML 属性，**首屏不需要任何 JS 参与**。要避免用户上次选的暗色在刷新时闪一下，
+在 `<head>` 里放一段同步内联脚本即可——参考 [主题定制](/guide/theming#防止首屏闪白)。
+
+组件文件首行都带 `'use client'`，所以可以安全地在 App Router 的客户端组件里使用；
+纯展示的 `Text` / `Icon` 也可以放在服务端组件里。
+
+## TypeScript
+
+包内自带 `.d.ts` 与 `.d.cts`，不需要装 ```types/arvinzxy__orange-ui`。
+所有组件的 props 都是导出的类型：
+
+```tsx
+import type { ButtonProps, TagProps } from '@arvinzxy/orange-ui';
+```
+
+## 下一步
+
+- 想看每个组件怎么用 → [组件总览](/components)
+- 想换品牌色 → [主题定制](/guide/theming)
+- 想知道这些数值怎么来的 → [设计变量](/design/tokens)

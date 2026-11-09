@@ -1,0 +1,114 @@
+---
+title: Link 链接
+description: 会跳走的文字。语义是链接而不是按钮，颜色走深一档的 ink 以保证文本级对比度。
+sidebar_position: 12
+---
+
+import { Link } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Link 链接
+
+链接是**会跳走的文字**。它和 [Button](/components/button) 的区别不是样式，是语义：浏览器把它当链接，
+右键「在新标签页打开」、⌘/Ctrl 点击、读屏的「链接」角色、爬虫的 `<a href>` 全都成立。
+
+一个必须知道的前提：品牌橙 `#F26B21` 压在白底只有 **3.04:1**，做文字不合格。
+所以 `color="primary"` 用的是 `--oui-color-primary-ink`（白底 5.29:1）——视觉上比色块里的橙深一档，
+这是**故意的**：色块可以亮，文字必须读得清。四套主题各自解算自己的 ink，切换主题时对比度不会掉。
+
+## 基础用法
+
+三种角色色对应三种语气：`primary` 是常规跳转、`neutral` 是同一层级内的次要入口、
+`danger` 只用在「会删掉东西」的地方。
+
+<Demo>
+  <Link href="#link-链接">查看文档</Link>
+  <Link href="#link-链接" color="neutral">中性链接</Link>
+  <Link href="#link-链接" color="danger">删除这条记录</Link>
+</Demo>
+
+```tsx
+<Link href="/docs">查看文档</Link>
+<Link href="/docs" color="neutral">中性链接</Link>
+<Link href="/docs" color="danger">删除这条记录</Link>
+```
+
+## 下划线 underline
+
+默认 `hover`：静止时干净，悬停时出现下划线。`always` 用于**正文段落里**的链接——
+段落中靠颜色区分链接对色弱用户不够，下划线才是稳定信号。`none` 只给「整块卡片都可点」这类场景。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 10 }}>
+    <span>underline 默认（hover）：<Link href="#link-链接">正文里的链接</Link>，静止时没有下划线。</span>
+    <span>underline="always"：<Link href="#link-链接" underline="always">段落里推荐用这个</Link>，色弱也能看出可点。</span>
+    <span>underline="none"：<Link href="#link-链接" underline="none">整块可点的卡片标题</Link>，悬停只变深。</span>
+  </div>
+</Demo>
+
+```tsx
+<Link underline="always" href="/docs">段落里推荐用这个</Link>
+<Link underline="none" href="/docs">整块可点的卡片标题</Link>
+```
+
+## 外部链接 external
+
+`external` 做三件事：`target="_blank"`、`rel="noopener noreferrer"`、末尾加一个 12px 的斜箭头。
+第三件是给人看的——**用户应该能预判「这一下会离开当前站」**，而不是被骗进一个新标签页。
+
+<Demo>
+  <Link href="https://example.com" external>外部文档</Link>
+  <Link href="https://example.com" external underline="always">带下划线的外链</Link>
+</Demo>
+
+```tsx
+<Link href="https://example.com" external>外部文档</Link>
+```
+
+`rel` 是在防一件事：新页面拿到 `window.opener` 后可以把原页面导航到钓鱼站（tabnabbing）。
+调用方自己传了 `rel` 会**合并**而不是覆盖，所以 `rel="nofollow"` 这类 SEO 声明不会丢。
+
+## 禁用
+
+`disabled` 不是「把颜色调浅」：它会**摘掉 `href`**、把 `tabIndex` 设为 `-1`、并拦截点击。
+键盘用户 Tab 不到它、脚本点它也不会跳转——禁用一个动作要做得彻底。
+
+<Demo>
+  <Link href="#link-链接" disabled>不可用的链接</Link>
+  <Link href="#link-链接" disabled underline="always">禁用 + 下划线</Link>
+</Demo>
+
+```tsx
+<Link href="/docs" disabled>不可用的链接</Link>
+```
+
+## 尺寸与图标
+
+四档字号与 [Text](/components/text) 的字号阶梯一一对应；`icon` 是前置图标，箭头类图标放后面请直接用 `external`。
+
+<Demo>
+  <Link href="#link-链接" size="xs">xs · 12</Link>
+  <Link href="#link-链接" size="sm">sm · 14</Link>
+  <Link href="#link-链接" size="md">md · 16</Link>
+  <Link href="#link-链接" size="lg">lg · 20</Link>
+</Demo>
+
+```tsx
+<Link href="/docs" size="lg">lg · 20</Link>
+```
+
+## 无障碍
+
+- 三种角色色都是 **ink 档**：primary 白底 5.29:1、danger 白底 6.29:1，neutral 直接用主文本色（最深一档）
+- 外链自动 `rel="noopener noreferrer"`；箭头图标是 `aria-hidden`，旁边补了一句 `oui-sr-only` 的「（在新窗口打开）」，读屏用户需要知道会离开当前页
+- `disabled` 摘掉 `href` 并移出 Tab 序，同时带 `aria-disabled="true"`：视觉、键盘、脚本三条路径一致
+- 焦点环只在 `:focus-visible` 出现（键盘 Tab 时），鼠标点击不闪
+- 链接文字要有信息量：「点这里」对读屏的链接列表毫无意义，写「查看部署文档」
+
+## API
+
+<PropsTable
+  name="Link"
+  native="其余属性（href、target、rel、download、aria-* 等）透传给底层 <a>。ref 是普通 prop。"
+/>

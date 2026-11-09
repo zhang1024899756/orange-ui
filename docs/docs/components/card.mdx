@@ -1,0 +1,181 @@
+---
+title: Card 卡片
+description: 一块有边界的内容平面：封面、头部、主体、底部各就各位，加载时整卡变骨架。
+sidebar_position: 22
+---
+
+import { Card, Button, Tag, Avatar } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Card 卡片
+
+卡片不是「带阴影的白盒子」，而是**一个内容边界**：它把封面、标题、正文、操作圈进同一个平面，
+让读者一眼看出这些信息属于一起、到哪里结束。
+
+因此默认形态只有 1px 描边、**零阴影**——阴影是层级信号（浮起、可点、正在拖），不是装饰。
+
+```tsx
+import { Card } from '@arvinzxy/orange-ui';
+```
+
+## 基础用法
+
+<Demo layout="center">
+  <div style={{ width: 320 }}>
+    <Card>
+      一个面向开发者的卡片：只放内容，不在内边距之外开口子。
+    </Card>
+  </div>
+</Demo>
+
+```tsx
+<Card>
+  一个面向开发者的卡片：只放内容，不在内边距之外开口子。
+</Card>
+```
+
+## 形态 variant
+
+`outlined`（默认）是静态内容；`elevated` 把 1px 边框换成透明、叠一层小阴影，用于「浮在页面上」的卡片。
+两种形态的盒子尺寸完全一致，切换不会引起跳动。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 16 }}>
+    <Card variant="outlined" header="outlined">
+      描边形态：静态内容的默认值，本身不表达层级。
+    </Card>
+    <Card variant="elevated" header="elevated">
+      浮起形态：用于弹层旁边、可拖拽列表项这类需要「离页面上一层」的东西。
+    </Card>
+  </div>
+</Demo>
+
+```tsx
+<Card variant="outlined" header="outlined">静态内容</Card>
+<Card variant="elevated" header="elevated">浮在页面上一层</Card>
+```
+
+## 内边距 padding
+
+四档：`none` / `sm` 8 / `md` 16（默认）/ `lg` 24。
+`none` 会让内容贴边，因此头部的下分隔线、底部的上分隔线与背景色都会自动去掉——避免出现一条贴在边上的线。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12 }}>
+    <Card padding="none">none</Card>
+    <Card padding="sm">sm · 8</Card>
+    <Card padding="md">md · 16</Card>
+    <Card padding="lg">lg · 24</Card>
+  </div>
+</Demo>
+
+```tsx
+<Card padding="none">贴边内容（封面、整宽表格）</Card>
+<Card padding="sm">紧凑列表</Card>
+<Card padding="md">默认</Card>
+<Card padding="lg">详情页主卡片</Card>
+```
+
+## 结构：封面 / 头部 / 主体 / 底部
+
+`cover` 自动裁切圆角，`header` 自带下分隔线，`footer` 带上分隔线与次级底色。
+四个区域都是可选的，但**顺序固定**：封面在最上，底部在最下。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 320px))', gap: 16 }}>
+    <Card
+      hoverable
+      cover={
+        <div style={{ height: 120, background: 'var(--oui-gradient-brand)', display: 'grid', placeItems: 'center', color: 'var(--oui-color-on-primary)', fontSize: 13 }}>
+          封面
+        </div>
+      }
+      header="模型详情"
+      footer={
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 12, color: 'var(--oui-color-text-tertiary)' }}>2.1k 次下载</span>
+          <Button size="sm">使用</Button>
+        </div>
+      }
+    >
+      完整结构：封面、标题、正文、底部操作各就各位。
+    </Card>
+    <Card
+      header={
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Avatar name="张三" size="sm" status="online" />
+            <span style={{ fontSize: 14 }}>张三</span>
+          </div>
+          <Tag color="primary" size="sm">精选</Tag>
+        </div>
+      }
+      footer={<span style={{ fontSize: 12, color: 'var(--oui-color-text-tertiary)' }}>3 小时前更新</span>}
+    >
+      头部与底部完全自定义：放头像、标签、时间戳都行。
+    </Card>
+  </div>
+</Demo>
+
+```tsx
+<Card cover={<img src="/cover.png" alt="" />} header="模型详情" footer={<Button size="sm">使用</Button>}>
+  正文
+</Card>
+```
+
+## 可点击
+
+传了 `onClick` 才变成可交互容器：`role="button"`、`tabIndex="0"`，Enter 与空格都能触发。
+**此时卡片内部不要再放按钮或链接**——一个可交互元素包住另一个，语义和键盘顺序都会乱。
+需要「卡片里有多个操作」时，让卡片保持静态，把操作放进 footer。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 300px))', gap: 16 }}>
+    <Card hoverable onClick={() => {}}>
+      点我（Tab 聚焦后按 Enter / 空格也能触发）
+    </Card>
+    <Card variant="elevated" hoverable onClick={() => {}}>
+      浮起 + 悬停上浮 2px
+    </Card>
+  </div>
+</Demo>
+
+```tsx
+<Card hoverable onClick={() => openDetail()}>
+  整卡可点：内部不要再放按钮
+</Card>
+```
+
+## 加载中 loading
+
+`loading` 会整卡换成骨架：封面占位（有 `cover` 时）、三条正文占位，并带 `aria-busy="true"`。
+骨架照抄真实结构的尺寸，加载完成时下面的内容不会被顶下去。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 16, width: 340 }}>
+    <Card loading header="标题">内容</Card>
+    <Card loading cover={<div style={{ height: 120 }} />}>带封面的卡片</Card>
+  </div>
+</Demo>
+
+```tsx
+<Card loading header="标题">内容</Card>
+<Card loading cover={<img src="/cover.png" alt="" />}>带封面的卡片</Card>
+```
+
+## 无障碍
+
+- 没有 `onClick` 时是纯容器，不进 Tab 序列，也不会被读屏当成可操作元素
+- 有 `onClick` 时是 `role="button"` + `tabIndex="0"`，Enter / 空格触发（空格会阻止页面滚动）
+- `hoverable` 的悬停反馈只在 `(hover: hover)` 的设备上生效，触摸屏不会「粘住」高亮
+- `loading` 时 `aria-busy="true"`，整卡不可点击
+- 卡片**不会**替你生成标题层级：header 里放标题文字时，请自己用语义标签（`h3` 等）
+- 焦点可见：可点击卡片有 2px 外扩焦点环
+
+## API
+
+<PropsTable
+  name="Card"
+  native="其余属性（onClick、id、aria-* 等）透传给根 div。ref 是普通 prop，直接指向根节点（React 19 起不再需要 forwardRef）。"
+/>

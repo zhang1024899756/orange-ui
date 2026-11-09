@@ -1,0 +1,44 @@
+---
+title: 设计
+description: 这套设计语言的三条纪律，以及它们为什么存在。
+sidebar_position: 0
+---
+
+import { Button } from '@arvinzxy/orange-ui';
+
+# 设计
+
+一套组件库的「气质」不是靠某个组件好看，而是靠**一组不许破的规则**。
+这里只有三条，但每条都在源码里有对应的约束。
+
+<div className="oui-grid" style={{ marginTop: 20 }}>
+
+<div className="oui-feature">
+  <div className="oui-feature__title">① 颜色有预算</div>
+  <p className="oui-feature__desc">中性 6 档 + 强调 1 个 + 语义 3 个 + 装饰 4 个 = 14 个非中性色。超出的颜色一律不许用。</p>
+  <p><Button size="sm" variant="outlined" href="/design/tokens">设计变量</Button></p>
+</div>
+
+<div className="oui-feature">
+  <div className="oui-feature__title">② 阴影只给浮层</div>
+  <p className="oui-feature__desc">静态卡片只有 1px 边框。用阴影堆立体感是后台管理系统的味道，不是社区产品。</p>
+  <p><Button size="sm" variant="outlined" href="/design/principles">设计原则</Button></p>
+</div>
+
+<div className="oui-feature">
+  <div className="oui-feature__title">③ 字号只有 6 档</div>
+  <p className="oui-feature__desc">12/14/16/20/24/32。需要更强就换字重或换颜色，不许临时想第 7 个字号。</p>
+  <p><Button size="sm" variant="outlined" href="/design/typography">字体与字号</Button></p>
+</div>
+
+</div>
+
+## 这些数值不是原创的
+
+它们是**实测**来的：参照 ModelScope 魔搭社区的界面，用真实浏览器读数（1440 视口，抓 computed style），
+得到它真实在用的 token —— 主色 `#624aff`、中性四档、12px 为主的小字、4px 起的圆角阶梯、几乎为零的阴影。
+
+我们抄了它的骨架，补了两件它没有的事：
+
+1. **主题可切换**：它只有明暗两套、品牌色写死；这里 4 套 × 明暗，且使用方能覆盖任何一层。
+2. **对比度达标**：它的三级文字 `#8284A4` 只有 3.63:1，不达 AA；我们抬到 5.00:1。

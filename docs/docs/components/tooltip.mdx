@@ -1,0 +1,137 @@
+---
+title: Tooltip 文字提示
+description: 悬停或聚焦时补充一句说明；它永远不是唯一信息来源。
+sidebar_position: 26
+---
+
+import { Tooltip, Button } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Tooltip 文字提示
+
+提示只做一件事：**补充说明**。它不能承载唯一信息——触摸屏没有 hover，读屏也不会主动去念提示。
+所以「这个按钮是干什么的」必须写在按钮自己的可访问名称里，提示只负责多给一点上下文。
+
+浮层挂在 `body` 上（Portal）+ `fixed` 定位，位置由触发元素的 `getBoundingClientRect()` 算出，
+因此不会被父级的 `overflow` 裁掉；滚动或窗口尺寸变化时**直接关闭**，不做跟随——跟随会制造「漂在半空」的错位提示。
+
+```tsx
+import { Tooltip } from '@arvinzxy/orange-ui';
+```
+
+## 基础用法
+
+`children` 必须是**单个**能接收 `ref` 的元素（组件或原生元素都行）。鼠标进入延迟 120ms 出现，移出即消失。
+
+<Demo>
+  <Tooltip content="保存当前草稿">
+    <Button variant="outlined">悬停或聚焦我</Button>
+  </Tooltip>
+  <Tooltip content="这条提示没有箭头" arrow={false}>
+    <Button variant="soft">没有箭头</Button>
+  </Tooltip>
+</Demo>
+
+```tsx
+<Tooltip content="保存当前草稿">
+  <Button variant="outlined">悬停或聚焦我</Button>
+</Tooltip>
+```
+
+## 方位 placement
+
+四个方位（`top` 默认 / `bottom` / `left` / `right`），**v1 不做自动翻转**——
+靠近视口边缘时请自己选一个不会出界的方位。
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', padding: '32px 0' }}>
+    <Tooltip content="placement=top" placement="top">
+      <Button variant="soft">top</Button>
+    </Tooltip>
+    <Tooltip content="placement=bottom" placement="bottom">
+      <Button variant="soft">bottom</Button>
+    </Tooltip>
+    <Tooltip content="placement=left" placement="left">
+      <Button variant="soft">left</Button>
+    </Tooltip>
+    <Tooltip content="placement=right" placement="right">
+      <Button variant="soft">right</Button>
+    </Tooltip>
+  </div>
+</Demo>
+
+```tsx
+<Tooltip content="placement=left" placement="left">
+  <Button variant="soft">left</Button>
+</Tooltip>
+```
+
+## 延迟与键盘
+
+`delay` 只作用于**鼠标**，键盘聚焦会立刻出现；按 `Esc` 或失焦即关闭。
+把延迟设成 0 适合工具栏——用户已经明确指到那个按钮上了。
+
+<Demo>
+  <Tooltip content="立即出现" delay={0}>
+    <Button variant="outlined">0ms</Button>
+  </Tooltip>
+  <Tooltip content="默认 120ms" delay={120}>
+    <Button variant="outlined">120ms</Button>
+  </Tooltip>
+  <Tooltip content="慢一点，500ms" delay={500}>
+    <Button variant="outlined">500ms</Button>
+  </Tooltip>
+</Demo>
+
+```tsx
+<Tooltip content="立即出现" delay={0}>
+  <Button variant="outlined">0ms</Button>
+</Tooltip>
+```
+
+## 异步内容
+
+内容还在取时传 `loading`：浮层里显示转圈 +「加载中…」，并带 `aria-busy="true"`。
+适合「悬停才去查这个用户的详情」这类懒加载场景。
+
+<Demo>
+  <Tooltip content="" loading>
+    <Button variant="soft">悬停查看异步提示</Button>
+  </Tooltip>
+</Demo>
+
+```tsx
+<Tooltip content={detail} loading={detail === null}>
+  <Button variant="soft">悬停查看详情</Button>
+</Tooltip>
+```
+
+## 受控
+
+`open` / `defaultOpen` / `onOpenChange` 三件套。受控时组件只回调，不改内部状态；
+需要「点一下把提示固定住」时用它。
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Tooltip content="受控提示" open={open} onOpenChange={setOpen}>
+  <Button variant="outlined">悬停我</Button>
+</Tooltip>
+```
+
+## 无障碍
+
+- 浮层是 `role="tooltip"`；**只在显示时**把它的 id 挂到触发元素的 `aria-describedby` 上，关闭即移除
+- 键盘：Tab 聚焦立即显示（不受 `delay` 影响），`Esc` 关闭
+- `pointer-events: none`：提示不拦截鼠标，不会自己打断 hover
+- 提示不承载唯一信息：按钮的名称写在按钮上，提示只做补充
+- 滚动与窗口尺寸变化时关闭，避免提示和元素错位
+- `disabled` 时组件**原样返回 children**，不改触发元素、不显示提示
+
+## API
+
+<PropsTable
+  name="Tooltip"
+  native="children 必须是单个可接收 ref 的元素；className 与 style 作用于浮层本身，触发元素的 aria-* 请直接写在触发元素上。"
+/>

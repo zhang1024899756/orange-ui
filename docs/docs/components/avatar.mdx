@@ -1,0 +1,185 @@
+---
+title: Avatar 头像
+description: 图片、首字母、占位三层回退的头像，以及按姓名稳定配色的头像组。
+sidebar_position: 21
+---
+
+import { Avatar, AvatarGroup, Badge, Icon } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Avatar 头像
+
+列表里很多时候**只有一个识别物**：头像。所以回退态比图片本身更重要——图挂了、没网、名字是空的，
+都要有一个稳定、可辨认、可读屏的替代。
+
+实现是三件套：`<img>`（`onError` 自动回退）、首字母（按名字哈希到 6 档底色，**同一个人每次都是同一个颜色**）、
+以及没有名字时的 user 图标。读屏始终能拿到完整名字：首字母本身 `aria-hidden`，完整名字放在 `.oui-sr-only` 里。
+
+```tsx
+import { Avatar, AvatarGroup } from '@arvinzxy/orange-ui';
+```
+
+## 基础用法
+
+export const SAMPLE_SRC = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Crect width='96' height='96' fill='%23F26B21'/%3E%3Ccircle cx='48' cy='38' r='16' fill='%23FFE2D3'/%3E%3Crect x='22' y='62' width='52' height='26' rx='13' fill='%23FFE2D3'/%3E%3C/svg%3E";
+
+<Demo>
+  <Avatar src={SAMPLE_SRC} alt="示例头像" size="lg" />
+  <Avatar name="张三" size="lg" />
+  <Avatar name="Alice Wang" size="lg" />
+  <Avatar size="lg" />
+</Demo>
+
+```tsx
+<Avatar src="/me.png" alt="李四" />
+<Avatar name="张三" />
+<Avatar name="Alice Wang" />
+<Avatar />
+```
+
+多词名字取**首尾两个首字母**（Alice Wang → AW），单个中文名取首字（张三 → 张）；完全没有名字时退回 user 图标。
+
+## 图片加载失败
+
+图挂了不是白块：`onError` 会把它换成首字母回退，并保留 `name` 的颜色与读屏名称。
+`fallback` 可以彻底接管回退内容（优先于首字母）。
+
+<Demo>
+  <Avatar src={SAMPLE_SRC} alt="正常图片" size="lg" />
+  <Avatar src="data:image/png;base64,broken" name="李四" alt="加载失败的头像" size="lg" />
+  <Avatar fallback={<Icon name="sparkles" />} size="lg" />
+</Demo>
+
+```tsx
+{/* 地址失效时自动回退到「李四」的首字母，底色不变 */}
+<Avatar src="data:image/png;base64,broken" name="李四" alt="加载失败的头像" />
+
+{/* 自己接管回退内容 */}
+<Avatar fallback={<Icon name="sparkles" />} />
+```
+
+## 尺寸与形状
+
+四档命名尺寸 `xs` 24 / `sm` 28 / `md` 32（默认）/ `lg` 40，也可以直接给数字（px）。
+形状只有 `circle`（默认）与 `square`（6px 圆角）——方头像是「团队 / 应用」，圆头像是「人」。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 16 }}>
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <Avatar size="xs" name="张三" />
+      <Avatar size="sm" name="李四" />
+      <Avatar size="md" name="王五" />
+      <Avatar size="lg" name="陈六" />
+      <Avatar size={64} name="自定义 64" />
+    </div>
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <Avatar shape="square" name="张三" size="lg" />
+      <Avatar shape="square" name="Alice" size="lg" src={SAMPLE_SRC} alt="方形图片头像" />
+    </div>
+  </div>
+</Demo>
+
+```tsx
+<Avatar size="xs" name="张三" />
+<Avatar size="lg" name="陈六" />
+<Avatar size={64} name="自定义 64" />
+<Avatar shape="square" name="张三" size="lg" />
+```
+
+## 状态点
+
+`status` 在右下角画一个点：`online` / `away` / `busy` / `offline`。
+圆点的颜色**不是唯一信息**：组件同时给读屏一句「在线 / 离开 / 忙碌 / 离线」，色弱用户不会漏掉。
+
+<Demo>
+  <Avatar name="张三" status="online" size="lg" />
+  <Avatar name="李四" status="away" size="lg" />
+  <Avatar name="王五" status="busy" size="lg" />
+  <Avatar name="陈六" status="offline" size="lg" />
+</Demo>
+
+```tsx
+<Avatar name="张三" status="online" size="lg" />
+<Avatar name="李四" status="away" size="lg" />
+```
+
+## 头像组 AvatarGroup
+
+`max` 默认 4，超出的折叠成 `+N`；`size` / `shape` 在组上统一设置（会覆盖子头像自己的）。
+语义上是一个 `role="group"`，读屏名默认「共 N 位成员」；成员总数不是 children 数量时用 `total` 覆盖。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 20 }}>
+    <AvatarGroup max={4}>
+      <Avatar name="张三" />
+      <Avatar name="李四" />
+      <Avatar name="王五" />
+      <Avatar name="陈六" />
+      <Avatar name="赵七" />
+      <Avatar name="孙八" />
+    </AvatarGroup>
+    <AvatarGroup max={3} size="lg" total={12} shape="square">
+      <Avatar name="Alice" src={SAMPLE_SRC} alt="Alice" />
+      <Avatar name="Bob" />
+      <Avatar name="Cindy" />
+    </AvatarGroup>
+  </div>
+</Demo>
+
+```tsx
+<AvatarGroup max={4}>
+  <Avatar name="张三" />
+  <Avatar name="李四" />
+  <Avatar name="王五" />
+  <Avatar name="陈六" />
+  <Avatar name="赵七" />
+</AvatarGroup>
+
+{/* 成员总数来自接口时用 total 覆盖 */}
+<AvatarGroup max={3} total={12} size="lg">
+  <Avatar name="Alice" />
+  <Avatar name="Bob" />
+  <Avatar name="Cindy" />
+</AvatarGroup>
+```
+
+## 与徽标组合
+
+头像本身不画角标，需要数字或红点时用 Badge 包一层——这样角标的定位与语义只有一处实现。
+
+<Demo>
+  <Badge count={3}>
+    <Avatar name="张三" size="lg" />
+  </Badge>
+  <Badge dot>
+    <Avatar name="李四" size="lg" status="online" />
+  </Badge>
+</Demo>
+
+```tsx
+<Badge count={3}>
+  <Avatar name="张三" size="lg" />
+</Badge>
+<Badge dot>
+  <Avatar name="李四" size="lg" status="online" />
+</Badge>
+```
+
+## 无障碍
+
+- 有图片时 `alt` 优先，缺省取 `name`；回退时首字母对读屏隐藏，完整名字放在 `.oui-sr-only` 里
+- 连名字都没有时，读屏听到的是「头像」，而不是一串空内容
+- 状态点本身 `aria-hidden`，状态通过一句隐藏文本表达——**不靠颜色单独传递信息**
+- 头像组是 `role="group"`，默认读屏名「共 N 位成员」；`+N` 气泡是纯视觉（`aria-hidden`）
+- 头像是识别物，不参与 Tab 序列；需要点击时用外面包一层真正的按钮或链接
+
+## API
+
+### Avatar
+
+<PropsTable name="Avatar" native="其余属性透传给根 span。ref 是普通 prop，直接指向根节点（React 19 起不再需要 forwardRef）。" />
+
+### AvatarGroup
+
+<PropsTable name="AvatarGroup" native="其余属性透传给根 div；size / shape 会下发到组内头像，覆盖它们各自的设置。" />

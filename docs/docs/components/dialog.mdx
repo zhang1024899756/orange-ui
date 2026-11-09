@@ -1,0 +1,287 @@
+---
+title: Dialog 对话框
+description: 打断当前流程、要求用户做出决定的模态浮层：焦点陷阱、ESC 与遮罩规则都由组件兜住。
+sidebar_position: 25
+---
+
+import { useState } from 'react';
+import { Dialog, Button } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Dialog 对话框
+
+对话框是「**打断**」：它盖住页面，把注意力收拢到一件事上。所以它只该出现在需要明确决定的时候——
+创建、删除、确认不可逆操作。展示信息用 Popover、抽屉或直接给页面。
+
+组件负责三件难事：渲染到 `body`（用 Portal，不被父级 `overflow` 裁掉）、**焦点陷阱**、以及关闭规则的优先级。
+内容与业务逻辑全部交给你。
+
+```tsx
+import { Dialog } from '@arvinzxy/orange-ui';
+```
+
+## 基础用法
+
+`open` 是受控的，配 `onOpenChange` 一起用。给 `title` 时它同时是对话框的无障碍名称，
+给 `description` 时自动关联 `aria-describedby`——两个都填，读屏一进来就知道「这是什么、要干什么」。
+
+export function BasicDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>打开对话框</Button>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        title="创建项目"
+        description="项目会出现在当前工作区的最前面"
+        onConfirm={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+      >
+        <p style={{ margin: 0, color: 'var(--oui-color-text-secondary)' }}>
+          对话框负责遮罩、焦点陷阱和关闭规则；填什么、提交到哪里，由使用方决定。
+        </p>
+      </Dialog>
+    </>
+  );
+}
+
+<Demo layout="center">
+  <BasicDemo />
+</Demo>
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Button onClick={() => setOpen(true)}>打开对话框</Button>
+<Dialog
+  open={open}
+  onOpenChange={setOpen}
+  title="创建项目"
+  description="项目会出现在当前工作区的最前面"
+  onConfirm={() => setOpen(false)}
+  onCancel={() => setOpen(false)}
+>
+  正文内容
+</Dialog>
+```
+
+## 尺寸 size
+
+三档宽度 `sm` 360 / `md` 480（默认）/ `lg` 640，对应三种信息量，不是三种「好看程度」。
+窄屏下宽度会被 `max-width: 100%` 收住，不会溢出视口。
+
+export function SizesDemo() {
+  const [size, setSize] = useState('sm');
+  const [open, setOpen] = useState(false);
+  const openWith = (next) => {
+    setSize(next);
+    setOpen(true);
+  };
+  return (
+    <>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <Button variant="outlined" onClick={() => openWith('sm')}>sm · 360</Button>
+        <Button variant="outlined" onClick={() => openWith('md')}>md · 480</Button>
+        <Button variant="outlined" onClick={() => openWith('lg')}>lg · 640</Button>
+      </div>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        size={size}
+        title={'宽度 ' + size}
+        onConfirm={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+      >
+        <p style={{ margin: 0, color: 'var(--oui-color-text-secondary)' }}>
+          短确认用 sm，表单用 md，带表格或两栏内容才用 lg。
+        </p>
+      </Dialog>
+    </>
+  );
+}
+
+<Demo layout="center">
+  <SizesDemo />
+</Demo>
+
+```tsx
+<Dialog open={open} onOpenChange={setOpen} size="lg" title="选择成员">
+  正文内容
+</Dialog>
+```
+
+## 底部 footer
+
+不传 `footer` 时渲染默认的「取消 + 确定」；传节点就完全替换底部；传 `false` 只留右上角关闭按钮。
+自定义底部时，视觉重量仍然要遵循「一个实心主按钮」：破坏性动作用 danger，次要动作降级。
+
+export function FooterDemo() {
+  const [custom, setCustom] = useState(false);
+  const [plain, setPlain] = useState(false);
+  return (
+    <>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <Button variant="outlined" onClick={() => setCustom(true)}>自定义底部</Button>
+        <Button variant="outlined" onClick={() => setPlain(true)}>只要关闭按钮</Button>
+      </div>
+      <Dialog
+        open={custom}
+        onOpenChange={setCustom}
+        title="删除这个项目？"
+        description="删除后无法恢复，协作者会立即失去访问权限"
+        footer={
+          <>
+            <Button variant="ghost" color="neutral" onClick={() => setCustom(false)}>再想想</Button>
+            <Button color="danger" onClick={() => setCustom(false)}>删除</Button>
+          </>
+        }
+      >
+        <p style={{ margin: 0, color: 'var(--oui-color-text-secondary)' }}>
+          footer 接受任意节点；这里把不可逆动作放在最后，并且用 danger。
+        </p>
+      </Dialog>
+      <Dialog open={plain} onOpenChange={setPlain} title="发布说明" footer={false}>
+        <p style={{ margin: 0, color: 'var(--oui-color-text-secondary)' }}>
+          footer=false 时没有底部区域，适合「读一段公告」这种没有分支动作的对话框。
+        </p>
+      </Dialog>
+    </>
+  );
+}
+
+<Demo layout="center">
+  <FooterDemo />
+</Demo>
+
+```tsx
+<Dialog open={open} onOpenChange={setOpen} title="删除这个项目？" footer={false}>
+  公告正文
+</Dialog>
+```
+
+## 加载与提交中
+
+`loading` 表示**内容还在取**：标题保留，内容区换成三条骨架，确定按钮同时进入 loading——
+骨架条自己用 div 画，尺寸与真实内容一致，加载完成不会跳一下。
+
+`confirmLoading` 表示**正在提交**：只锁「意外关闭」（遮罩点击与 ESC），右上角 X 和取消按钮仍然可用。
+用哪一种取决于你想不想让用户在过程中反悔。
+
+export function LoadingDemo() {
+  const [loadingOpen, setLoadingOpen] = useState(false);
+  const [busyOpen, setBusyOpen] = useState(false);
+  return (
+    <>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <Button variant="outlined" onClick={() => setLoadingOpen(true)}>内容加载中</Button>
+        <Button variant="outlined" onClick={() => setBusyOpen(true)}>提交中</Button>
+      </div>
+      <Dialog
+        open={loadingOpen}
+        onOpenChange={setLoadingOpen}
+        title="正在加载详情"
+        loading
+        onConfirm={() => setLoadingOpen(false)}
+        onCancel={() => setLoadingOpen(false)}
+      >
+        <p style={{ margin: 0 }}>内容还在路上，这里不会被换成半截真实内容。</p>
+      </Dialog>
+      <Dialog
+        open={busyOpen}
+        onOpenChange={setBusyOpen}
+        title="正在保存"
+        description="提交期间点遮罩和按 ESC 都不会关闭"
+        confirmLoading
+        onConfirm={() => setBusyOpen(false)}
+        onCancel={() => setBusyOpen(false)}
+      >
+        <p style={{ margin: 0 }}>请求已经发出，正在等服务器返回。</p>
+      </Dialog>
+    </>
+  );
+}
+
+<Demo layout="center">
+  <LoadingDemo />
+</Demo>
+
+```tsx
+<Dialog open={open} onOpenChange={setOpen} title="正在加载详情" loading>
+  正文
+</Dialog>
+
+<Dialog open={open} onOpenChange={setOpen} title="正在保存" confirmLoading>
+  正文
+</Dialog>
+```
+
+## 关闭方式
+
+关闭路径有四种，优先级不同：
+
+| 动作 | 触发 | confirmLoading 时 |
+| --- | --- | --- |
+| 右上角 X / 取消按钮 | `onCancel` + `onOpenChange(false)` | 仍可关 |
+| 点遮罩 | 同上，需 `maskClosable` 不为 `false` | 被屏蔽 |
+| ESC | 同上，需 `closeOnEsc` 不为 `false` | 被屏蔽 |
+| 确定按钮 | 只回调 `onConfirm` | 转 loading，不重复触发 |
+
+注意**确定按钮不会自动关闭对话框**：关不关、什么时候关，由 `onConfirm` 里决定。
+需要「必须做个选择才能走」时，同时关掉遮罩与 ESC：
+
+export function LockedDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant="outlined" onClick={() => setOpen(true)}>只能点按钮关闭</Button>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        title="必须做出选择"
+        description="这个对话框关掉了遮罩点击与 ESC"
+        maskClosable={false}
+        closeOnEsc={false}
+        onConfirm={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+      >
+        <p style={{ margin: 0 }}>只有 X、取消、确定三个出口。</p>
+      </Dialog>
+    </>
+  );
+}
+
+<Demo layout="center">
+  <LockedDemo />
+</Demo>
+
+```tsx
+<Dialog
+  open={open}
+  onOpenChange={setOpen}
+  title="必须做出选择"
+  maskClosable={false}
+  closeOnEsc={false}
+  onConfirm={() => setOpen(false)}
+>
+  正文
+</Dialog>
+```
+
+## 无障碍
+
+- 渲染到 `body`（Portal），面板带 `role="dialog"` 与 `aria-modal="true"`
+- 有 `title` 时用 `aria-labelledby` 指向标题；有 `description` 时用 `aria-describedby` 指向副标题
+- **焦点陷阱是手写的**：打开时焦点进入面板内第一个可聚焦元素，`Tab` / `Shift+Tab` 在面板内循环，关闭后焦点还给打开前的元素
+- 打开期间锁住页面滚动，关闭即还原
+- 右上角关闭按钮是真按钮，带 `aria-label="关闭"`，命中区 24×24
+- 遮罩是纯视觉层（没有可访问内容），键盘用户用 ESC 与 X 退出
+- 进场是 `opacity` + 8px 位移、120ms；`prefers-reduced-motion` 下动画关闭（关闭是立即卸载，没有退场动画）
+
+## API
+
+<PropsTable
+  name="Dialog"
+  native="其余属性透传给最外层浮层容器；ref 是普通 prop，指向内部面板（role=dialog 的那一层）。React 19 起不再需要 forwardRef。"
+/>

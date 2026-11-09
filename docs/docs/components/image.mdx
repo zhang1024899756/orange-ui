@@ -1,0 +1,155 @@
+---
+title: Image 图片
+description: 先占位再加载的图片组件：固定比例容器 + 骨架 + 失败回退，加载过程不推动页面。
+sidebar_position: 15
+---
+
+import { Image } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+export const COVER =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EFF2F9"/><stop offset="1" stop-color="#C4C3D9"/></linearGradient></defs><rect width="640" height="360" fill="url(#g)"/></svg>',
+  );
+
+export const BROKEN = 'data:image/png;base64,AAAA';
+
+# Image 图片
+
+图片是布局杀手：加载前高度 0，加载完撑开，整页内容往下跳一次。Image 的解法是**先占位再加载**——
+容器按 `ratio` 先把尺寸占住（`aspect-ratio`），图片在容器里以 `opacity` 淡入，**任何时刻都不改变文档流**。
+
+配套三态：加载中（骨架扫光）、成功、失败（灰底 + 图标 + 文案，可被 `fallback` 覆盖）。
+
+## 基础用法
+
+`alt` 是**类型上的必填项**，没有默认值。这不是刁难：没有 alt 的图片，读屏用户完全不知道那里有什么。
+
+<Demo layout="block">
+  <div style={{ width: 360 }}>
+    <Image src={COVER} alt="一张示例封面图" />
+  </div>
+</Demo>
+
+```tsx
+<Image src="/images/cover.png" alt="产品首页截图" />
+```
+
+默认比例 16:9、默认圆角 `md`、默认懒加载（`loading="lazy"`）。首屏主图请传 `lazy={false}`，避免它被延迟到用户滚到时才请求。
+
+## 比例与填充
+
+五档比例：`1:1` / `4:3` / `16:9` / `3:4` / `auto`。`auto` 表示跟随图片自身比例——
+这时候骨架无法预占位，只给一个最小高度兜底，**列表里不要用它**。
+
+`fit` 决定图片在容器里怎么放：`cover` 裁切填满（默认，适合封面），`contain` 完整显示（适合构图、图表、截图）。
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+    <div style={{ width: 160 }}>
+      <Image src={COVER} alt="1:1 头像位" ratio="1:1" />
+    </div>
+    <div style={{ width: 200 }}>
+      <Image src={COVER} alt="4:3 卡片封面" ratio="4:3" />
+    </div>
+    <div style={{ width: 260 }}>
+      <Image src={COVER} alt="16:9 横幅" ratio="16:9" />
+    </div>
+    <div style={{ width: 140 }}>
+      <Image src={COVER} alt="3:4 竖图" ratio="3:4" />
+    </div>
+  </div>
+  <div style={{ display: 'flex', gap: 16, marginTop: 16 }}>
+    <div style={{ width: 200 }}>
+      <Image src={COVER} alt="cover 裁切填满" ratio="1:1" fit="cover" />
+    </div>
+    <div style={{ width: 200 }}>
+      <Image src={COVER} alt="contain 完整显示" ratio="1:1" fit="contain" />
+    </div>
+  </div>
+</Demo>
+
+```tsx
+<Image src="/a.png" alt="卡片封面" ratio="4:3" />
+<Image src="/a.png" alt="图表" ratio="16:9" fit="contain" />
+```
+
+## 圆角
+
+六档圆角与 token 一一对应，**不要用内联 style 改圆角**，否则在不同卡片里会出现 5px / 6px / 8px 三种「差不多」的角。
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+    <div style={{ width: 120 }}><Image src={COVER} alt="none" radius="none" ratio="1:1" /></div>
+    <div style={{ width: 120 }}><Image src={COVER} alt="sm" radius="sm" ratio="1:1" /></div>
+    <div style={{ width: 120 }}><Image src={COVER} alt="md" radius="md" ratio="1:1" /></div>
+    <div style={{ width: 120 }}><Image src={COVER} alt="lg" radius="lg" ratio="1:1" /></div>
+    <div style={{ width: 120 }}><Image src={COVER} alt="xl" radius="xl" ratio="1:1" /></div>
+    <div style={{ width: 120 }}><Image src={COVER} alt="2xl" radius="2xl" ratio="1:1" /></div>
+  </div>
+</Demo>
+
+## 加载中
+
+传 `loading` 会**强制**停在骨架态（图片照常加载，只是不显示）。它适合两种情况：
+Storybook 里展示骨架、以及首屏数据还没回来时先占位。
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 16 }}>
+    <div style={{ width: 240 }}><Image src={COVER} alt="骨架态" ratio="16:9" loading /></div>
+    <div style={{ width: 240 }}><Image src={COVER} alt="方块骨架" ratio="1:1" loading radius="lg" /></div>
+  </div>
+</Demo>
+
+```tsx
+<Image src="/a.png" alt="封面" loading />
+```
+
+不传 `loading` 时是**非受控**：`onLoad` / `onError` 自己驱动状态；
+传了就是**受控**：图片事件不再改状态，只回调 `onLoadingChange`，你可以用真实进度接管。
+
+## 失败回退
+
+默认失败态是灰底 + 图标 + 「加载失败」四个字。**必须有文字**：只放一个破图标，用户不知道是网络问题还是图没了。
+
+`fallback` 可以整块替换默认占位——常见做法是放一个「重新上传」或占位插画。
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 16 }}>
+    <div style={{ width: 240 }}><Image src={BROKEN} alt="加载失败的图片" ratio="16:9" /></div>
+    <div style={{ width: 240 }}>
+      <Image
+        src={BROKEN}
+        alt="自定义占位的图片"
+        ratio="16:9"
+        fallback={
+          <span style={{ display: 'grid', placeItems: 'center', height: '100%', fontSize: 12, color: 'var(--oui-color-text-tertiary)' }}>
+            封面待补充
+          </span>
+        }
+      />
+    </div>
+  </div>
+</Demo>
+
+```tsx
+<Image src="/a.png" alt="封面" fallback={<span>封面待补充</span>} />
+```
+
+## 无障碍
+
+- `alt` **在类型上就是必填**，不给默认值：没有 alt 的图片会在读屏里变成一段无声的空白
+- 纯装饰图传 `alt=""`（空字符串是合法且有意义的），读屏会跳过它，而不是读一遍文件名
+- 失败态有**文字**「加载失败」，不是只靠图标或颜色区分
+- 骨架层是 `aria-hidden`，外层在加载期间带 `aria-busy="true"`——读屏用户知道「这里在加载」，但不会听到一堆灰块
+- 懒加载默认开启，但**首屏主图和 LCP 图请传 `lazy={false}`**，否则会拖慢首屏
+- 图片始终是真实的 `<img>`（不是 CSS 背景），所以能被右键保存、被读屏读出、被搜索引擎收录
+
+## API
+
+<PropsTable
+  name="Image"
+  native="其余属性（onLoad、onError、decoding、crossOrigin、aria-* 等）透传给底层 <img>。className 与 style 落在外层容器上，ref 指向 <img>。"
+/>

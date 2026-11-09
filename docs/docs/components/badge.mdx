@@ -1,0 +1,141 @@
+---
+title: Badge 徽章
+description: 贴在元素右上角的计数或状态指示器，独立显示时也能当纯数字用，读屏文案有默认值。
+sidebar_position: 20
+---
+
+import { Badge, Icon, Button } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Badge 徽章
+
+徽章回答一个问题：「**这里有多少、有没有新东西**」。它永远是配角——
+挂在头像、图标、按钮的右上角，**不该被单独摆在一行中间当装饰**。
+
+它和 [Tag](/components/tag) 的分工：Tag 描述「**这是什么**」，Badge 描述「**有多少**」。
+
+## 基础用法
+
+不传 `children` 时独立显示，就是一个圆角胶囊。
+
+<Demo>
+  <Badge count={5} />
+  <Badge count={99} />
+  <Badge count={128} />
+  <Badge count={128} max={999} />
+  <Badge count={0} showZero />
+</Demo>
+
+```tsx
+<Badge count={5} />
+<Badge count={128} max={999} />
+<Badge count={0} showZero />
+```
+
+`count` 默认在 99 处封顶显示「99+」；0 默认**不显示**（没有未读时不该占一个坑），要显示传 `showZero`。
+
+## 吸附到元素
+
+传了 `children` 就绝对定位到右上角。徽章自带一圈底色描边，压在深色头像或图片上也不会和背景糊在一起。
+
+<Demo>
+  <Badge count={3}>
+    <Button variant="outlined" size="md" icon={<Icon name="bell" size={16} />}>消息</Button>
+  </Badge>
+  <Badge count={12}>
+    <span style={{ display: 'inline-flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 8, background: 'var(--oui-color-bg-muted)' }}>
+      <Icon name="user" size={20} />
+    </span>
+  </Badge>
+  <Badge dot>
+    <Icon name="bell" size={24} />
+  </Badge>
+</Demo>
+
+```tsx
+<Badge count={3}>
+  <Button variant="outlined">消息</Button>
+</Badge>
+<Badge dot>
+  <Icon name="bell" size={24} />
+</Badge>
+```
+
+## 圆点 dot
+
+`dot` 只有一个小圆点，没有数字。用于「有新内容但不需要数」的场景（在线状态、未读提示）。
+**它必须靠 `label` 或旁边的文字说明含义**——一个孤零零的红点对读屏用户等于噪音。
+
+<Demo>
+  <Badge dot color="primary" />
+  <Badge dot color="success" />
+  <Badge dot color="danger" />
+  <Badge dot color="warning" size="md" />
+</Demo>
+
+```tsx
+<Badge dot />
+<Badge dot color="success" />
+```
+
+## 文字徽章 content
+
+`content` 放固定文案：`NEW`、`BETA`、`HOT`。文字徽章本身可读，**不加 `role="img"`**（不像数字那样需要替读屏念一遍）。
+
+<Demo>
+  <Badge content="NEW" />
+  <Badge content="BETA" color="warning" />
+  <Badge content="HOT" color="danger" />
+  <Badge content="PRO">
+    <span style={{ display: 'inline-flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 8, background: 'var(--oui-color-bg-muted)' }}>
+      <Icon name="star" size={20} />
+    </span>
+  </Badge>
+</Demo>
+
+```tsx
+<Badge content="NEW" />
+<Badge content="BETA" color="warning" />
+```
+
+## 颜色、尺寸与偏移
+
+五种角色色（和 [Button](/components/button) 的 color 同一套语义）；两档尺寸：`sm` 16px（默认）、`md` 24px。
+`offset` 是相对右上角的微调，单位 px——只用来避让，不要拿它排版。
+
+<Demo>
+  <Badge count={1} color="primary" />
+  <Badge count={2} color="neutral" />
+  <Badge count={3} color="success" />
+  <Badge count={4} color="warning" />
+  <Badge count={5} color="danger" />
+  <Badge count={9} size="md" color="danger" />
+  <Badge count={9} offset={[8, -4]}>
+    <span style={{ display: 'inline-flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 8, background: 'var(--oui-color-bg-muted)' }}>
+      <Icon name="image" size={20} />
+    </span>
+  </Badge>
+</Demo>
+
+```tsx
+<Badge count={5} color="danger" />
+<Badge count={9} size="md" />
+<Badge count={9} offset={[8, -4]}>{child}</Badge>
+```
+
+## 无障碍
+
+- 数字徽章自动带 `role="img"` 和 `aria-label="N 条未读"`——读屏不会只念出一个孤立的数字
+- `dot` 默认读作「有未读内容」；场景不同就用 `label` 覆盖（例如「账号在线」）
+- 文字徽章（`NEW`）**不套 `role="img"`**：文案本身可读，多套一层反而会被念两遍
+- 气泡是 `pointer-events: none`：点击穿透到被标注的元素上，不会出现「点了红点没反应」
+- 气泡边缘有一圈 `box-shadow` 描边（等于底色），压在任何背景上都能分出边界
+- **不要只用颜色表达状态**：dot 的含义必须由 `label` 或旁边文字承担，色盲用户看不到「红」
+
+## API
+
+<PropsTable
+  name="Badge"
+  native="其余属性透传给外层 span（id、data-*、aria-* 等）。ref 是普通 prop。"
+/>

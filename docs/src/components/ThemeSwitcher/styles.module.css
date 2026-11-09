@@ -1,0 +1,60 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid var(--oui-color-border);
+  border-radius: 9999px;
+  background: var(--oui-color-bg);
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--dot);
+  box-shadow: 0 0 0 2px transparent;
+  transition: box-shadow 120ms ease, transform 120ms ease;
+}
+
+.dot:hover { transform: scale(1.12); }
+
+.dot[data-active] {
+  box-shadow: 0 0 0 2px var(--oui-color-bg), 0 0 0 3px var(--dot);
+}
+
+/* 命中区 24×24，视觉仍是 14px */
+.dot::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+}
+
+.dot { position: relative; }
+
+.sep {
+  width: 1px;
+  height: 14px;
+  margin: 0 2px;
+  background: var(--oui-color-border);
+}
+
+.mode {
+  min-width: 22px;
+  min-height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--oui-color-text-secondary);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  position: relative;
+}
+
+.mode:hover { background: var(--oui-color-bg-muted); }

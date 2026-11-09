@@ -1,0 +1,79 @@
+---
+title: Empty 空状态
+description: 没有内容时，页面应该说明为什么没有、以及下一步能做什么。
+sidebar_position: 5
+---
+
+import { Empty, Button } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Empty 空状态
+
+空状态是**唯一一个「没有内容」却必须被认真设计**的页面。它要回答三件事：
+为什么是空的、是不是我操作错了、下一步能做什么。
+
+内置插画是一只空托盘（48 网格、1.75 线宽、圆头），和内置图标是同一套手绘语言，
+所以它放在任何组件旁边都不会像「贴上去的第三方插图」。
+
+## 基础用法
+
+<Demo layout="center">
+  <Empty />
+</Demo>
+
+## 说清楚为什么空
+
+默认文案是「暂无数据」，但那只对「本来就没有」成立。搜索无结果、筛选过窄、权限不足，
+三种空态应该给三种不同的下一步。
+
+<Demo layout="grid" columns={2}>
+  <Empty
+    title="没有匹配的模型"
+    description="试试减少筛选条件，或换一个关键词。"
+    action={<Button size="sm" variant="outlined">清除筛选</Button>}
+  />
+  <Empty
+    title="还没有创建过创空间"
+    description="创空间可以把你训练的模型变成一个能分享的页面。"
+    action={<Button size="sm">创建第一个</Button>}
+  />
+</Demo>
+
+## 尺寸
+
+`sm` 用于卡片内部、`md`（默认）用于列表区、`lg` 用于整页。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 20 }}>
+    <Empty size="sm" title="卡片内的空态" />
+    <Empty size="md" title="列表区的空态" description="这里是最常用的尺寸。" />
+  </div>
+</Demo>
+
+## 自定义插画
+
+`icon` 可以换成自己的图（建议 48–72px、同一条线）。**别用彩色大插画**——
+空态是整页最安静的角落，彩色插画会把注意力吸到「什么都没有」上。
+
+<Demo layout="center">
+  <Empty
+    title="全部模型都在训练队列里"
+    description="训练完成后会自动出现在这里。"
+    icon={<span style={{ fontSize: 40, lineHeight: 1 }} aria-hidden="true">⏳</span>}
+  />
+</Demo>
+
+## 无障碍
+
+- 标题是 `<div>` 而不是 `<hN>`：空态不是页面的章节标题，塞进大纲会让目录错乱
+- 插画带 `aria-hidden="true"`，信息全部由文案承担
+- 有 `action` 时，按钮必须是**真正可聚焦**的元素（不要用 div 模拟点击）
+- 不要只靠颜色表达状态，文案里要写清楚「为什么空」
+
+## API
+
+<PropsTable
+  name="Empty"
+  native="其余属性透传给外层 div。"
+/>

@@ -1,0 +1,94 @@
+---
+title: 字体与字号
+description: 6 档字号、3 档字重、2 个字体族——就这么多。
+sidebar_position: 3
+---
+
+import { Text } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+
+# 字体与字号
+
+## 字体族
+
+| 用途 | 字体栈 |
+|---|---|
+| 正文 | `'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif` |
+| 数值 / 代码 | `'Roboto Mono', ui-monospace, Menlo, Consolas, monospace` |
+
+中文界面不要用衬线体，也不要引入网络字体——首屏一段字体加载失败，整页排版会崩。
+数值用等宽并开 `font-variant-numeric: tabular-nums`，这样列表里数字才会上下对齐。
+
+## 6 档字号
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 14 }}>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
+      <code style={{ width: 130, fontSize: 11 }}>--oui-font-2xl · 32/40</code>
+      <Text size="2xl" weight={600}>模型社区</Text>
+    </div>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
+      <code style={{ width: 130, fontSize: 11 }}>--oui-font-xl · 24/32</code>
+      <Text size="xl" weight={600}>页面标题</Text>
+    </div>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
+      <code style={{ width: 130, fontSize: 11 }}>--oui-font-lg · 20/28</code>
+      <Text size="lg" weight={600}>区块标题</Text>
+    </div>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
+      <code style={{ width: 130, fontSize: 11 }}>--oui-font-md · 16/24</code>
+      <Text size="md" weight={600}>卡片标题</Text>
+    </div>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
+      <code style={{ width: 130, fontSize: 11 }}>--oui-font-sm · 14/22</code>
+      <Text size="sm">正文默认字号，长文阅读用这一档</Text>
+    </div>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
+      <code style={{ width: 130, fontSize: 11 }}>--oui-font-xs · 12/18</code>
+      <Text size="xs">元信息、标签、徽章、下载量</Text>
+    </div>
+  </div>
+</Demo>
+
+:::note 为什么正文是 14 而不是 16
+参照站列表页 12px 的文字出现 472 次——它的信息密度是「小字 + 大间距」。
+但纯 12px 做正文对中文太狠，所以正文取 14，**只有元信息才下到 12**。
+:::
+
+## 3 档字重
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 28, alignItems: 'baseline', flexWrap: 'wrap' }}>
+    <Text size="lg" weight={400}>400 Regular</Text>
+    <Text size="lg" weight={500}>500 Medium</Text>
+    <Text size="lg" weight={600}>600 Semibold</Text>
+  </div>
+</Demo>
+
+**没有 700/800。** 中文在 700 以上字重会开始糊，且大多数系统字体没有对应的真字重，
+浏览器只能做合成加粗——那看起来比不加粗更廉价。
+
+## 色调
+
+<Demo>
+  <Text>text 主文本</Text>
+  <Text tone="secondary">secondary 正文</Text>
+  <Text tone="tertiary">tertiary 元信息</Text>
+  <Text tone="primary">primary 强调</Text>
+  <Text tone="danger">danger 警示</Text>
+  <Text tone="disabled">disabled</Text>
+</Demo>
+
+## 截断
+
+单行用 `truncate`（省略号），多行用 `truncate={2}`（clamp）。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 10, maxWidth: 360 }}>
+    <Text truncate>Qwen3-235B-A22B-Thinking-2507 是通义千问系列最新的推理模型，上下文长度 256K。</Text>
+    <Text truncate={2}>
+      这是一段真实的模型描述：该模型在数学、代码与逻辑推理三项基准上较上一代提升明显，
+      支持 100 多种语言与方言，具备强大的多语言指令执行和翻译能力。
+    </Text>
+  </div>
+</Demo>

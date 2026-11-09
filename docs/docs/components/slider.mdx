@@ -1,0 +1,154 @@
+---
+title: Slider 滑动条
+description: 单值或双 thumb 的连续取值控件，键盘、指针、读屏三条通道都完整。
+sidebar_position: 18
+---
+
+import { Slider } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Slider 滑动条
+
+滑块的价值在于「拖的时候知道自己在哪」，而不是「看起来像设置面板」。
+
+实现建立在 `role="slider"` 上：每个 thumb 都是一个可聚焦的滑轨手柄，带完整的 `aria-valuenow` / `aria-valuemin` / `aria-valuemax`；
+指针交互用 Pointer Events（鼠标、触摸、手写笔一套代码），点在轨道空白处会把**最近的 thumb** 跳过去。
+值可以是单个数字，也可以是 `[最小值, 最大值]`——给了数组就自动进入双滑块。
+
+```tsx
+import { Slider } from '@arvinzxy/orange-ui';
+```
+
+## 基础用法
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 28, width: 420 }}>
+    <Slider defaultValue={40} aria-label="音量" />
+    <Slider defaultValue={0.3} min={0} max={1} step={0.1} tooltip="always" aria-label="透明度" />
+  </div>
+</Demo>
+
+```tsx
+<Slider defaultValue={40} aria-label="音量" />
+<Slider defaultValue={0.3} min={0} max={1} step={0.1} tooltip="always" aria-label="透明度" />
+```
+
+## 双滑块 range
+
+给数组值就自动进入双滑块；两个 thumb 各带 `aria-label="最小值"` / `aria-label="最大值"`，
+并且互相夹紧——拖左边只会停在右边内侧，反之亦然，**永远不会交叉**。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 28, width: 420 }}>
+    <Slider defaultValue={[20, 60]} aria-label="价格区间" />
+    <Slider defaultValue={[0, 100]} tooltip="always" aria-label="全区间" />
+  </div>
+</Demo>
+
+```tsx
+<Slider defaultValue={[20, 60]} aria-label="价格区间" />
+<Slider defaultValue={[0, 100]} tooltip="always" aria-label="全区间" />
+```
+
+## 刻度 marks
+
+`marks` 的键是数值，值是任意节点；落在当前区间里的刻度点会变成主色（双滑块时是两 thumb 之间）。
+刻度只是视觉参考，不改变 step——想要吸附到刻度，把 `step` 设成刻度间隔。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 44, width: 460 }}>
+    <Slider defaultValue={40} marks={{ 0: '0℃', 50: '50℃', 100: '100℃' }} aria-label="温度" />
+  </div>
+</Demo>
+
+```tsx
+<Slider
+  defaultValue={40}
+  marks={{ 0: '0℃', 50: '50℃', 100: '100℃' }}
+  aria-label="温度"
+/>
+```
+
+## 数值提示 tooltip
+
+`hover`（默认）在悬停 / 聚焦 / 拖动时显示，`always` 常显，`never` 不显示。
+气泡里的数字按 `step` 的小数位格式化（`step={0.1}` 就显示一位小数），且对读屏隐藏（`aria-hidden`）——
+读屏用户拿的是 thumb 上的 `aria-valuenow`。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 28, width: 420 }}>
+    <Slider tooltip="hover" defaultValue={30} aria-label="悬停显示" />
+    <Slider tooltip="always" defaultValue={60} aria-label="常显" />
+    <Slider tooltip="never" defaultValue={90} aria-label="不显示" />
+  </div>
+</Demo>
+
+```tsx
+<Slider tooltip="hover" defaultValue={30} aria-label="悬停显示" />
+<Slider tooltip="always" defaultValue={60} aria-label="常显" />
+<Slider tooltip="never" defaultValue={90} aria-label="不显示" />
+```
+
+## 键盘
+
+聚焦 thumb 后：
+
+| 按键 | 行为 |
+| --- | --- |
+| ← / ↓ | 减一个 `step` |
+| → / ↑ | 加一个 `step` |
+| PageUp | 加十个 `step` |
+| PageDown | 减十个 `step` |
+| Home | 到 `min` |
+| End | 到 `max` |
+
+键盘调整会触发 `onChange`，但**不会**触发 `onChangeComplete`——后者只在指针松手时给，用来区分「正在调」和「调完了」。
+
+## 禁用与加载
+
+`disabled` / `loading` 都会降透明、把 thumb 移出 Tab 序列（`tabIndex="-1"` + `aria-disabled`）并禁止拖动；
+`loading` 额外把 thumb 内容换成转圈，尺寸不变。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 28, width: 420 }}>
+    <Slider disabled defaultValue={30} aria-label="禁用" />
+    <Slider loading defaultValue={70} aria-label="加载中" />
+  </div>
+</Demo>
+
+```tsx
+<Slider disabled defaultValue={30} aria-label="禁用" />
+<Slider loading defaultValue={70} aria-label="加载中" />
+```
+
+## 受控与 onChangeComplete
+
+```tsx
+const [price, setPrice] = useState([20, 60]);
+
+<Slider
+  range
+  value={price}
+  onChange={(next) => setPrice(next)}
+  onChangeComplete={(next) => save(next)}
+  aria-label="价格区间"
+/>
+```
+
+## 无障碍
+
+- 每个 thumb 都是 `role="slider"`，带 `aria-valuemin` / `aria-valuemax` / `aria-valuenow`，Tab 可聚焦
+- 双滑块各带 `aria-label="最小值"` / `aria-label="最大值"`；单滑块不传 `aria-label` 时默认叫「滑块」
+- 键盘六键齐全：方向键步进、Home / End 到两端、PageUp / PageDown 十个 step
+- 禁用与加载时 `aria-disabled` + `tabIndex="-1"`，不会留在 Tab 序列里
+- thumb 视觉 14px，命中区 24px；轨道可点区域也是 24 高
+- 气泡数字是视觉信息（`aria-hidden`），真实数值由 `aria-valuenow` 承担
+- `min === max` 的退化区间按 0% 处理，不出 NaN、不进入死循环
+
+## API
+
+<PropsTable
+  name="Slider"
+  native="其余属性（aria-label、id、data-* 等）透传给根 div。ref 是普通 prop，直接指向根 div（React 19 起不再需要 forwardRef）。"
+/>

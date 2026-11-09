@@ -1,0 +1,79 @@
+---
+title: 无障碍
+description: 对比度、焦点、命中区、读屏语义——做了什么，豁免了什么，都说清楚。
+sidebar_position: 3
+---
+
+# 无障碍
+
+这一页不是「我们也支持无障碍」的口号，而是**逐条列出边界**：
+哪些做到了、哪些靠豁免、哪些不支持。
+
+## 对比度
+
+所有正文与控件文字都跑过 WCAG AA（4.5:1）。三处值得说明：
+
+| 项 | 值 | 说明 |
+|---|---|---|
+| 三级文字 `--oui-color-text-tertiary` | `#6B6D8E` · 5.00:1 | 参照站原值 `#8284A4` 只有 3.63:1，我们抬了一档 |
+| 主色当文字 `--oui-color-primary-ink` | 各主题单独派生 | 主色本身当文字不够，必须用 `*-ink` |
+| 禁用态 | `--oui-color-text-disabled` | **不参与检查**——WCAG 1.4.3 明确豁免禁用控件 |
+
+## 焦点
+
+- 只有键盘操作时出现焦点环（`:focus-visible`），鼠标点击不出现
+- 焦点环用 `--oui-color-primary-border`（主色 32%），2px
+- Dialog 会做焦点陷阱：打开时焦点进第一个可聚焦元素，`Tab` 在内部循环，`Esc` 关闭后焦点回到触发元素
+
+## 命中区
+
+可点元素的**视觉尺寸**按参照站来（标签关闭按钮 12px、输入框动作按钮 16px、开关 32×18），
+但**命中区一律补到 24×24**，用伪元素外扩，不改变布局：
+
+```css
+.oui-tag__x::after { content: ''; position: absolute; inset: -6px; }
+```
+
+并排元素之间只扩上下方向，避免可点区互相覆盖。
+自动检查工具量的是 `getBoundingClientRect()`，看不到伪元素，所以它会一直报「点击区太小」——
+这是工具的局限，不是缺陷，我们按 WCAG 2.5.8 的 spacing exception 合规。
+
+## 读屏语义
+
+| 场景 | 处理 |
+|---|---|
+| 按钮 loading | `aria-busy="true"` + 阻断点击；有 `loadingText` 时用它做无障碍名称 |
+| 纯图标按钮 | 必须传 `aria-label`，否则读屏只念「按钮」 |
+| Spinner 无文字 | 对读屏隐藏；有 `label` 时 `role="status"` |
+| Skeleton | 灰块对读屏隐藏；包裹模式外层带 `aria-busy` |
+| Badge 数字 | `role="img"` + `aria-label="3 条未读"`，避免数字被逐字读出 |
+| Tag 可关闭 | 关闭按钮有独立 `aria-label="移除 <标签文本>"` |
+| Tooltip | 气泡 `role="tooltip"`，用 `aria-describedby` 关联，`Esc` 关闭 |
+| Dialog | `role="dialog"` + `aria-modal="true"` + 标题用 `aria-labelledby` 关联 |
+| Password 切换 | 按钮 `aria-pressed` 表达当前是否明文 |
+
+## 减少动态偏好
+
+`prefers-reduced-motion: reduce` 下：
+
+- 骨架屏扫光 → 静态灰块
+- 过渡与动画时长 → 0.001ms
+- **转圈放慢但不停**（完全静止会被误读成卡死）
+
+## 测试
+
+每个组件都有 `jest-axe` 零违规断言，随 `pnpm test` 一起跑：
+
+```bash
+pnpm test
+# 20 个测试文件 / 186 条断言
+```
+
+axe 只能覆盖「机械可判定」的规则（角色、标签、对比度）。键盘路径、焦点顺序、
+读屏播报顺序这类，我们靠手写断言（`Tab`、`Esc`、`aria-busy` 断言）补。
+
+## 不支持
+
+- **不支持 IE**：CSS 用了 `color-mix()`、`:where()`、```layer`，IE 一个都不支持
+- **不做 RTL**：目前没有 `dir="rtl"` 适配
+- **不做高对比度模式**（`forced-colors`）特殊样式

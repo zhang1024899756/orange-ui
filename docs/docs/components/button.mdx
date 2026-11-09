@@ -1,0 +1,159 @@
+---
+title: Button 按钮
+description: 页面上唯一确定性的动作。一屏只留一个实心主按钮，其余降级为描边、浅底或纯文字。
+sidebar_position: 1
+---
+
+import { Button } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Button 按钮
+
+页面上唯一确定性的动作。**一屏只留一个实心主按钮**，其余降级为描边、浅底或纯文字——
+强调色出现的次数，就是这页信息的层级。
+
+按钮的高度由 `size` 决定（24 / 28 / 32 / 40），默认 32 与参照站一致；圆角固定 4px，
+因为它是「工具」不是「气泡」。加载时**锁定原宽度**：文字位置不动，只把左边图标换成转圈。
+
+```tsx
+import { Button } from '@arvinzxy/orange-ui';
+```
+
+## 基础用法
+
+<Demo>
+  <Button>立即创建</Button>
+  <Button variant="outlined">取消</Button>
+  <Button variant="ghost">跳过</Button>
+  <Button variant="text">查看详情</Button>
+</Demo>
+
+```tsx
+<Button>立即创建</Button>
+<Button variant="outlined">取消</Button>
+<Button variant="ghost">跳过</Button>
+<Button variant="text">查看详情</Button>
+```
+
+## 形态 variant
+
+五种形态按「视觉重量」从重到轻排列。同一区域里越靠后的动作，用越轻的形态。
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+    <Button variant="solid">solid 实心</Button>
+    <Button variant="outlined">outlined 描边</Button>
+    <Button variant="soft">soft 浅底</Button>
+    <Button variant="ghost">ghost 幽灵</Button>
+    <Button variant="text">text 文字</Button>
+  </div>
+</Demo>
+
+## 角色色 color
+
+`color` 声明这个按钮代表哪种语义，不代表「我想让它变彩色」。
+一个页面里 `danger` 只该出现在真正不可逆的操作上。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: 12 }}>
+    <Button color="primary">primary</Button>
+    <Button color="neutral">neutral</Button>
+    <Button color="success">success</Button>
+    <Button color="warning">warning</Button>
+    <Button color="danger">danger</Button>
+  </div>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: 12, marginTop: 12 }}>
+    <Button variant="outlined" color="primary">primary</Button>
+    <Button variant="outlined" color="neutral">neutral</Button>
+    <Button variant="outlined" color="success">success</Button>
+    <Button variant="outlined" color="warning">warning</Button>
+    <Button variant="outlined" color="danger">danger</Button>
+  </div>
+</Demo>
+
+## 尺寸 size
+
+四档高度对应四种信息密度：`xs` 给表格行内，`lg` 给落地页主 CTA。
+**同一行里的按钮必须同尺寸**，混排会让整行基线错位。
+
+<Demo>
+  <Button size="xs">xs · 24</Button>
+  <Button size="sm">sm · 28</Button>
+  <Button size="md">md · 32</Button>
+  <Button size="lg">lg · 40</Button>
+</Demo>
+
+## 形状 shape
+
+<Demo>
+  <Button shape="rect">rect</Button>
+  <Button shape="round">round</Button>
+  <Button shape="circle" aria-label="添加" icon={<span style={{ fontSize: 16, lineHeight: 1 }}>+</span>} />
+</Demo>
+
+`shape="circle"` 只给纯图标按钮用。**纯图标按钮必须带 `aria-label`**，否则读屏用户听到的只有「按钮」。
+
+## 图标
+
+<Demo>
+  <Button icon={<span aria-hidden="true">＋</span>}>新建项目</Button>
+  <Button variant="outlined" iconRight={<span aria-hidden="true">›</span>}>下一步</Button>
+  <Button variant="soft" size="sm" icon={<span aria-hidden="true">↻</span>}>刷新</Button>
+</Demo>
+
+## 加载中
+
+`loading` 会做三件事：左侧图标换成转圈、**锁定当前宽度**、`aria-busy="true"` 并阻断点击。
+需要换文案时传 `loadingText` —— 注意它会改变按钮宽度，只有在容器本来就能容纳时才用。
+
+<Demo>
+  <Button loading>保存中</Button>
+  <Button loading loadingText="正在发布…">发布</Button>
+  <Button variant="outlined" loading>同步</Button>
+  <Button loading disabled>禁用的加载态</Button>
+</Demo>
+
+```tsx
+{/* 只转圈，原文字隐形以锁住宽度 —— 列表里批量提交时不会让整行抖动 */}
+<Button loading>保存中</Button>
+
+{/* 需要换文案时用 loadingText，接受宽度变化 */}
+<Button loading loadingText="正在发布…">发布</Button>
+```
+
+## 禁用与块级
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
+    <Button disabled>禁用</Button>
+    <Button disabled variant="outlined">禁用描边</Button>
+    <Button disabled loading>禁用 + 加载</Button>
+  </div>
+  <Button block>撑满父容器</Button>
+</Demo>
+
+禁用态不参与对比度检查（WCAG 1.4.3 明确豁免），所以它看起来就应该「灰掉」。
+
+## 渲染成链接
+
+给了 `href` 就渲染成 `<a role="button">`。用于**跳转**——真正的导航请用 [Link](/components/link) 组件，
+语义更正确，也能被浏览器和读屏当作链接处理。
+
+<Demo>
+  <Button href="#button-按钮" variant="outlined">跳到本页顶部</Button>
+</Demo>
+
+## 无障碍
+
+- 加载态自动带 `aria-busy="true"`，并阻断点击
+- 纯图标按钮必须传 `aria-label`
+- 焦点环只在键盘操作时出现（`:focus-visible`），鼠标点击不出现
+- 实心按钮上的文字按主题色**自动取深墨或白色**，保证 ≥ 4.5:1
+
+## API
+
+<PropsTable
+  name="Button"
+  native="其余属性（onClick、type、form、aria-* 等）透传给底层 <button> 或 <a>。ref 是普通 prop（React 19 起不再需要 forwardRef）。"
+/>

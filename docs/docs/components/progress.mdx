@@ -1,0 +1,124 @@
+---
+title: Progress 进度条
+description: 确定进度给数值、不确定进度只给忙信号；线形与环形共用一套语义。
+sidebar_position: 23
+---
+
+import { Progress } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Progress 进度条
+
+进度条回答两个不同的问题：**完成到哪了**（确定进度，有数值）和**还在跑**（不确定进度，没有数值）。
+这两件事在无障碍上不是一回事——前者要 `aria-valuenow`，后者只能给 `aria-busy`，**编一个假百分比比不给更糟**。
+
+```tsx
+import { Progress } from '@arvinzxy/orange-ui';
+```
+
+## 线形与标签
+
+`value` 是 0–100，超出范围会被夹住；`showLabel` 在右侧显示百分比（默认取整）。
+线形三档粗细：`xs` 4 / `sm` 6（默认）/ `md` 8。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 16, width: 520 }}>
+    <Progress value={0} showLabel />
+    <Progress value={35} showLabel />
+    <Progress value={70} showLabel />
+    <Progress value={100} showLabel />
+  </div>
+</Demo>
+
+```tsx
+<Progress value={35} showLabel />
+<Progress value={70} showLabel gradient />
+```
+
+## 环形
+
+`type="circle"` 用 SVG 画环：`xs` 40 / `sm` 56（默认）/ `md` 72，线宽固定 4。
+标签落在环心，所以环里不要再塞别的内容。
+
+<Demo>
+  <Progress type="circle" value={25} showLabel />
+  <Progress type="circle" value={62} showLabel color="success" />
+  <Progress type="circle" value={88} showLabel color="danger" size="md" />
+</Demo>
+
+```tsx
+<Progress type="circle" value={25} showLabel />
+<Progress type="circle" value={88} showLabel color="danger" size="md" />
+```
+
+## 不确定进度 indeterminate
+
+`indeterminate` 时忽略 `value`：填充块无限流动，组件只挂 `aria-busy="true"`，不报任何百分比。
+`prefers-reduced-motion` 下动画停止，退化成一条静态的半透明填充——宁可不动，也不要制造「卡死」的错觉。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 20, width: 520 }}>
+    <Progress indeterminate />
+    <Progress indeterminate gradient />
+    <Progress indeterminate type="circle" />
+  </div>
+</Demo>
+
+```tsx
+<Progress indeterminate />
+<Progress indeterminate type="circle" />
+```
+
+## 颜色与状态
+
+`color` 有五档（primary / success / warning / danger / neutral）；`status` 是**语义覆盖**：
+`success` 强制成功色、`error` 强制危险色，优先于 `color`。
+`gradient` 换成品牌渐变，只建议用在「完成 / 满值」这种值得强调的时刻。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 16, width: 520 }}>
+    <Progress value={45} color="warning" showLabel />
+    <Progress value={100} status="success" showLabel />
+    <Progress value={45} status="error" showLabel />
+    <Progress value={100} gradient showLabel />
+  </div>
+</Demo>
+
+```tsx
+<Progress value={100} status="success" showLabel />
+<Progress value={45} status="error" showLabel />
+<Progress value={100} gradient showLabel />
+```
+
+## 自定义标签
+
+`format` 拿到的是**夹取后的百分比**，返回任意节点。进度条里放「3 / 12 个文件」比放 25% 更有用。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 16, width: 520 }}>
+    <Progress value={25} showLabel format={(percent) => '已完成 ' + percent + '%'} />
+    <Progress value={25} showLabel format={() => '3 / 12'} />
+  </div>
+</Demo>
+
+```tsx
+<Progress value={25} showLabel format={(percent) => '已完成 ' + percent + '%'} />
+<Progress value={25} showLabel format={() => '3 / 12'} />
+```
+
+## 无障碍
+
+- 根元素是 `role="progressbar"`，带 `aria-valuenow` / `aria-valuemin="0"` / `aria-valuemax="100"`
+- 默认 `aria-label="进度"`，**请用业务含义覆盖**（例如「模型训练进度」），否则读屏听到的是一串一模一样的「进度」
+- `indeterminate` 时不报数值，只有 `aria-busy="true"`——假数值会让读屏用户误判
+- 标签用等宽数字（`tabular-nums`），百分比变化时不会左右抖动
+- 不用 `aria-live` 播报：进度更新频繁时会刷屏，重要节点请另用文字状态说明
+- `prefers-reduced-motion` 下不确定态停止动画
+
+## API
+
+<PropsTable
+  name="Progress"
+  native="其余属性（aria-label、id、data-* 等）透传给根 div。ref 是普通 prop，直接指向根节点（React 19 起不再需要 forwardRef）。"
+/>

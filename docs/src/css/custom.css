@@ -1,0 +1,627 @@
+/* ============================================================================
+   orange-ui 文档站样式
+   原则：文档站本身就是组件库的一次公开演出 —— 它的排版、色板、圆角、间距
+   全部取自 --oui-* 变量。换主题时，文档站和组件一起变色，不重写一份 CSS。
+   ========================================================================== */
+
+/* ---------- Infima → orange-ui token 映射 ---------- */
+:root {
+  --ifm-color-primary: var(--oui-color-primary-ink);
+  --ifm-color-primary-dark: var(--oui-color-primary-active);
+  --ifm-color-primary-darker: var(--oui-color-primary-active);
+  --ifm-color-primary-darkest: var(--oui-color-text);
+  --ifm-color-primary-light: var(--oui-color-primary);
+  --ifm-color-primary-lighter: var(--oui-color-primary-hover);
+  --ifm-color-primary-lightest: var(--oui-color-primary);
+
+  --ifm-background-color: var(--oui-color-bg);
+  --ifm-background-surface-color: var(--oui-color-bg);
+  --ifm-font-color-base: var(--oui-color-text-secondary);
+  --ifm-font-color-secondary: var(--oui-color-text-tertiary);
+  --ifm-heading-color: var(--oui-color-text);
+
+  --ifm-font-family-base: var(--oui-font-family);
+  --ifm-font-family-monospace: var(--oui-font-mono);
+  --ifm-font-size-base: 15px;
+  --ifm-line-height-base: 1.72;
+  --ifm-heading-font-weight: 600;
+  --ifm-font-weight-semibold: 600;
+
+  --ifm-global-radius: 6px;
+  --ifm-card-border-radius: 8px;
+  --ifm-code-border-radius: 4px;
+  --ifm-code-font-size: 0.86em;
+  --ifm-code-background: var(--oui-color-bg-muted);
+
+  --ifm-navbar-background-color: var(--oui-color-bg);
+  --ifm-navbar-shadow: none;
+  --ifm-navbar-height: 60px;
+  --ifm-navbar-link-color: var(--oui-color-text-secondary);
+  --ifm-navbar-link-hover-color: var(--oui-color-primary-ink);
+
+  --ifm-menu-color: var(--oui-color-text-secondary);
+  --ifm-menu-color-active: var(--oui-color-primary-ink);
+  --ifm-menu-color-background-active: var(--oui-color-primary-subtle);
+  --ifm-menu-color-background-hover: var(--oui-color-bg-muted);
+
+  --ifm-toc-border-color: var(--oui-color-border);
+  --ifm-hr-border-color: var(--oui-color-border);
+  --ifm-table-border-color: var(--oui-color-border);
+  --ifm-table-stripe-background: var(--oui-color-bg-subtle);
+
+  --ifm-link-color: var(--oui-color-primary-ink);
+  --ifm-link-hover-color: var(--oui-color-primary-active);
+
+  --ifm-footer-background-color: var(--oui-color-bg-subtle);
+  --ifm-footer-color: var(--oui-color-text-tertiary);
+  --ifm-footer-link-color: var(--oui-color-text-secondary);
+}
+
+html[data-theme='dark'] {
+  --ifm-background-color: var(--oui-color-bg);
+  --ifm-background-surface-color: var(--oui-color-bg-subtle);
+  --ifm-navbar-background-color: var(--oui-color-bg);
+  --ifm-footer-background-color: var(--oui-color-bg-subtle);
+  --ifm-code-background: var(--oui-color-bg-muted);
+  --ifm-menu-color-background-active: var(--oui-color-primary-subtle);
+}
+
+/* ---------- 基础排版 ---------- */
+body {
+  background: var(--oui-color-bg);
+  color: var(--oui-color-text-secondary);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.01em;
+  color: var(--oui-color-text);
+}
+
+.markdown > h2 {
+  margin-top: 2.6rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--oui-color-border);
+  font-size: 22px;
+}
+
+.markdown > h3 {
+  margin-top: 1.8rem;
+  font-size: 17px;
+}
+
+.markdown p,
+.markdown li {
+  font-size: 15px;
+  line-height: 1.78;
+}
+
+.markdown code {
+  border: 1px solid var(--oui-color-border);
+  background: var(--oui-color-bg-subtle);
+  color: var(--oui-color-primary-ink);
+  padding: 0.1em 0.4em;
+  font-size: 0.86em;
+}
+
+html[data-theme='dark'] .markdown code {
+  color: var(--oui-color-primary);
+}
+
+.markdown a {
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--oui-color-primary-ink) 35%, transparent);
+}
+
+.markdown a:hover {
+  border-bottom-color: var(--oui-color-primary-ink);
+}
+
+.markdown table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.markdown table th {
+  background: var(--oui-color-bg-subtle);
+  color: var(--oui-color-text);
+  font-weight: 600;
+  text-align: left;
+}
+
+.markdown table th,
+.markdown table td {
+  border: 1px solid var(--oui-color-border);
+  padding: 8px 12px;
+  vertical-align: top;
+}
+
+.markdown table td code {
+  white-space: nowrap;
+}
+
+/* ---------- 顶栏 ---------- */
+.navbar {
+  border-bottom: 1px solid var(--oui-color-border);
+  padding-inline: 24px;
+}
+
+.navbar__brand {
+  margin-right: 28px;
+}
+
+.navbar__logo {
+  height: 24px;
+  width: 24px;
+}
+
+.navbar__title {
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: var(--oui-color-text);
+}
+
+.navbar__link {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.navbar__item.navbar__link--active {
+  color: var(--oui-color-primary-ink);
+}
+
+/* ---------- 侧栏 ---------- */
+.theme-doc-sidebar-container {
+  border-right: 1px solid var(--oui-color-border) !important;
+}
+
+.menu {
+  padding: 16px 12px !important;
+  font-size: 14px;
+}
+
+.menu__link {
+  border-radius: 6px;
+  padding: 6px 10px;
+  line-height: 1.5;
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  font-weight: 600;
+}
+
+.menu__list-item-collapsible .menu__link {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--oui-color-text-tertiary);
+  text-transform: none;
+}
+
+.menu__list-item-collapsible:hover {
+  background: transparent;
+}
+
+/* ---------- 文档主体 ---------- */
+.theme-doc-markdown {
+  max-width: 760px;
+}
+
+.pagination-nav__link {
+  border: 1px solid var(--oui-color-border);
+  border-radius: 8px;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--oui-color-primary-border);
+}
+
+.table-of-contents {
+  font-size: 13px;
+}
+
+.table-of-contents__link--active {
+  color: var(--oui-color-primary-ink);
+  font-weight: 600;
+}
+
+/* 面包屑隐藏：这套文档的层级已经在侧栏里说清楚了 */
+.breadcrumbs {
+  display: none;
+}
+
+/* ---------- 代码块 ---------- */
+.theme-code-block {
+  border: 1px solid var(--oui-color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.theme-code-block pre {
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+
+/* ---------- Demo 预览框 ---------- */
+.oui-demo {
+  position: relative;
+  margin: 20px 0;
+  border: 1px solid var(--oui-color-border);
+  border-radius: 10px;
+  background: var(--oui-color-bg);
+  overflow: hidden;
+}
+
+.oui-demo__tag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  padding: 2px 10px;
+  border-bottom-left-radius: 8px;
+  background: var(--oui-color-primary-subtle);
+  color: var(--oui-color-primary-ink);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+html[data-theme='dark'] .oui-demo__tag {
+  color: var(--oui-color-primary);
+}
+
+.oui-demo__stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 28px 24px;
+  min-height: 76px;
+}
+
+.oui-demo__stage[data-layout='grid'] {
+  display: grid;
+  gap: 16px;
+}
+
+.oui-demo__stage[data-layout='block'] {
+  display: block;
+}
+
+.oui-demo__stage[data-layout='center'] {
+  justify-content: center;
+}
+
+.oui-demo__stage[data-bg='subtle'] {
+  background: var(--oui-color-bg-subtle);
+}
+
+.oui-demo__caption {
+  padding: 8px 24px;
+  border-top: 1px dashed var(--oui-color-border);
+  color: var(--oui-color-text-tertiary);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+/* ---------- 组件页头 ---------- */
+.oui-page-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--oui-color-border);
+}
+
+.oui-page-head h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.oui-page-head__en {
+  color: var(--oui-color-text-tertiary);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.oui-page-head__meta {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+/* ---------- Props 表 ---------- */
+.oui-props {
+  margin: 16px 0 8px;
+  font-size: 13px;
+}
+
+.oui-props table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.oui-props th {
+  padding: 8px 12px;
+  border: 1px solid var(--oui-color-border);
+  background: var(--oui-color-bg-subtle);
+  color: var(--oui-color-text);
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+html[data-theme='dark'] .oui-props th {
+  background: var(--oui-color-bg-muted);
+}
+
+.oui-props td {
+  padding: 9px 12px;
+  border: 1px solid var(--oui-color-border);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+.oui-props__name {
+  font-family: var(--oui-font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--oui-color-text);
+  white-space: nowrap;
+}
+
+.oui-props__type {
+  font-family: var(--oui-font-mono);
+  font-size: 12px;
+  color: var(--oui-color-primary-ink);
+  word-break: break-word;
+}
+
+.oui-props__default {
+  font-family: var(--oui-font-mono);
+  font-size: 12px;
+  color: var(--oui-color-text-tertiary);
+}
+
+.oui-props__required {
+  margin-left: 4px;
+  color: var(--oui-color-danger);
+  font-size: 11px;
+}
+
+/* ---------- 色板 / token 表格 ---------- */
+.oui-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 12px;
+  margin: 16px 0 24px;
+}
+
+.oui-swatch {
+  border: 1px solid var(--oui-color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--oui-color-bg);
+}
+
+.oui-swatch__chip {
+  height: 64px;
+  border-bottom: 1px solid var(--oui-color-border);
+}
+
+.oui-swatch__meta {
+  padding: 8px 10px;
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.oui-swatch__name {
+  font-family: var(--oui-font-mono);
+  color: var(--oui-color-text);
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.oui-swatch__value {
+  color: var(--oui-color-text-tertiary);
+  font-family: var(--oui-font-mono);
+}
+
+/* ---------- 首页 ---------- */
+.oui-home {
+  padding: 0 0 64px;
+}
+
+.oui-hero {
+  padding: 72px 24px 56px;
+  text-align: center;
+  border-bottom: 1px solid var(--oui-color-border);
+  background:
+    radial-gradient(900px 320px at 50% -10%, var(--oui-color-primary-subtle), transparent 70%),
+    var(--oui-color-bg);
+}
+
+.oui-hero__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 4px 12px;
+  border: 1px solid var(--oui-color-primary-border);
+  border-radius: 9999px;
+  background: var(--oui-color-primary-subtle);
+  color: var(--oui-color-primary-ink);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+html[data-theme='dark'] .oui-hero__kicker {
+  color: var(--oui-color-primary);
+}
+
+.oui-hero__title {
+  margin: 0 auto 18px;
+  max-width: 780px;
+  font-size: clamp(30px, 4.6vw, 52px);
+  line-height: 1.16;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--oui-color-text);
+}
+
+.oui-hero__title em {
+  font-style: normal;
+  color: var(--oui-color-primary);
+  background: var(--oui-gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.oui-hero__lead {
+  margin: 0 auto 28px;
+  max-width: 620px;
+  color: var(--oui-color-text-secondary);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.oui-hero__actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.oui-hero__stage {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px;
+  border: 1px solid var(--oui-color-border);
+  border-radius: 16px;
+  background: var(--oui-color-bg);
+  text-align: left;
+}
+
+.oui-hero__stage-label {
+  margin-bottom: 12px;
+  color: var(--oui-color-text-tertiary);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.oui-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 24px 0;
+}
+
+.oui-section__title {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--oui-color-text);
+}
+
+.oui-section__desc {
+  margin: 0 0 24px;
+  color: var(--oui-color-text-tertiary);
+  font-size: 14px;
+}
+
+.oui-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+  gap: 14px;
+}
+
+.oui-feature {
+  padding: 18px;
+  border: 1px solid var(--oui-color-border);
+  border-radius: 10px;
+  background: var(--oui-color-bg);
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.oui-feature:hover {
+  border-color: var(--oui-color-primary-border);
+  transform: translateY(-1px);
+}
+
+.oui-feature__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--oui-color-text);
+}
+
+.oui-feature__desc {
+  margin: 0;
+  color: var(--oui-color-text-tertiary);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.oui-feature__desc code {
+  border: 0;
+  background: var(--oui-color-bg-subtle);
+  color: var(--oui-color-primary-ink);
+  padding: 1px 5px;
+  font-size: 12px;
+}
+
+html[data-theme='dark'] .oui-feature__desc code {
+  color: var(--oui-color-primary);
+}
+
+.oui-comp-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.oui-comp-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid var(--oui-color-border);
+  border-radius: 8px;
+  color: var(--oui-color-text-secondary);
+  font-size: 13px;
+  text-decoration: none;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.oui-comp-list__item:hover {
+  border-color: var(--oui-color-primary-border);
+  background: var(--oui-color-bg-subtle);
+  text-decoration: none;
+  color: var(--oui-color-text);
+}
+
+.oui-comp-list__en {
+  color: var(--oui-color-text-tertiary);
+  font-family: var(--oui-font-mono);
+  font-size: 11px;
+}
+
+/* 移动端 */
+@media (max-width: 996px) {
+  .oui-hero { padding: 48px 18px 40px; }
+  .oui-section { padding: 40px 18px 0; }
+  .oui-demo__stage { padding: 20px 16px; }
+}

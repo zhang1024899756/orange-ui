@@ -1,0 +1,164 @@
+---
+title: Input 输入框
+description: 外层视觉容器 + 内层真 input 的两层结构，让标签能关联、清除按钮能用键盘、错误态能被读屏听见。
+sidebar_position: 16
+---
+
+import { Input, Icon } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Input 输入框
+
+输入框之间的差别很少在「长得像不像」，而在三个能不能：`<label>` 能不能关联到输入框、清除按钮能不能用键盘按到、错误态能不能被读屏听见。
+
+所以这里做成**两层**：外层 `.oui-input` 只负责视觉——`bg-subtle` 填充底、1px 透明描边、6px 圆角，聚焦时描边转主色并叠一圈 2px 焦点环；
+内层是**真正的 `<input>`**，`id` / `name` / `aria-*` 全部落在它身上，`<label htmlFor>` 因此照常工作。
+
+```tsx
+import { Input } from '@arvinzxy/orange-ui';
+```
+
+## 基础用法
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 12, width: 420 }}>
+    <Input placeholder="请输入项目名称" aria-label="项目名称" />
+    <Input defaultValue="orange-ui-docs" aria-label="仓库名" />
+  </div>
+</Demo>
+
+```tsx
+<Input placeholder="请输入项目名称" aria-label="项目名称" />
+<Input defaultValue="orange-ui-docs" aria-label="仓库名" />
+```
+
+## 尺寸 size
+
+四档高度 24 / 28 / 32 / 40，默认 `md`。尺寸只改高度、内边距和字号，圆角与描边不变——
+同一行混排不同尺寸会让基线错位，表单里请统一。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 12, width: 420 }}>
+    <Input size="xs" placeholder="xs · 24" aria-label="xs" />
+    <Input size="sm" placeholder="sm · 28" aria-label="sm" />
+    <Input size="md" placeholder="md · 32（默认）" aria-label="md" />
+    <Input size="lg" placeholder="lg · 40" aria-label="lg" />
+  </div>
+</Demo>
+
+```tsx
+<Input size="xs" placeholder="xs · 24" aria-label="xs" />
+<Input size="sm" placeholder="sm · 28" aria-label="sm" />
+<Input size="md" placeholder="md · 32（默认）" aria-label="md" />
+<Input size="lg" placeholder="lg · 40" aria-label="lg" />
+```
+
+## 前后缀与清除
+
+`prefix` / `suffix` 放图标、货币符号或单位；`clearable` 只在**有值、非禁用、非加载**时出现清除按钮。
+
+清除按钮是真 `<button aria-label="清除">`：视觉只有 16px，命中区靠伪元素外扩到 24×24，
+并且按下时阻止默认行为——点清除不会先把焦点从输入框夺走。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 12, width: 420 }}>
+    <Input prefix={<Icon name="user" />} placeholder="带前置图标" aria-label="账号" />
+    <Input suffix={<span>元</span>} placeholder="带单位" aria-label="金额" />
+    <Input clearable defaultValue="点右侧可以清空" aria-label="可清除" />
+  </div>
+</Demo>
+
+```tsx
+<Input prefix={<Icon name="user" />} placeholder="带前置图标" aria-label="账号" />
+<Input suffix={<span>元</span>} placeholder="带单位" aria-label="金额" />
+<Input clearable defaultValue="点右侧可以清空" aria-label="可清除" />
+```
+
+## 校验与加载
+
+`status="error"` 描边转危险色，同时给内部 `<input>` 挂 `aria-invalid="true"`；聚焦时焦点环也换成危险色。
+注意组件**不渲染错误文案**——文案由页面自己放在下面，用 `aria-describedby` 指过去，读屏才会念出来。
+
+`loading` 做四件事：右侧换成转圈、`aria-busy="true"`、`readOnly`（值不会被改掉）、隐藏清除按钮。
+它是「在等外部结果」，不是「禁止输入」。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 12, width: 420 }}>
+    <Input status="error" defaultValue="格式不对" aria-label="错误态" />
+    <Input loading defaultValue="正在校验，值不会被清空" aria-label="加载中" />
+    <Input disabled defaultValue="禁用" aria-label="禁用" />
+  </div>
+</Demo>
+
+```tsx
+<Input status="error" defaultValue="格式不对" aria-label="错误态" />
+<Input loading defaultValue="正在校验，值不会被清空" aria-label="加载中" />
+<Input disabled defaultValue="禁用" aria-label="禁用" />
+```
+
+## 字数统计
+
+给 `showCount` 就在右下角显示 `n/m`——只有同时传了 `maxLength` 才会出现 `/m`，否则只显示当前字数。
+数字用 12px 等宽数字（`tabular-nums`），输入时不会左右抖动；错误态下计数跟着变危险色。
+
+<Demo layout="block">
+  <div style={{ display: 'grid', gap: 12, width: 420 }}>
+    <Input showCount maxLength={20} defaultValue="还能再写几个字" aria-label="带字数统计" />
+    <Input showCount maxLength={20} status="error" defaultValue="错误态计数也变红" aria-label="错误态计数" />
+    <Input showCount defaultValue="没有 maxLength 时只显示字数" aria-label="只显示字数" />
+  </div>
+</Demo>
+
+```tsx
+<Input showCount maxLength={20} defaultValue="还能再写几个字" aria-label="带字数统计" />
+<Input showCount defaultValue="没有 maxLength 时只显示字数" aria-label="只显示字数" />
+```
+
+## 搜索框
+
+`type="search"` 换成胶囊圆角（社区站搜索框的既有形态），并把浏览器自带的清除叉隐藏，
+统一由 `clearable` 接管——一个输入框不该出现两个样式的叉。
+
+<Demo layout="block">
+  <div style={{ width: 420 }}>
+    <Input type="search" prefix={<Icon name="search" />} clearable defaultValue="组件库" aria-label="搜索组件" />
+  </div>
+</Demo>
+
+```tsx
+<Input type="search" prefix={<Icon name="search" />} clearable defaultValue="组件库" aria-label="搜索组件" />
+```
+
+## 受控与 onClear
+
+值放在页面里维护，清除时自己改值。**受控模式下组件只回调 `onChange` / `onClear`，绝不改内部状态**——
+只传 `value` 不接 `onChange`，输入框就会「打不进字」，这是符合预期的。
+
+```tsx
+const [name, setName] = useState('');
+
+<Input
+  value={name}
+  onChange={(event) => setName(event.target.value)}
+  onClear={() => setName('')}
+  clearable
+  aria-label="项目名"
+/>
+```
+
+## 无障碍
+
+- 原生属性全部落在内部 `<input>` 上：`<label htmlFor>`、`form`、`aria-*` 都照常工作，标签关联不会失效
+- `status="error"` 时自动加 `aria-invalid="true"`；错误文案请用 `aria-describedby` 关联到输入框
+- 清除按钮是真正的 `<button>`，带 `aria-label="清除"`，命中区 24×24
+- `loading` 时 `aria-busy="true"` + `readOnly`：读屏知道「正在等结果」而不是「你不能输入」
+- 焦点环画在**容器**上（`:focus-within`，2px），前后缀和清除按钮都在环内，视觉上是整个控件在聚焦
+- `prefers-reduced-motion` 下过渡时间归零
+
+## API
+
+<PropsTable
+  name="Input"
+  native="其余属性（id、name、value、onChange、maxLength、aria-* 等）透传给内部 <input>；className 加在外层视觉容器上。ref 是普通 prop，直接指向内部 <input>（React 19 起不再需要 forwardRef）。"
+/>

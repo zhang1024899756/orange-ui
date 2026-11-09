@@ -1,0 +1,141 @@
+---
+title: Switch 开关
+description: 立即生效的二元状态：真按钮语义、键盘可切换、加载时 thumb 变转圈且位置不动。
+sidebar_position: 17
+---
+
+import { Switch } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Switch 开关
+
+开关表达的是「**立刻生效**的二元状态」——像按一下灯就亮，不是「选中了等会儿一起提交」。
+如果这个选择要随表单保存，用复选框更准确：拨动开关，系统里已经变了。
+
+实现是真正的 `<button type="button" role="switch" aria-checked>`，空格与回车由浏览器原生按钮行为触发，
+不额外写键盘处理，也就不会出现「按一次跳两下」的双触发。
+
+```tsx
+import { Switch } from '@arvinzxy/orange-ui';
+```
+
+## 基础用法
+
+不给 `checked` 时是非受控，用 `defaultChecked` 给初始值。**不带文案的开关必须传 `aria-label`**——
+按钮里没有文字，读屏否则只能念出「开关，关闭」。
+
+<Demo>
+  <Switch aria-label="接收通知" />
+  <Switch aria-label="自动更新" defaultChecked />
+</Demo>
+
+```tsx
+<Switch aria-label="接收通知" />
+<Switch aria-label="自动更新" defaultChecked />
+```
+
+## 尺寸 size
+
+sm 32×18（thumb 14）/ md 40×22（thumb 18），默认 md。视觉高度只有 18 / 22，
+命中区用伪元素撑到 24 高——**视觉尺寸不变**，手指也点得中。
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 20, alignItems: 'center', flexWrap: 'wrap' }}>
+    <Switch size="sm" aria-label="小号关闭" />
+    <Switch size="sm" defaultChecked aria-label="小号打开" />
+    <Switch size="md" aria-label="中号关闭" />
+    <Switch size="md" defaultChecked aria-label="中号打开" />
+  </div>
+</Demo>
+
+```tsx
+<Switch size="sm" aria-label="小号关闭" />
+<Switch size="sm" defaultChecked aria-label="小号打开" />
+<Switch size="md" aria-label="中号关闭" />
+<Switch size="md" defaultChecked aria-label="中号打开" />
+```
+
+## 颜色 color
+
+只有 `primary` 与 `success` 两种：轨道颜色表达「开」的语义，不是调色板。
+`success` 留给「已完成 / 已通过」这类终态，其余一律 primary。
+
+<Demo>
+  <Switch color="primary" defaultChecked aria-label="primary 打开" />
+  <Switch color="success" defaultChecked aria-label="success 打开" />
+</Demo>
+
+```tsx
+<Switch color="primary" defaultChecked aria-label="primary 打开" />
+<Switch color="success" defaultChecked aria-label="success 打开" />
+```
+
+## 带文案
+
+`checkedChildren` / `unCheckedChildren` 渲染在**轨道右侧**，随状态切换。
+它既是视觉标签，也直接成为按钮的可访问名称——有文案时可以不传 `aria-label`。
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+    <Switch checkedChildren="开" unCheckedChildren="关" />
+    <Switch checkedChildren="接收邮件" unCheckedChildren="不接收" defaultChecked />
+  </div>
+</Demo>
+
+```tsx
+<Switch checkedChildren="开" unCheckedChildren="关" />
+<Switch checkedChildren="接收邮件" unCheckedChildren="不接收" defaultChecked />
+```
+
+## 受控
+
+受控时状态由外部持有，组件只回调 `onChange`。想「点了没反应」，通常是只传了 `checked` 没接 `onChange`。
+
+```tsx
+const [on, setOn] = useState(true);
+
+<Switch
+  checked={on}
+  onChange={setOn}
+  checkedChildren="自动更新已开启"
+  unCheckedChildren="自动更新已关闭"
+/>
+```
+
+## 加载与禁用
+
+`loading`：thumb 换成转圈、**保持原来的 checked 位置**、按钮 disabled（点不动）、`aria-busy="true"`。
+`disabled`：只降透明并禁用点击。两者都不改变轨道尺寸，列表里不会因为加载抖动。
+
+<Demo layout="block">
+  <div style={{ display: 'flex', gap: 20, alignItems: 'center', flexWrap: 'wrap' }}>
+    <Switch loading aria-label="加载中关闭" />
+    <Switch loading defaultChecked aria-label="加载中打开" />
+    <Switch disabled aria-label="禁用关闭" />
+    <Switch disabled defaultChecked aria-label="禁用打开" />
+  </div>
+</Demo>
+
+```tsx
+<Switch loading aria-label="加载中关闭" />
+<Switch loading defaultChecked aria-label="加载中打开" />
+<Switch disabled aria-label="禁用关闭" />
+<Switch disabled defaultChecked aria-label="禁用打开" />
+```
+
+## 无障碍
+
+- 语义是 `role="switch"` + `aria-checked`，不是带样式的 div
+- 键盘：Tab 聚焦，空格 / 回车切换（原生 button 行为，无需额外处理）
+- 不带文案时必须传 `aria-label`；带 `checkedChildren` 时按钮内容就是名称
+- 命中区 24 高（视觉 18 / 22），指针与触摸都够得着
+- `loading` 时 `aria-busy="true"` 且 disabled，状态不会被误改
+- 轨道与 thumb 的过渡在 `prefers-reduced-motion` 下关闭
+
+## API
+
+<PropsTable
+  name="Switch"
+  native="其余属性（disabled、onClick、aria-* 等）透传给底层 <button>。ref 是普通 prop，直接指向 <button>（React 19 起不再需要 forwardRef）。"
+/>

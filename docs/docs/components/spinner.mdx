@@ -1,0 +1,87 @@
+---
+title: Spinner 加载指示器
+description: 区域的等待信号。没有文字的转圈不该被读屏读到。
+sidebar_position: 3
+---
+
+import { Spinner, Button } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+import { PropsTable } from '@site/src/components/PropsTable';
+
+# Spinner 加载指示器
+
+它回答的是「**这里在等**」，不是「等多久」——要表达进度用 [Progress](/components/progress)。
+有文字的用 `label`（会进无障碍树），纯转圈的对读屏隐藏，由外层容器用 `aria-busy` 交代。
+
+四个尺寸：`xs 12` / `sm 16`（默认）/ `md 20` / `lg 24`，全部跟随 `--oui-color-primary`。
+
+## 基础用法
+
+<Demo>
+  <Spinner />
+  <Spinner size="lg" />
+  <Spinner size="xs" />
+</Demo>
+
+```tsx
+<Spinner />
+<Spinner size="lg" />
+```
+
+## 带文字
+
+给了 `label` 就会渲染成 `role="status"`：读屏会读出这行字，视觉上也多一行解释。
+**这是唯一会让加载指示器进入无障碍树的用法。**
+
+<Demo layout="block">
+  <Spinner label="正在加载模型列表…" />
+</Demo>
+
+## 行内与按钮内
+
+`inline` 让它跟文字同一行，不占满宽度。按钮自己的 `loading` 用的就是同一个 SVG，
+所以二者放在一起时视觉重量一致。
+
+<Demo>
+  <Spinner inline size="sm" />
+  <span>正在同步 12 个文件</span>
+  <Button loading>保存</Button>
+</Demo>
+
+## 区域覆盖
+
+`overlay` 会盖在**父容器**上（父容器需要 `position: relative`），用于一块区域的整体等待：
+表格刷新、卡片重新取数。覆盖层背景是半透明的 `--oui-color-bg`，底下的内容仍然可见。
+
+<Demo layout="block">
+  <div style={{ position: 'relative', padding: 20, border: '1px dashed var(--oui-color-border-strong)', borderRadius: 8, minHeight: 96 }}>
+    <div style={{ fontSize: 13, color: 'var(--oui-color-text-tertiary)' }}>这块区域的内容（被覆盖层压住）</div>
+    <Spinner overlay size="lg" label="正在刷新" />
+  </div>
+</Demo>
+
+## 颜色
+
+`color="current"` 跟随继承色，用于深色底或按钮内部；其余五色与按钮的 `color` 语义一致。
+
+<Demo>
+  <Spinner color="primary" />
+  <Spinner color="success" />
+  <Spinner color="warning" />
+  <Spinner color="danger" />
+  <span style={{ color: 'var(--oui-color-primary)' }}><Spinner color="current" /></span>
+</Demo>
+
+## 无障碍
+
+- **没有 `label` 时整个 SVG 带 `aria-hidden="true"`**：一个不停转的图形不该被读屏反复播报
+- 有 `label` 时用 `role="status"` + 可见文字，读屏会读一次
+- `overlay` 场景请同时给被覆盖区域 `aria-busy="true"`，否则读屏用户不知道内容正在变
+- `prefers-reduced-motion: reduce` 下转圈动画会显著放慢而不是消失——完全静止会被误读成「卡死」
+
+## API
+
+<PropsTable
+  name="Spinner"
+  native="其余属性透传给外层 div。"
+/>

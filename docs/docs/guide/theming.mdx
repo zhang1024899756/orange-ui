@@ -1,0 +1,156 @@
+---
+title: 主题定制
+description: 4 套内置主题 × 明暗，切一个 HTML 属性就生效；自定义品牌色不需要编译。
+sidebar_position: 2
+---
+
+import { Button, Tag, Card, Switch, Progress } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+
+# 主题定制
+
+主题是这套组件库和参照站**最大的不同**。魔搭只有明暗两套、品牌色写死；
+这里换主题只改 `<html>` 上的两个属性，**不重新编译、不做 JS 注入、SSR 不闪白**。
+
+## 内置 4 套 × 明暗
+
+<div className="oui-comp-list" style={{ marginBottom: 24 }}>
+  <a className="oui-comp-list__item" href="#"><span>orange 蜜橘</span><span className="oui-comp-list__en">#F26B21</span></a>
+  <a className="oui-comp-list__item" href="#"><span>modelscope 魔搭紫</span><span className="oui-comp-list__en">#624AFF</span></a>
+  <a className="oui-comp-list__item" href="#"><span>teal 青屿</span><span className="oui-comp-list__en">#0E9384</span></a>
+  <a className="oui-comp-list__item" href="#"><span>rose 珊瑚</span><span className="oui-comp-list__en">#E5446D</span></a>
+</div>
+
+点右上角的圆点切换，下面这块会跟着变：
+
+<Demo caption="四个组件，同一次渲染；变的只有 CSS 变量。">
+  <Button>主操作</Button>
+  <Button variant="soft">浅底</Button>
+  <Tag color="primary" icon={<span aria-hidden="true">✦</span>}>标签</Tag>
+  <div style={{ width: 160 }}><Progress value={62} /></div>
+  <Switch defaultChecked />
+</Demo>
+
+## 一条属性就切换
+
+```html
+<!-- 整站 -->
+<html data-oui-theme="orange" data-oui-scheme="light">
+
+<!-- 或者任何局部容器：同一页里可以并存两套主题 -->
+<section data-oui-theme="modelscope" data-oui-scheme="dark"> … </section>
+```
+
+- `data-oui-theme`：`orange` / `modelscope` / `teal` / `rose`，或你自己注册的名字
+- `data-oui-scheme`：`light` / `dark`；**不写**时跟随 `prefers-color-scheme`
+
+:::tip 用 data-* 而不是 class
+`class="dark"` 这种名字几乎一定会和宿主项目撞车。data 属性是私有命名空间，也方便脚本操作。
+:::
+
+## React 里切换
+
+```tsx
+import { ThemeProvider, Button } from '@arvinzxy/orange-ui';
+
+// 只管自己这片区域（默认）
+<ThemeProvider theme="teal" scheme="dark">
+  <Button>青屿暗色</Button>
+</ThemeProvider>
+
+// 写回 <html>，整站生效
+<ThemeProvider theme="rose" scheme="light" global>
+  <App />
+</ThemeProvider>
+```
+
+## 自定义品牌色
+
+只要给两个值：主色和渐变副色。其余（hover / active / 浅底 / 描边 / 主色上的字）全部由 CSS 现算。
+
+```css
+/* 姿势 A：注册一个新主题，一行搞定 */
+[data-oui-theme='my-brand'] { --oui-color-primary: #0EA5E9; }
+
+/* 姿势 B：局部覆盖，只影响某个区块，不污染 :root */
+.pricing-card { --oui-color-primary: #7C3AED; --oui-radius-md: 6px; }
+```
+
+```tsx
+// 姿势 C：在 React 里给
+<ThemeProvider primary="#00AA88" primary2="#3DD4BE"> … </ThemeProvider>
+```
+
+:::note 派生是运行时算的
+`--oui-color-primary-hover` 用 `color-mix(in srgb, var(--oui-color-primary) 92%, black)` 现算，
+所以换品牌色**不需要构建脚本生成色阶**。这也是它比 antd（主题编译进包）更轻的原因。
+:::
+
+## 派生规则（写死的，别自己调）
+
+| 状态 | 规则 | 为什么 |
+|---|---|---|
+| hover | 基色混 8% 黑 | 深墨字压上去 5.19:1 |
+| active | 基色混 **14%** 黑 | 这是仍能过 AA 的最深一档（4.59:1） |
+| 浅底 subtle | 本色 10% 透明 | 与参照站一致 |
+| 浅底上的文字 | 用对应的 `*-ink` | 本色当文字只有 3.0–3.6:1 |
+| 描边 / 焦点环 | 本色 32% 透明 | |
+
+## 主色上的字：按对比度自动取
+
+亮橙、青、珊瑚上压白字都过不了 AA（3.04 / 3.80 / 3.90），所以这几套主题用近黑墨色（6.06）；
+魔搭紫压白字是 5.33，就用白色。**这不是审美选择，是算出来的。**
+
+| 主题 | primary | 主色上的字 | 对比度 |
+|---|---|---|---|
+| orange | `#F26B21` | `#15121F` | 6.06:1 |
+| modelscope | `#624AFF` | `#FFFFFF` | 5.33:1 |
+| teal | `#0E9384` | `#15121F` | 4.85:1 |
+| rose | `#E5446D` | `#15121F` | 4.73:1 |
+
+## 防止首屏闪白
+
+暗色用户刷新时闪一下白，是唯一一个「删不掉」的体验缺陷——水合时序不会因为你改 React 代码而改变。
+做法是在 `<head>` 里放一段**同步内联**脚本，比任何 CSS 都早：
+
+```html
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('oui-theme');
+      if (t === 'system') {
+        t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      if (t) document.documentElement.setAttribute('data-oui-scheme', t);
+    } catch (e) { /* Safari 无痕下 localStorage 会抛 */ }
+  })();
+</script>
+```
+
+三条纪律：**同步、内联、放 head 最前面**。任何 defer / 外部文件 / `useEffect` 都太晚。
+`ThemeProvider` 首帧只读 DOM 上已经写好的属性，不重算——否则水合后必然闪一次。
+
+## 覆盖组件内部样式
+
+类名是**稳定语义类名**（`.oui-button`、`.oui-tag`），不是哈希。所以你有两条路：
+
+```css
+/* 1. 只改变量（推荐） */
+.my-app { --oui-button-height-md: 34px; }
+
+/* 2. 直接改选择器 —— 不需要 !important */
+.my-app .oui-button { letter-spacing: 0.02em; }
+```
+
+:::caution @layer 的代价
+组件样式全部在 ```layer oui.components` 里，所以**你任何未分层的普通 CSS 都能盖过它**——
+这是故意的。但反过来，如果你把 reset 写成未分层的 `button { background: none }`，
+它也会盖掉我们的按钮样式。建议把宿主项目的 reset 放进 ```layer reset`。
+:::
+
+## 主题名类型
+
+```ts
+import type { OuiTheme } from '@arvinzxy/orange-ui';
+// 内置四个有补全，同时允许任意字符串（注册私有主题不会被类型挡住）
+```

@@ -1,0 +1,75 @@
+---
+title: 组件总览
+description: 20 个元素组件，刚好拼得出一屏社区页。
+sidebar_position: 0
+---
+
+import { Button, Tag, Badge, Avatar } from '@arvinzxy/orange-ui';
+import { Demo } from '@site/src/components/Demo';
+
+# 组件总览
+
+20 个元素组件，分成四组。**没有一个是"以后可能会用"的**——每一组都对应社区/内容平台/AI 工作台里
+真实存在的一类界面元素。
+
+## 基础
+
+<div className="oui-comp-list">
+
+<a className="oui-comp-list__item" href="/components/button"><span>按钮</span><span className="oui-comp-list__en">Button</span></a>
+<a className="oui-comp-list__item" href="/components/icon"><span>图标</span><span className="oui-comp-list__en">Icon</span></a>
+<a className="oui-comp-list__item" href="/components/link"><span>链接</span><span className="oui-comp-list__en">Link</span></a>
+<a className="oui-comp-list__item" href="/components/text"><span>文字</span><span className="oui-comp-list__en">Text</span></a>
+<a className="oui-comp-list__item" href="/components/number"><span>数值</span><span className="oui-comp-list__en">Number</span></a>
+<a className="oui-comp-list__item" href="/components/image"><span>图片</span><span className="oui-comp-list__en">Image</span></a>
+</div>
+
+## 表单
+
+<div className="oui-comp-list">
+
+<a className="oui-comp-list__item" href="/components/input"><span>输入框</span><span className="oui-comp-list__en">Input</span></a>
+<a className="oui-comp-list__item" href="/components/switch"><span>开关</span><span className="oui-comp-list__en">Switch</span></a>
+<a className="oui-comp-list__item" href="/components/slider"><span>滑动条</span><span className="oui-comp-list__en">Slider</span></a>
+</div>
+
+## 数据展示
+
+<div className="oui-comp-list">
+
+<a className="oui-comp-list__item" href="/components/tag"><span>标签</span><span className="oui-comp-list__en">Tag</span></a>
+<a className="oui-comp-list__item" href="/components/badge"><span>徽章</span><span className="oui-comp-list__en">Badge</span></a>
+<a className="oui-comp-list__item" href="/components/avatar"><span>头像</span><span className="oui-comp-list__en">Avatar</span></a>
+<a className="oui-comp-list__item" href="/components/card"><span>卡片</span><span className="oui-comp-list__en">Card</span></a>
+<a className="oui-comp-list__item" href="/components/progress"><span>进度条</span><span className="oui-comp-list__en">Progress</span></a>
+<a className="oui-comp-list__item" href="/components/divider"><span>分割线</span><span className="oui-comp-list__en">Divider</span></a>
+</div>
+
+## 反馈
+
+<div className="oui-comp-list">
+
+<a className="oui-comp-list__item" href="/components/dialog"><span>对话框</span><span className="oui-comp-list__en">Dialog</span></a>
+<a className="oui-comp-list__item" href="/components/tooltip"><span>文字提示</span><span className="oui-comp-list__en">Tooltip</span></a>
+<a className="oui-comp-list__item" href="/components/spinner"><span>加载指示器</span><span className="oui-comp-list__en">Spinner</span></a>
+<a className="oui-comp-list__item" href="/components/skeleton"><span>骨架屏</span><span className="oui-comp-list__en">Skeleton</span></a>
+<a className="oui-comp-list__item" href="/components/empty"><span>空状态</span><span className="oui-comp-list__en">Empty</span></a>
+</div>
+
+## 拼装示例
+
+<Demo>
+  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+    <Avatar name="Qwen" size="sm" shape="square" />
+    <strong>Qwen3-235B-A22B</strong>
+    <Tag color="cyan" size="sm">文本生成</Tag>
+    <Badge content="NEW" color="danger" />
+    <Button size="sm" variant="outlined">收藏</Button>
+  </div>
+</Demo>
+
+## 还没做
+
+这 20 个之外的东西都**故意没做**：Tabs、Dropdown、Pagination、Toast、Select、Checkbox、Radio、
+Table、Textarea、Breadcrumb、Drawer。它们要么依赖弹出层定位引擎，要么需要一整套键盘导航，
+放进第一批会把每个组件的完成度都拉低。第二批次再上。
