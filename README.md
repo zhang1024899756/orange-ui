@@ -1,9 +1,20 @@
-# orange-ui
+<div align="center">
 
-React 19 组件库 · 20 个元素组件 · 4 套可切换主题 × 明暗两套配色。
+<img src="docs/static/img/wordmark.svg" width="440" alt="orange-ui" />
 
-面向的场景是**信息密集但仍有活力和温度的产品界面**（模型社区、内容平台、AI 应用工作台）：
-高密度小字、低阴影、细边框；「活泼」只允许出现在 16px 彩色图标和品牌渐变里，不靠彩色大色块和阴影堆叠。
+<p><strong>React 19 组件库 · 20 个元素组件 · 4 套可切换主题 × 明暗两套配色</strong></p>
+
+<p>面向 <strong>信息密集但仍有活力和温度的产品界面</strong>（模型社区、内容平台、AI 应用工作台）：<br />
+高密度小字、低阴影、细边框；「活泼」只允许出现在 16px 彩色图标和品牌渐变里，不靠彩色大色块和阴影堆叠。</p>
+
+[![文档](https://img.shields.io/badge/文档-C74F0A?style=flat-square&logo=docusaurus&logoColor=white)](https://zhang1024899756.github.io/orange-ui/)
+[![npm](https://img.shields.io/npm/v/@arvinzxy/orange-ui?label=npm&logo=npm&logoColor=white&style=flat-square&color=C74F0A)](https://www.npmjs.com/package/@arvinzxy/orange-ui)
+[![React 19](https://img.shields.io/badge/React-19-087EA4?logo=react&logoColor=white&style=flat-square)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white&style=flat-square)](https://www.typescriptlang.org)
+[![license](https://img.shields.io/badge/license-MIT-C74F0A?logo=opensourceinitiative&logoColor=white&style=flat-square)](./LICENSE)
+[![docs](https://img.shields.io/github/actions/workflow/status/zhang1024899756/orange-ui/deploy-docs.yml?branch=main&label=docs&logo=githubactions&logoColor=white&style=flat-square)](https://github.com/zhang1024899756/orange-ui/actions/workflows/deploy-docs.yml)
+
+</div>
 
 - 零运行时依赖（只有 `clsx`），样式是纯 CSS，不引入第二套 React 生态
 - 主题切换只改 `data-oui-theme` / `data-oui-scheme`：不需要重新编译、不需要 JS 注入、SSR 不闪白

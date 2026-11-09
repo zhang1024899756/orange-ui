@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="orange-ui">
+  <g transform="translate(0 2)">
+    <circle cx="64" cy="82" r="30" fill="#F26B21" />
+    <path d="M64 54v-10" stroke="#F26B21" stroke-width="6" stroke-linecap="round" />
+    <path d="M64 44c6-13 19-20 31-17-3 13-17 22-31 17z" fill="#F26B21" />
+  </g>
+</svg>
