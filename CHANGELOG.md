@@ -16,6 +16,12 @@
 - API 表由 `docs/scripts/gen-props.mjs` 从组件 TS 接口与 JSDoc 生成，不会与实现脱节
 
 ### 修复
+- 文档站导航：首页「开始使用 / 设计变量」、指南首页、设计首页、组件总览的 20 张卡片都写成
+  了裸绝对路径（`/guide/...`、`/components/...`），漏掉站点 `baseUrl`，线上全部 404。
+  现在统一走 `useBaseUrl`（`DocButton`）与 `<Link to>`，本地与 GitHub Pages 子路径都正确
+- 色板：按钮 / 徽章 / 头像上的墨色按 AA 反解，从统一的深墨 `#15121F` 改为每套主题各自
+  「静止态仍 ≥4.5:1 的最浅一档」——orange `#232038`(5.17)、teal `#1A1728`(4.62)、
+  rose `#181522`(4.60)，装饰色统一 `#201D30`（最紧的品红底 4.69）。视觉上比纯黑轻一档
 - `Tag`：同时传 `onClick` 与 `closable` 时会渲染出 `<button>` 内嵌 `<button>`（非法 HTML，
   React 19 水合报错）。现在这种组合降级为 `span[role="button"]` + 键盘处理，关闭按钮仍是真按钮
 - `Link`：`external` 且调用方显式传了 `target` 时不会补 `rel="noopener noreferrer"`（tabnabbing 风险），

@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 
 const THEMES = [
   { id: 'orange', label: '蜜橘', color: '#F26B21' },
-  { id: 'modelscope', label: '魔搭紫', color: '#624AFF' },
+  { id: 'violet', label: '紫罗兰', color: '#624AFF' },
   { id: 'teal', label: '青屿', color: '#0E9384' },
   { id: 'rose', label: '珊瑚', color: '#E5446D' },
 ];

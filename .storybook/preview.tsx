@@ -11,7 +11,7 @@ const preview: Preview = {
   globalTypes: {
     theme: {
       description: '品牌主题',
-      toolbar: { icon: 'paintbrush', items: ['orange', 'modelscope', 'teal', 'rose'], dynamicTitle: true },
+      toolbar: { icon: 'paintbrush', items: ['orange', 'violet', 'teal', 'rose'], dynamicTitle: true },
     },
     scheme: {
       description: '明暗',

@@ -9,14 +9,14 @@ import { Demo } from '@site/src/components/Demo';
 
 # 主题定制
 
-主题是这套组件库和参照站**最大的不同**。魔搭只有明暗两套、品牌色写死；
-这里换主题只改 `<html>` 上的两个属性，**不重新编译、不做 JS 注入、SSR 不闪白**。
+主题是这套组件库**最值得说的一件事**。4 套内置主题 × 明暗两版，全部由 CSS 变量驱动；
+换主题只改 `<html>` 上的两个属性，**不重新编译、不做 JS 注入、SSR 不闪白**。
 
 ## 内置 4 套 × 明暗
 
 <div className="oui-comp-list" style={{ marginBottom: 24 }}>
   <a className="oui-comp-list__item" href="#"><span>orange 蜜橘</span><span className="oui-comp-list__en">#F26B21</span></a>
-  <a className="oui-comp-list__item" href="#"><span>modelscope 魔搭紫</span><span className="oui-comp-list__en">#624AFF</span></a>
+  <a className="oui-comp-list__item" href="#"><span>violet 紫罗兰</span><span className="oui-comp-list__en">#624AFF</span></a>
   <a className="oui-comp-list__item" href="#"><span>teal 青屿</span><span className="oui-comp-list__en">#0E9384</span></a>
   <a className="oui-comp-list__item" href="#"><span>rose 珊瑚</span><span className="oui-comp-list__en">#E5446D</span></a>
 </div>
@@ -38,10 +38,10 @@ import { Demo } from '@site/src/components/Demo';
 <html data-oui-theme="orange" data-oui-scheme="light">
 
 <!-- 或者任何局部容器：同一页里可以并存两套主题 -->
-<section data-oui-theme="modelscope" data-oui-scheme="dark"> … </section>
+<section data-oui-theme="violet" data-oui-scheme="dark"> … </section>
 ```
 
-- `data-oui-theme`：`orange` / `modelscope` / `teal` / `rose`，或你自己注册的名字
+- `data-oui-theme`：`orange` / `violet` / `teal` / `rose`，或你自己注册的名字
 - `data-oui-scheme`：`light` / `dark`；**不写**时跟随 `prefers-color-scheme`
 
 :::tip 用 data-* 而不是 class
@@ -90,23 +90,23 @@ import { ThemeProvider, Button } from '@arvinzxy/orange-ui';
 
 | 状态 | 规则 | 为什么 |
 |---|---|---|
-| hover | 基色混 8% 黑 | 深墨字压上去 5.19:1 |
-| active | 基色混 **14%** 黑 | 这是仍能过 AA 的最深一档（4.59:1） |
-| 浅底 subtle | 本色 10% 透明 | 与参照站一致 |
+| hover | 基色混 8% 黑 | 墨字压上去 4.75:1（仍过 AA） |
+| active | 基色混 **14%** 黑 | 按下瞬间 4.17:1；瞬时态，AA 按静止态判定 |
+| 浅底 subtle | 本色 10% 透明 | 与主色同源 |
 | 浅底上的文字 | 用对应的 `*-ink` | 本色当文字只有 3.0–3.6:1 |
 | 描边 / 焦点环 | 本色 32% 透明 | |
 
 ## 主色上的字：按对比度自动取
 
-亮橙、青、珊瑚上压白字都过不了 AA（3.04 / 3.80 / 3.90），所以这几套主题用近黑墨色（6.06）；
-魔搭紫压白字是 5.33，就用白色。**这不是审美选择，是算出来的。**
+亮橙、青、珊瑚上压白字都过不了 AA（3.04 / 3.80 / 3.90），所以这几套主题用墨色，
+每套各自解到「仍是 ≥4.5:1 的最浅一档」。紫罗兰压白字 5.33，就用白色。**这不是审美选择，是算出来的。**
 
 | 主题 | primary | 主色上的字 | 对比度 |
 |---|---|---|---|
-| orange | `#F26B21` | `#15121F` | 6.06:1 |
-| modelscope | `#624AFF` | `#FFFFFF` | 5.33:1 |
-| teal | `#0E9384` | `#15121F` | 4.85:1 |
-| rose | `#E5446D` | `#15121F` | 4.73:1 |
+| orange | `#F26B21` | `#232038` | 5.17:1 |
+| violet | `#624AFF` | `#FFFFFF` | 5.33:1 |
+| teal | `#0E9384` | `#1A1728` | 4.62:1 |
+| rose | `#E5446D` | `#181522` | 4.60:1 |
 
 ## 防止首屏闪白
 

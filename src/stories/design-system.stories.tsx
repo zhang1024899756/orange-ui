@@ -159,7 +159,7 @@ export const Themes: Story = {
     <div style={{ display: 'grid', gap: 16 }}>
       {[
         ['orange', '蜜橘（默认）'],
-        ['modelscope', '魔搭紫'],
+        ['violet', '紫罗兰'],
         ['teal', '青屿'],
         ['rose', '珊瑚'],
       ].map(([theme, label]) => (

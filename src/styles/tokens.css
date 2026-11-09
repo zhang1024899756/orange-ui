@@ -14,14 +14,14 @@
 
    两处与契约图表不同、说明如下（都以契约自己写的判定规则为准）：
    · --oui-color-on-primary 按「对比度 ≥ 4.5:1 决定」求解：白字压在 orange/teal/rose
-     上分别只有 3.04 / 3.80 / 3.90，故取深墨 #15121F（6.06 / 4.85 / 4.73）；modelscope
-     白字 5.33，保留 #FFFFFF。
+     上分别只有 3.04 / 3.80 / 3.90，故取墨色而不是白字；每套主题各自解到「静止态仍是
+     ≥4.5:1 的最浅一档」，所以三套墨值不同、观感密度一致；violet 白字 5.33，用 #FFFFFF。
    · --oui-color-primary-ink 是「文本级主色」：契约的 #F26B21 作为文字压在白底只有
      3.04，故派生更深的 #B8480A（5.29，primary 淡底 4.75）；深色主题下换回亮色。
      四个语义色同理解出一个 *-ink（判定口径见 §2 注释）。
-   · --oui-color-text-tertiary 契约抄的是魔搭实测值 #8284A4，压白底 3.63:1 / 压 #F7F9FD
+   · --oui-color-text-tertiary 原始读数 #8284A4 压白底只有 3.63:1 / 压 #F7F9FD
      3.44:1，都低于 AA 的 4.5。组件库不继承这个缺陷：抬到 #6B6D8E（5.00:1 / 4.74:1），
-     视觉上只暗一档。深色的 #7C819A 已达标（4.82 / 4.51），保持契约原值。
+     视觉上只暗一档。深色的 #7C819A 已达标（4.82 / 4.51），保持原值。
    ========================================================================== */
 
 :root {
@@ -74,8 +74,8 @@
   --oui-color-info-subtle: color-mix(in srgb, var(--oui-color-info) 10%, transparent);
   --oui-color-info-border: color-mix(in srgb, var(--oui-color-info) 32%, transparent);
 
-  /* 装饰色上的字（四个装饰色都是中明度，深墨在明暗两套下都 ≥ 4.5:1） */
-  --oui-color-on-accent: #15121F;
+  /* 装饰色上的字：比纯墨浅一档的 #201D30 —— 最紧的品红底 4.69:1，仍过 AA */
+  --oui-color-on-accent: #201D30;
 
   /* ---- 5. 装饰图标色（唯一允许出现彩色的地方，只给 16px 图标用） ---- */
   --oui-accent-cyan: #54C1FA;
@@ -206,13 +206,13 @@
   --oui-color-primary: #F26B21;
   --oui-color-primary-hover: #F15E0E;      /* 加深 8% */
   --oui-color-primary-active: #E0580D;     /* 再加深 6% */
-  --oui-color-on-primary: #15121F;         /* 白字 3.04 ⊂ 不合格，取深墨 6.06 */
+  --oui-color-on-primary: #232038;         /* 白字 3.04 ⊂ 不合格；墨色 5.17（hover 4.75） */
   --oui-color-primary-ink: #B8480A;        /* 白底 5.29 / primary 淡底 5.02 / 淡底 #FEF0E9 4.75 */
   --oui-gradient-brand-2: #FF9F45;
   --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
 }
 
-[data-oui-theme="modelscope"] {
+[data-oui-theme="violet"] {
   --oui-color-primary: #624AFF;
   --oui-color-primary-hover: #5036FF;
   --oui-color-primary-active: #4124FF;
@@ -226,7 +226,7 @@
   --oui-color-primary: #0E9384;
   --oui-color-primary-hover: #0C8073;
   --oui-color-primary-active: #0B7065;
-  --oui-color-on-primary: #15121F;         /* 白字 3.80 ⊂ 不合格，深墨 4.85 */
+  --oui-color-on-primary: #1A1728;         /* 白字 3.80 ⊂ 不合格；墨色 4.62 */
   --oui-color-primary-ink: #0B786C;        /* 白底 5.36 / primary 淡底 5.09 */
   --oui-gradient-brand-2: #3DD4BE;
   --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
@@ -236,7 +236,7 @@
   --oui-color-primary: #E5446D;
   --oui-color-primary-hover: #E3325F;
   --oui-color-primary-active: #E02253;
-  --oui-color-on-primary: #15121F;         /* 白字 3.90 ⊂ 不合格，深墨 4.73 */
+  --oui-color-on-primary: #181522;         /* 白字 3.90 ⊂ 不合格；墨色 4.60 */
   --oui-color-primary-ink: #D01B49;        /* 白底 5.34 / primary 淡底 5.06 */
   --oui-gradient-brand-2: #FF8FA3;
   --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
@@ -261,16 +261,16 @@
   --oui-color-shade: #FFFFFF;              /* 深色下 hover 提亮而非压暗 */
 
   --oui-color-success: #3DD68C;            /* 9.87:1 */
-  --oui-color-on-success: #15121F;
+  --oui-color-on-success: #201D30;
   --oui-color-success-ink: var(--oui-color-success);
   --oui-color-warning: #F0A22E;            /* 8.74:1 */
-  --oui-color-on-warning: #15121F;
+  --oui-color-on-warning: #201D30;
   --oui-color-warning-ink: var(--oui-color-warning);
   --oui-color-danger: #F87171;             /* 6.70:1 */
-  --oui-color-on-danger: #15121F;
+  --oui-color-on-danger: #201D30;
   --oui-color-danger-ink: var(--oui-color-danger);
   --oui-color-info: #7CA9FF;               /* 7.92:1 */
-  --oui-color-on-info: #15121F;
+  --oui-color-on-info: #201D30;
   --oui-color-info-ink: var(--oui-color-info);
 
   --oui-shadow-sm: 0 1px 2px rgba(0, 0, 0, .40);
@@ -291,7 +291,7 @@
   --oui-color-primary-ink: #F26B21;        /* 深底 6.09 / bg-subtle 5.69 */
 }
 
-[data-oui-theme="modelscope"][data-oui-scheme="dark"] {
+[data-oui-theme="violet"][data-oui-scheme="dark"] {
   --oui-color-primary-hover: #745EFF;
   --oui-color-primary-active: #8370FF;
   --oui-color-primary-ink: #8C79FF;        /* 深底 5.55 / bg-subtle 5.19（原 7D68FF 在 bg-subtle 只有 4.37） */

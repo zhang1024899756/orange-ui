@@ -178,7 +178,7 @@
         "name": "size",
         "type": "Size",
         "required": false,
-        "description": "尺寸，默认 md（32px，与参照站一致）",
+        "description": "尺寸，默认 md（32px）",
         "defaultValue": "md"
       },
       {

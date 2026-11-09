@@ -4,7 +4,7 @@ description: 这套设计语言的三条纪律，以及它们为什么存在。
 sidebar_position: 0
 ---
 
-import { Button } from '@arvinzxy/orange-ui';
+import { DocButton } from '@site/src/components/DocButton';
 
 # 设计
 
@@ -16,29 +16,29 @@ import { Button } from '@arvinzxy/orange-ui';
 <div className="oui-feature">
   <div className="oui-feature__title">① 颜色有预算</div>
   <p className="oui-feature__desc">中性 6 档 + 强调 1 个 + 语义 3 个 + 装饰 4 个 = 14 个非中性色。超出的颜色一律不许用。</p>
-  <p><Button size="sm" variant="outlined" href="/design/tokens">设计变量</Button></p>
+  <p><DocButton size="sm" variant="outlined" to="/design/tokens">设计变量</DocButton></p>
 </div>
 
 <div className="oui-feature">
   <div className="oui-feature__title">② 阴影只给浮层</div>
   <p className="oui-feature__desc">静态卡片只有 1px 边框。用阴影堆立体感是后台管理系统的味道，不是社区产品。</p>
-  <p><Button size="sm" variant="outlined" href="/design/principles">设计原则</Button></p>
+  <p><DocButton size="sm" variant="outlined" to="/design/principles">设计原则</DocButton></p>
 </div>
 
 <div className="oui-feature">
   <div className="oui-feature__title">③ 字号只有 6 档</div>
   <p className="oui-feature__desc">12/14/16/20/24/32。需要更强就换字重或换颜色，不许临时想第 7 个字号。</p>
-  <p><Button size="sm" variant="outlined" href="/design/typography">字体与字号</Button></p>
+  <p><DocButton size="sm" variant="outlined" to="/design/typography">字体与字号</DocButton></p>
 </div>
 
 </div>
 
 ## 这些数值不是原创的
 
-它们是**实测**来的：参照 ModelScope 魔搭社区的界面，用真实浏览器读数（1440 视口，抓 computed style），
-得到它真实在用的 token —— 主色 `#624aff`、中性四档、12px 为主的小字、4px 起的圆角阶梯、几乎为零的阴影。
+它们是**实测**来的：用真实浏览器读数（1440 视口，抓 computed style）量了一批信息密集型中文界面，
+得到真实在用的 token —— 主色 `#624aff`、中性四档、12px 为主的小字、4px 起的圆角阶梯、几乎为零的阴影。
 
-我们抄了它的骨架，补了两件它没有的事：
+这套骨架之上，我们补了两件更关键的事：
 
-1. **主题可切换**：它只有明暗两套、品牌色写死；这里 4 套 × 明暗，且使用方能覆盖任何一层。
-2. **对比度达标**：它的三级文字 `#8284A4` 只有 3.63:1，不达 AA；我们抬到 5.00:1。
+1. **主题可切换**：4 套内置主题 × 明暗，一行属性就切，使用方还能覆盖任何一层。
+2. **对比度达标**：原始读数里的三级文字 `#8284A4` 只有 3.63:1，不达 AA；我们抬到 5.00:1。
