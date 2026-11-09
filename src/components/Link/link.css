@@ -1,0 +1,87 @@
+@layer oui.components {
+  .oui-link {
+    --oui-link-c: var(--oui-color-primary-ink);
+    --oui-link-fs: var(--oui-font-sm);
+    --oui-link-lh: var(--oui-leading-sm);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--oui-space-1);
+    max-width: 100%;
+    font-family: var(--oui-font-family);
+    font-size: var(--oui-link-fs);
+    line-height: var(--oui-link-lh);
+    font-weight: var(--oui-font-weight-regular);
+    color: var(--oui-link-c);
+    text-decoration: none;
+    text-underline-offset: calc(var(--oui-border-width) * 2);
+    cursor: pointer;
+    transition: color var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  /* ---------- 角色色 ---------- */
+  .oui-link[data-color='primary'] {
+    --oui-link-c: var(--oui-color-primary-ink);
+  }
+
+  .oui-link[data-color='neutral'] {
+    --oui-link-c: var(--oui-color-text);
+  }
+
+  .oui-link[data-color='danger'] {
+    --oui-link-c: var(--oui-color-danger-ink);
+  }
+
+  /* ---------- 尺寸 ---------- */
+  .oui-link[data-size='xs'] {
+    --oui-link-fs: var(--oui-font-xs);
+    --oui-link-lh: var(--oui-leading-xs);
+  }
+
+  .oui-link[data-size='sm'] {
+    --oui-link-fs: var(--oui-font-sm);
+    --oui-link-lh: var(--oui-leading-sm);
+  }
+
+  .oui-link[data-size='md'] {
+    --oui-link-fs: var(--oui-font-md);
+    --oui-link-lh: var(--oui-leading-md);
+  }
+
+  .oui-link[data-size='lg'] {
+    --oui-link-fs: var(--oui-font-lg);
+    --oui-link-lh: var(--oui-leading-lg);
+  }
+
+  /* ---------- 下划线行为 ---------- */
+  .oui-link[data-underline='always'] {
+    text-decoration: underline;
+  }
+
+  .oui-link[data-underline='hover']:hover {
+    text-decoration: underline;
+  }
+
+  .oui-link[data-underline='none']:hover {
+    text-decoration: none;
+    color: color-mix(in srgb, var(--oui-link-c) 82%, var(--oui-color-shade));
+  }
+
+  /* ---------- 禁用 ---------- */
+  .oui-link[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--oui-opacity-disabled);
+    text-decoration: none;
+  }
+
+  /* ---------- 内部元素 ---------- */
+  .oui-link__icon,
+  .oui-link__external {
+    display: inline-flex;
+    flex: none;
+  }
+
+  .oui-link__label {
+    min-width: 0;
+  }
+}

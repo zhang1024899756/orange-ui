@@ -1,0 +1,221 @@
+@layer oui.components {
+  /* ---------- 尺寸：只有四档，全部落在 24/28/32/40 网格上 ---------- */
+  .oui-button {
+    --oui-btn-h: var(--oui-control-md);
+    --oui-btn-px: var(--oui-space-3);
+    --oui-btn-fs: var(--oui-font-sm);
+    --oui-btn-gap: var(--oui-space-2);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--oui-btn-gap);
+    height: var(--oui-btn-h);
+    padding-inline: var(--oui-btn-px);
+    border: var(--oui-border-width) solid transparent;
+    border-radius: var(--oui-radius-sm);
+    font-family: inherit;
+    font-size: var(--oui-btn-fs);
+    font-weight: var(--oui-font-weight-medium);
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      background-color var(--oui-duration-fast) var(--oui-ease),
+      border-color var(--oui-duration-fast) var(--oui-ease),
+      color var(--oui-duration-fast) var(--oui-ease),
+      opacity var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  .oui-button[data-size='xs'] {
+    --oui-btn-h: var(--oui-control-xs);
+    --oui-btn-px: var(--oui-space-2);
+    --oui-btn-fs: var(--oui-font-xs);
+    --oui-btn-gap: var(--oui-space-1);
+  }
+
+  .oui-button[data-size='sm'] {
+    --oui-btn-h: var(--oui-control-sm);
+    --oui-btn-px: var(--oui-space-2);
+    --oui-btn-fs: var(--oui-font-xs);
+    --oui-btn-gap: var(--oui-space-1);
+  }
+
+  .oui-button[data-size='lg'] {
+    --oui-btn-h: var(--oui-control-lg);
+    --oui-btn-px: var(--oui-space-4);
+    --oui-btn-fs: var(--oui-font-sm);
+  }
+
+  .oui-button[data-shape='round'] {
+    border-radius: var(--oui-radius-full);
+  }
+
+  .oui-button[data-shape='circle'] {
+    padding-inline: 0;
+    width: var(--oui-btn-h);
+    border-radius: var(--oui-radius-full);
+  }
+
+  .oui-button[data-block] {
+    display: flex;
+    width: 100%;
+  }
+
+  /* ---------- 角色色：一套变量，五种形态共用 ---------- */
+  .oui-button[data-color='primary'] {
+    --oui-btn-solid-bg: var(--oui-color-primary);
+    --oui-btn-solid-bg-hover: var(--oui-color-primary-hover);
+    --oui-btn-solid-bg-active: var(--oui-color-primary-active);
+    --oui-btn-solid-fg: var(--oui-color-on-primary);
+    --oui-btn-ink: var(--oui-color-primary-ink);
+    --oui-btn-subtle: var(--oui-color-primary-subtle);
+    --oui-btn-border: var(--oui-color-primary-border);
+  }
+
+  .oui-button[data-color='neutral'] {
+    --oui-btn-solid-bg: var(--oui-color-neutral);
+    --oui-btn-solid-bg-hover: color-mix(in srgb, var(--oui-color-neutral) 88%, var(--oui-color-shade));
+    --oui-btn-solid-bg-active: color-mix(in srgb, var(--oui-color-neutral) 78%, var(--oui-color-shade));
+    --oui-btn-solid-fg: var(--oui-color-on-neutral);
+    --oui-btn-ink: var(--oui-color-text);
+    --oui-btn-subtle: var(--oui-color-neutral-subtle);
+    --oui-btn-border: var(--oui-color-neutral-border);
+  }
+
+  .oui-button[data-color='success'] {
+    --oui-btn-solid-bg: var(--oui-color-success);
+    --oui-btn-solid-bg-hover: color-mix(in srgb, var(--oui-color-success) 92%, var(--oui-color-shade));
+    --oui-btn-solid-bg-active: color-mix(in srgb, var(--oui-color-success) 86%, var(--oui-color-shade));
+    --oui-btn-solid-fg: var(--oui-color-on-success);
+    --oui-btn-ink: var(--oui-color-success-ink);
+    --oui-btn-subtle: var(--oui-color-success-subtle);
+    --oui-btn-border: var(--oui-color-success-border);
+  }
+
+  .oui-button[data-color='warning'] {
+    --oui-btn-solid-bg: var(--oui-color-warning);
+    --oui-btn-solid-bg-hover: color-mix(in srgb, var(--oui-color-warning) 92%, var(--oui-color-shade));
+    --oui-btn-solid-bg-active: color-mix(in srgb, var(--oui-color-warning) 86%, var(--oui-color-shade));
+    --oui-btn-solid-fg: var(--oui-color-on-warning);
+    --oui-btn-ink: var(--oui-color-warning-ink);
+    --oui-btn-subtle: var(--oui-color-warning-subtle);
+    --oui-btn-border: var(--oui-color-warning-border);
+  }
+
+  .oui-button[data-color='danger'] {
+    --oui-btn-solid-bg: var(--oui-color-danger);
+    --oui-btn-solid-bg-hover: color-mix(in srgb, var(--oui-color-danger) 92%, var(--oui-color-shade));
+    --oui-btn-solid-bg-active: color-mix(in srgb, var(--oui-color-danger) 86%, var(--oui-color-shade));
+    --oui-btn-solid-fg: var(--oui-color-on-danger);
+    --oui-btn-ink: var(--oui-color-danger-ink);
+    --oui-btn-subtle: var(--oui-color-danger-subtle);
+    --oui-btn-border: var(--oui-color-danger-border);
+  }
+
+  /* ---------- 五种形态 ---------- */
+  .oui-button[data-variant='solid'] {
+    background: var(--oui-btn-solid-bg);
+    color: var(--oui-btn-solid-fg);
+  }
+
+  .oui-button[data-variant='solid']:hover:not(:disabled, [aria-disabled='true']) {
+    background: var(--oui-btn-solid-bg-hover);
+  }
+
+  .oui-button[data-variant='solid']:active:not(:disabled, [aria-disabled='true']) {
+    background: var(--oui-btn-solid-bg-active);
+  }
+
+  .oui-button[data-variant='outlined'] {
+    background: transparent;
+    color: var(--oui-btn-ink);
+    border-color: var(--oui-btn-border);
+  }
+
+  .oui-button[data-variant='outlined']:hover:not(:disabled, [aria-disabled='true']) {
+    background: var(--oui-btn-subtle);
+  }
+
+  .oui-button[data-variant='soft'] {
+    background: var(--oui-btn-subtle);
+    color: var(--oui-btn-ink);
+  }
+
+  .oui-button[data-variant='soft']:hover:not(:disabled, [aria-disabled='true']) {
+    background: color-mix(in srgb, var(--oui-btn-solid-bg) 16%, transparent);
+  }
+
+  .oui-button[data-variant='ghost'] {
+    background: transparent;
+    color: var(--oui-btn-ink);
+  }
+
+  .oui-button[data-variant='ghost']:hover:not(:disabled, [aria-disabled='true']) {
+    background: var(--oui-btn-subtle);
+  }
+
+  .oui-button[data-variant='text'] {
+    background: transparent;
+    color: var(--oui-btn-ink);
+    padding-inline: var(--oui-space-1);
+  }
+
+  .oui-button[data-variant='text']:hover:not(:disabled, [aria-disabled='true']) {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* ---------- 状态 ---------- */
+  .oui-button:disabled,
+  .oui-button[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: var(--oui-opacity-disabled);
+  }
+
+  .oui-button[aria-disabled='true']:hover {
+    background: var(--oui-btn-solid-bg);
+  }
+
+  .oui-button[data-variant='outlined'][aria-disabled='true']:hover,
+  .oui-button[data-variant='ghost'][aria-disabled='true']:hover,
+  .oui-button[data-variant='text'][aria-disabled='true']:hover {
+    background: transparent;
+  }
+
+  /* ---------- loading：锁宽 + 居中，不改变盒子尺寸 ---------- */
+  .oui-button[data-loading] {
+    cursor: progress;
+  }
+
+  .oui-button__spin {
+    display: inline-flex;
+    flex: none;
+  }
+
+  .oui-button[data-loading]:not([data-loading-text]) .oui-button__label {
+    visibility: hidden;
+  }
+
+  .oui-button[data-loading]:not([data-loading-text]) .oui-button__spin {
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ---------- 内部元素 ---------- */
+  .oui-button__icon {
+    display: inline-flex;
+    flex: none;
+    font-size: 1.14em;
+  }
+
+  .oui-button__label {
+    display: inline-flex;
+    align-items: center;
+  }
+}

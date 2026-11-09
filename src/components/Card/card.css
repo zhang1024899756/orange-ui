@@ -1,0 +1,176 @@
+@layer oui.components {
+  .oui-card {
+    --oui-card-pad: var(--oui-space-4);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    border: var(--oui-border-width) solid var(--oui-color-border);
+    border-radius: var(--oui-radius-lg);
+    background: var(--oui-color-bg);
+    color: var(--oui-color-text);
+    transition:
+      transform var(--oui-duration) var(--oui-ease),
+      border-color var(--oui-duration) var(--oui-ease),
+      box-shadow var(--oui-duration) var(--oui-ease);
+  }
+
+  .oui-card[data-padding='none'] {
+    --oui-card-pad: 0;
+  }
+
+  .oui-card[data-padding='sm'] {
+    --oui-card-pad: var(--oui-space-2);
+  }
+
+  .oui-card[data-padding='lg'] {
+    --oui-card-pad: var(--oui-space-6);
+  }
+
+  /* 浮起形态：边框换成同宽透明，切换形态时盒子尺寸不变 */
+  .oui-card[data-variant='elevated'] {
+    border-color: transparent;
+    box-shadow: var(--oui-shadow-sm);
+  }
+
+  .oui-card[data-clickable] {
+    cursor: pointer;
+  }
+
+  .oui-card[data-clickable]:focus-visible {
+    outline: var(--oui-focus-ring-width) solid var(--oui-color-primary-border);
+    outline-offset: var(--oui-focus-ring-width);
+  }
+
+  /* 悬停反馈只在有指针设备时给，触摸屏上不会粘住高亮 */
+  @media (hover: hover) {
+    .oui-card[data-hoverable]:hover {
+      transform: translateY(calc(-1 * var(--oui-lift)));
+    }
+
+    .oui-card[data-variant='outlined'][data-hoverable]:hover {
+      border-color: var(--oui-color-border-strong);
+    }
+
+    .oui-card[data-variant='elevated'][data-hoverable]:hover {
+      box-shadow: var(--oui-shadow-md);
+    }
+  }
+
+  /* ---------- 内部区域 ---------- */
+  .oui-card__cover {
+    display: block;
+    flex: none;
+    overflow: hidden;
+  }
+
+  /* 封面里塞图片时撑满整宽，避免出现缝隙 */
+  .oui-card__cover > :where(img, picture, svg, video, canvas) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .oui-card__header {
+    flex: none;
+    padding: var(--oui-card-pad);
+    border-bottom: var(--oui-border-width) solid var(--oui-color-border);
+    font-size: var(--oui-font-md);
+    font-weight: var(--oui-font-weight-semibold);
+    line-height: var(--oui-leading-md);
+  }
+
+  .oui-card__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: var(--oui-card-pad);
+    font-size: var(--oui-font-sm);
+    line-height: var(--oui-leading-sm);
+  }
+
+  .oui-card__footer {
+    flex: none;
+    padding: var(--oui-card-pad);
+    border-top: var(--oui-border-width) solid var(--oui-color-border);
+    background: var(--oui-color-bg-subtle);
+  }
+
+  /* padding='none' 时不应留下一条贴在边上的分隔线 */
+  .oui-card[data-padding='none'] .oui-card__header {
+    border-bottom: 0;
+  }
+
+  .oui-card[data-padding='none'] .oui-card__footer {
+    border-top: 0;
+    background: transparent;
+  }
+
+  /* ---------- loading 占位（与 Skeleton 共用同一套 tokens，观感一致） ---------- */
+  .oui-card__placeholder-cover,
+  .oui-card__placeholder-line {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background-color: var(--oui-skeleton-base);
+  }
+
+  .oui-card__placeholder-cover {
+    height: calc(var(--oui-space-12) * 2);
+  }
+
+  .oui-card__placeholder-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oui-space-2);
+    padding: var(--oui-card-pad);
+  }
+
+  .oui-card__placeholder-line {
+    height: var(--oui-skeleton-line);
+    border-radius: var(--oui-radius-sm);
+  }
+
+  .oui-card__placeholder-line[data-lead] {
+    width: 60%;
+  }
+
+  .oui-card__placeholder-body .oui-card__placeholder-line:last-child {
+    width: 80%;
+  }
+
+  .oui-card__placeholder-cover::after,
+  .oui-card__placeholder-line::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: calc(100% / var(--oui-skeleton-shimmer));
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--oui-skeleton-sheen) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: oui-card-shimmer var(--oui-shimmer-duration) var(--oui-ease) infinite;
+  }
+
+  @keyframes oui-card-shimmer {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(calc(var(--oui-skeleton-shimmer) * 100%));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oui-card__placeholder-cover::after,
+    .oui-card__placeholder-line::after {
+      display: none;
+    }
+  }
+}

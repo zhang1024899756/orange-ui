@@ -1,0 +1,87 @@
+@layer oui.components {
+  .oui-number {
+    --oui-number-fs: var(--oui-font-sm);
+    --oui-number-lh: var(--oui-leading-sm);
+
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--oui-space-1);
+    font-family: var(--oui-font-family);
+    font-size: var(--oui-number-fs);
+    font-weight: var(--oui-font-weight-medium);
+    line-height: var(--oui-number-lh);
+    font-variant-numeric: tabular-nums;
+    color: var(--oui-color-text);
+    white-space: nowrap;
+  }
+
+  /* ---------- 尺寸 ---------- */
+  .oui-number[data-size='xs'] {
+    --oui-number-fs: var(--oui-font-xs);
+    --oui-number-lh: var(--oui-leading-xs);
+  }
+
+  .oui-number[data-size='sm'] {
+    --oui-number-fs: var(--oui-font-sm);
+    --oui-number-lh: var(--oui-leading-sm);
+  }
+
+  .oui-number[data-size='md'] {
+    --oui-number-fs: var(--oui-font-md);
+    --oui-number-lh: var(--oui-leading-md);
+  }
+
+  .oui-number[data-size='lg'] {
+    --oui-number-fs: var(--oui-font-lg);
+    --oui-number-lh: var(--oui-leading-lg);
+  }
+
+  .oui-number[data-mono] {
+    font-family: var(--oui-font-mono);
+  }
+
+  /* ---------- 涨跌：颜色只落在箭头和数字上 ---------- */
+  .oui-number[data-trend='up'] {
+    color: var(--oui-color-success-ink);
+  }
+
+  .oui-number[data-trend='down'] {
+    color: var(--oui-color-danger-ink);
+  }
+
+  .oui-number__trend {
+    flex: none;
+    align-self: center;
+  }
+
+  .oui-number__value {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .oui-number__affix {
+    font-size: 0.86em;
+    font-weight: var(--oui-font-weight-regular);
+    color: var(--oui-color-text-secondary);
+  }
+
+  /* ---------- 骨架：高度锁成当前字号的行高，宽度不走位 ---------- */
+  .oui-number[data-loading] .oui-number__skeleton {
+    display: inline-block;
+    width: calc(var(--oui-space-8) + var(--oui-space-4));
+    height: var(--oui-number-lh);
+    border-radius: var(--oui-radius-sm);
+    background: var(--oui-color-bg-muted);
+    animation: oui-number-skeleton var(--oui-shimmer-duration) linear infinite;
+  }
+
+  @keyframes oui-number-skeleton {
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.55;
+    }
+  }
+}

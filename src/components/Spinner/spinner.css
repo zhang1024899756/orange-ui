@@ -1,0 +1,64 @@
+@layer oui.components {
+  .oui-spinner {
+    --oui-spinner-color: var(--oui-color-primary);
+    --oui-spinner-fs: var(--oui-font-xs);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--oui-space-2);
+    color: var(--oui-spinner-color);
+    font-size: var(--oui-spinner-fs);
+    line-height: 1;
+  }
+
+  .oui-spinner[data-size='md'],
+  .oui-spinner[data-size='lg'] {
+    --oui-spinner-fs: var(--oui-font-sm);
+  }
+
+  /* 与文字同行：不占满一行，按基线对齐 */
+  .oui-spinner[data-inline] {
+    display: inline-flex;
+    width: auto;
+    vertical-align: middle;
+  }
+
+  .oui-spinner[data-color='current'] {
+    --oui-spinner-color: currentColor;
+  }
+
+  .oui-spinner[data-color='neutral'] {
+    --oui-spinner-color: var(--oui-color-text-tertiary);
+  }
+
+  .oui-spinner[data-color='success'] {
+    --oui-spinner-color: var(--oui-color-success);
+  }
+
+  .oui-spinner[data-color='warning'] {
+    --oui-spinner-color: var(--oui-color-warning);
+  }
+
+  .oui-spinner[data-color='danger'] {
+    --oui-spinner-color: var(--oui-color-danger);
+  }
+
+  /* 区域级加载遮罩：父容器需要 position: relative，圆角自动跟随父容器 */
+  .oui-spinner[data-overlay] {
+    position: absolute;
+    inset: 0;
+    z-index: var(--oui-z-sticky);
+    border-radius: inherit;
+    background: color-mix(in srgb, var(--oui-color-bg) 72%, transparent);
+  }
+
+  .oui-spinner__glyph {
+    display: block;
+  }
+
+  .oui-spinner__label {
+    color: var(--oui-color-text-secondary);
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,74 @@
+@layer oui.components {
+  .oui-divider {
+    --oui-divider-c: var(--oui-color-border);
+    --oui-divider-style: solid;
+    --oui-divider-gap: var(--oui-space-3);
+
+    flex: none;
+    border: 0;
+    border-color: var(--oui-divider-c);
+  }
+
+  .oui-divider[data-dashed] {
+    --oui-divider-style: dashed;
+  }
+
+  /* ---------- 水平 ---------- */
+  .oui-divider[data-orientation='horizontal'] {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-block: var(--oui-divider-gap);
+    color: var(--oui-color-text-tertiary);
+    font-family: var(--oui-font-family);
+    font-size: var(--oui-font-xs);
+    line-height: var(--oui-leading-xs);
+    white-space: nowrap;
+  }
+
+  .oui-divider[data-orientation='horizontal']:not([data-with-text]) {
+    border-block-start: var(--oui-border-width) var(--oui-divider-style) var(--oui-divider-c);
+  }
+
+  .oui-divider[data-orientation='horizontal'][data-with-text]::before,
+  .oui-divider[data-orientation='horizontal'][data-with-text]::after {
+    content: '';
+    flex: 1;
+    height: 0;
+    border-block-start: var(--oui-border-width) var(--oui-divider-style) var(--oui-divider-c);
+  }
+
+  .oui-divider[data-orientation='horizontal'][data-inset]:not([data-with-text]) {
+    width: auto;
+    margin-inline: var(--oui-space-4);
+  }
+
+  /* ---------- 垂直 ---------- */
+  .oui-divider[data-orientation='vertical'] {
+    display: inline-block;
+    align-self: stretch;
+    width: 0;
+    min-height: var(--oui-control-sm);
+    margin-inline: var(--oui-divider-gap);
+    border-inline-start: var(--oui-border-width) var(--oui-divider-style) var(--oui-divider-c);
+    vertical-align: middle;
+  }
+
+  /* ---------- 间距档 ---------- */
+  .oui-divider[data-spacing='sm'] {
+    --oui-divider-gap: var(--oui-space-2);
+  }
+
+  .oui-divider[data-spacing='md'] {
+    --oui-divider-gap: var(--oui-space-3);
+  }
+
+  .oui-divider[data-spacing='lg'] {
+    --oui-divider-gap: var(--oui-space-6);
+  }
+
+  .oui-divider__text {
+    flex: none;
+    padding-inline: var(--oui-space-3);
+  }
+}

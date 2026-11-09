@@ -1,0 +1,111 @@
+@layer oui.components {
+  .oui-switch {
+    --oui-switch-w: var(--oui-switch-w-md);
+    --oui-switch-h: var(--oui-switch-h-md);
+    --oui-switch-thumb: var(--oui-switch-thumb-md);
+    --oui-switch-pad: calc(var(--oui-space-1) / 2);
+    --oui-switch-travel: calc(var(--oui-switch-w) - var(--oui-switch-thumb) - var(--oui-switch-pad) * 2);
+    --oui-switch-on: var(--oui-color-primary);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--oui-space-2);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--oui-color-text);
+    font-family: inherit;
+    font-size: var(--oui-font-sm);
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    vertical-align: middle;
+  }
+
+  .oui-switch[data-size='sm'] {
+    --oui-switch-w: var(--oui-switch-w-sm);
+    --oui-switch-h: var(--oui-switch-h-sm);
+    --oui-switch-thumb: var(--oui-switch-thumb-sm);
+    font-size: var(--oui-font-xs);
+  }
+
+  .oui-switch[data-color='success'] {
+    --oui-switch-on: var(--oui-color-success);
+  }
+
+  /* 命中区：视觉高度 18/22，靠伪元素撑到 24，视觉尺寸不变 */
+  .oui-switch::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: var(--oui-control-xs);
+    transform: translateY(-50%);
+  }
+
+  .oui-switch__track {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    box-sizing: border-box;
+    width: var(--oui-switch-w);
+    height: var(--oui-switch-h);
+    padding: var(--oui-switch-pad);
+    background: var(--oui-color-border-strong);
+    border-radius: var(--oui-radius-full);
+    transition: background-color var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  .oui-switch[data-checked] .oui-switch__track {
+    background: var(--oui-switch-on);
+  }
+
+  .oui-switch__thumb {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: var(--oui-switch-thumb);
+    height: var(--oui-switch-thumb);
+    background: var(--oui-color-bg);
+    border-radius: var(--oui-radius-full);
+    color: var(--oui-switch-on);
+    transform: translateX(0);
+    transition: transform var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  .oui-switch[data-checked] .oui-switch__thumb {
+    transform: translateX(var(--oui-switch-travel));
+  }
+
+  .oui-switch__spin {
+    width: 100%;
+    height: 100%;
+  }
+
+  .oui-switch__label {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  /* ---------- 状态 ---------- */
+  .oui-switch:disabled {
+    cursor: not-allowed;
+    opacity: var(--oui-opacity-disabled);
+  }
+
+  .oui-switch[data-loading]:disabled {
+    cursor: progress;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oui-switch__track,
+    .oui-switch__thumb {
+      transition: none;
+    }
+  }
+}

@@ -1,0 +1,178 @@
+@layer oui.components {
+  .oui-text {
+    --oui-text-c: var(--oui-color-text);
+    --oui-text-fs: var(--oui-font-sm);
+    --oui-text-lh: var(--oui-leading-sm);
+
+    margin: 0;
+    color: var(--oui-text-c);
+    font-family: var(--oui-font-family);
+    font-size: var(--oui-text-fs);
+    font-weight: var(--oui-font-weight-regular);
+    line-height: var(--oui-text-lh);
+    letter-spacing: normal;
+  }
+
+  /* ---------- 字号阶梯 ---------- */
+  .oui-text[data-size='xs'] {
+    --oui-text-fs: var(--oui-font-xs);
+    --oui-text-lh: var(--oui-leading-xs);
+  }
+
+  .oui-text[data-size='sm'] {
+    --oui-text-fs: var(--oui-font-sm);
+    --oui-text-lh: var(--oui-leading-sm);
+  }
+
+  .oui-text[data-size='md'] {
+    --oui-text-fs: var(--oui-font-md);
+    --oui-text-lh: var(--oui-leading-md);
+  }
+
+  .oui-text[data-size='lg'] {
+    --oui-text-fs: var(--oui-font-lg);
+    --oui-text-lh: var(--oui-leading-lg);
+  }
+
+  .oui-text[data-size='xl'] {
+    --oui-text-fs: var(--oui-font-xl);
+    --oui-text-lh: var(--oui-leading-xl);
+  }
+
+  .oui-text[data-size='2xl'] {
+    --oui-text-fs: var(--oui-font-2xl);
+    --oui-text-lh: var(--oui-leading-2xl);
+    letter-spacing: var(--oui-letter-tight);
+  }
+
+  /* ---------- 字重 ---------- */
+  .oui-text[data-weight='400'] {
+    font-weight: var(--oui-font-weight-regular);
+  }
+
+  .oui-text[data-weight='500'] {
+    font-weight: var(--oui-font-weight-medium);
+  }
+
+  .oui-text[data-weight='600'] {
+    font-weight: var(--oui-font-weight-semibold);
+  }
+
+  /* ---------- 色调：全部指向语义 token，不出现裸色值 ---------- */
+  .oui-text[data-tone='default'] {
+    --oui-text-c: var(--oui-color-text);
+  }
+
+  .oui-text[data-tone='secondary'] {
+    --oui-text-c: var(--oui-color-text-secondary);
+  }
+
+  .oui-text[data-tone='tertiary'] {
+    --oui-text-c: var(--oui-color-text-tertiary);
+  }
+
+  .oui-text[data-tone='disabled'] {
+    --oui-text-c: var(--oui-color-text-disabled);
+  }
+
+  .oui-text[data-tone='primary'] {
+    --oui-text-c: var(--oui-color-primary-ink);
+  }
+
+  .oui-text[data-tone='danger'] {
+    --oui-text-c: var(--oui-color-danger-ink);
+  }
+
+  .oui-text[data-tone='success'] {
+    --oui-text-c: var(--oui-color-success-ink);
+  }
+
+  .oui-text[data-tone='inverse'] {
+    --oui-text-c: var(--oui-color-text-inverse);
+  }
+
+  /* ---------- 字体族与斜体 ---------- */
+  .oui-text[data-mono] {
+    font-family: var(--oui-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .oui-text[data-italic] {
+    font-style: italic;
+  }
+
+  /* ---------- 截断 ----------
+     min-width:0 是关键：flex / grid 子项默认 min-width:auto，不写就永远不省略。 */
+  .oui-text[data-truncate='single']:not([data-copyable]) {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .oui-text[data-truncate='multi']:not([data-copyable]) {
+    display: -webkit-box;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--oui-text-clamp, 2);
+  }
+
+  /* ---------- 可复制 ---------- */
+  .oui-text[data-copyable] {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--oui-space-1);
+    max-width: 100%;
+    vertical-align: middle;
+  }
+
+  .oui-text[data-copyable] .oui-text__body {
+    min-width: 0;
+  }
+
+  .oui-text[data-copyable][data-truncate='single'] .oui-text__body {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .oui-text[data-copyable][data-truncate='multi'] .oui-text__body {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--oui-text-clamp, 2);
+  }
+
+  .oui-text__copy {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--oui-icon-sm);
+    height: var(--oui-icon-sm);
+    padding: 0;
+    border: 0;
+    border-radius: var(--oui-radius-xs);
+    background: transparent;
+    color: var(--oui-color-text-tertiary);
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  /* 视觉 16px，命中区补到 24×24：窗口内每 8px 一个，不会和相邻元素抢点击 */
+  .oui-text__copy::after {
+    content: '';
+    position: absolute;
+    inset: calc(var(--oui-space-1) * -1);
+  }
+
+  .oui-text__copy:hover {
+    opacity: 1;
+  }
+}

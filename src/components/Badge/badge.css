@@ -1,0 +1,87 @@
+@layer oui.components {
+  .oui-badge {
+    --oui-badge-bg: var(--oui-color-primary);
+    --oui-badge-fg: var(--oui-color-on-primary);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+  /* ---------- 角色色 ---------- */
+  .oui-badge[data-color='primary'] {
+    --oui-badge-bg: var(--oui-color-primary);
+    --oui-badge-fg: var(--oui-color-on-primary);
+  }
+
+  .oui-badge[data-color='success'] {
+    --oui-badge-bg: var(--oui-color-success);
+    --oui-badge-fg: var(--oui-color-on-success);
+  }
+
+  .oui-badge[data-color='warning'] {
+    --oui-badge-bg: var(--oui-color-warning);
+    --oui-badge-fg: var(--oui-color-on-warning);
+  }
+
+  .oui-badge[data-color='danger'] {
+    --oui-badge-bg: var(--oui-color-danger);
+    --oui-badge-fg: var(--oui-color-on-danger);
+  }
+
+  .oui-badge[data-color='neutral'] {
+    --oui-badge-bg: var(--oui-color-neutral);
+    --oui-badge-fg: var(--oui-color-on-neutral);
+  }
+
+  /* ---------- 气泡本体 ---------- */
+  .oui-badge__bubble {
+    position: absolute;
+    top: 0;
+    inset-inline-end: 0;
+    z-index: var(--oui-z-sticky);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: var(--oui-badge-height);
+    min-width: var(--oui-badge-min-width);
+    padding-inline: var(--oui-space-1);
+    /* 一圈底色描边，压在头像/图片上也不会糊在一起 */
+    box-shadow: 0 0 0 var(--oui-border-width) var(--oui-color-bg);
+    border-radius: var(--oui-radius-full);
+    background: var(--oui-badge-bg);
+    color: var(--oui-badge-fg);
+    font-family: var(--oui-font-family);
+    font-size: var(--oui-font-xs);
+    font-weight: var(--oui-font-weight-medium);
+    line-height: 1;
+    white-space: nowrap;
+    /* 徽章只是指示器，点击应落到被标注的元素上 */
+    pointer-events: none;
+    transform: translate(
+      calc(50% + var(--oui-badge-offset-x, 0px)),
+      calc(-50% + var(--oui-badge-offset-y, 0px))
+    );
+  }
+
+  .oui-badge[data-size='md'] .oui-badge__bubble {
+    height: var(--oui-control-xs);
+    min-width: var(--oui-control-xs);
+  }
+
+  .oui-badge__bubble[data-kind='dot'] {
+    width: var(--oui-badge-dot);
+    height: var(--oui-badge-dot);
+    min-width: 0;
+    padding-inline: 0;
+  }
+
+  /* 独立显示：不做绝对定位，直接参与行内排版 */
+  .oui-badge[data-standalone] .oui-badge__bubble {
+    position: static;
+    box-shadow: none;
+    transform: none;
+  }
+}

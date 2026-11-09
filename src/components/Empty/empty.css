@@ -1,0 +1,79 @@
+@layer oui.components {
+  .oui-empty {
+    --oui-empty-glyph: calc(var(--oui-font-2xl) * 2);
+    --oui-empty-pad: var(--oui-space-6);
+    --oui-empty-title-fs: var(--oui-font-md);
+    --oui-empty-title-lh: var(--oui-leading-md);
+    --oui-empty-desc-fs: var(--oui-font-sm);
+    --oui-empty-desc-lh: var(--oui-leading-sm);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--oui-space-2);
+    box-sizing: border-box;
+    padding: var(--oui-empty-pad);
+    color: var(--oui-color-text);
+    text-align: center;
+  }
+
+  .oui-empty[data-size='sm'] {
+    --oui-empty-glyph: calc(var(--oui-font-2xl) * 1.25);
+    --oui-empty-pad: var(--oui-space-4);
+    --oui-empty-title-fs: var(--oui-font-sm);
+    --oui-empty-title-lh: var(--oui-leading-sm);
+    --oui-empty-desc-fs: var(--oui-font-xs);
+    --oui-empty-desc-lh: var(--oui-leading-xs);
+  }
+
+  .oui-empty[data-size='lg'] {
+    --oui-empty-glyph: calc(var(--oui-font-2xl) * 2.5);
+    --oui-empty-pad: var(--oui-space-8);
+    --oui-empty-title-fs: var(--oui-font-lg);
+    --oui-empty-title-lh: var(--oui-leading-lg);
+  }
+
+  /* 图形与标题之间 16，标题与描述 8，描述与操作 16 */
+  .oui-empty__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--oui-space-2);
+    color: var(--oui-color-text-disabled);
+  }
+
+  .oui-empty__glyph {
+    display: block;
+    width: var(--oui-empty-glyph);
+    height: var(--oui-empty-glyph);
+  }
+
+  .oui-empty__title {
+    font-size: var(--oui-empty-title-fs);
+    font-weight: var(--oui-font-weight-medium);
+    line-height: var(--oui-empty-title-lh);
+    color: var(--oui-color-text);
+  }
+
+  .oui-empty__description {
+    max-width: 36ch;
+    font-size: var(--oui-empty-desc-fs);
+    line-height: var(--oui-empty-desc-lh);
+    color: var(--oui-color-text-tertiary);
+  }
+
+  .oui-empty__extra {
+    font-size: var(--oui-empty-desc-fs);
+    line-height: var(--oui-empty-desc-lh);
+    color: var(--oui-color-text-tertiary);
+  }
+
+  .oui-empty__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--oui-space-2);
+    margin-top: var(--oui-space-2);
+  }
+}

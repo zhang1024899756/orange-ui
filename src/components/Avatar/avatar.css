@@ -1,0 +1,176 @@
+@layer oui.components {
+  .oui-avatar {
+    --oui-avatar-size: var(--oui-avatar-md);
+    --oui-avatar-bg: var(--oui-accent-cyan);
+    --oui-avatar-fg: var(--oui-color-on-accent);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    box-sizing: border-box;
+    width: var(--oui-avatar-size);
+    height: var(--oui-avatar-size);
+    border-radius: var(--oui-radius-full);
+    background: var(--oui-avatar-bg);
+    color: var(--oui-avatar-fg);
+    font-family: var(--oui-font-family);
+    font-size: calc(var(--oui-avatar-size) * 0.4);
+    font-weight: var(--oui-font-weight-medium);
+    line-height: 1;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+  }
+
+  .oui-avatar[data-size='xs'] {
+    --oui-avatar-size: var(--oui-avatar-xs);
+  }
+
+  .oui-avatar[data-size='sm'] {
+    --oui-avatar-size: var(--oui-avatar-sm);
+  }
+
+  .oui-avatar[data-size='md'] {
+    --oui-avatar-size: var(--oui-avatar-md);
+  }
+
+  .oui-avatar[data-size='lg'] {
+    --oui-avatar-size: var(--oui-avatar-lg);
+  }
+
+  .oui-avatar[data-shape='square'] {
+    border-radius: var(--oui-radius-md);
+  }
+
+  /* ---------- 6 档回退底色：4 个装饰色 + 2 档中性色 ---------- */
+  .oui-avatar[data-tone='0'] {
+    --oui-avatar-bg: var(--oui-accent-cyan);
+  }
+
+  .oui-avatar[data-tone='1'] {
+    --oui-avatar-bg: var(--oui-accent-teal);
+  }
+
+  .oui-avatar[data-tone='2'] {
+    --oui-avatar-bg: var(--oui-accent-amber);
+  }
+
+  .oui-avatar[data-tone='3'] {
+    --oui-avatar-bg: var(--oui-accent-magenta);
+  }
+
+  .oui-avatar[data-tone='4'] {
+    --oui-avatar-bg: var(--oui-color-text-secondary);
+    --oui-avatar-fg: var(--oui-color-text-inverse);
+  }
+
+  .oui-avatar[data-tone='5'] {
+    --oui-avatar-bg: var(--oui-color-bg-muted);
+    --oui-avatar-fg: var(--oui-color-text);
+  }
+
+  /* ---------- 内容 ---------- */
+  .oui-avatar__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+    background: var(--oui-color-bg-muted);
+  }
+
+  .oui-avatar__initials {
+    display: block;
+    padding-inline: var(--oui-space-1);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .oui-avatar__fallback,
+  .oui-avatar__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+    height: 60%;
+  }
+
+  /* ---------- 右下角状态点：圆点在圆形头像边上跨一半，方形则压在角上 ---------- */
+  .oui-avatar__status {
+    position: absolute;
+    inset-inline-end: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    width: calc(var(--oui-avatar-size) * 0.3);
+    height: calc(var(--oui-avatar-size) * 0.3);
+    border: var(--oui-border-w-thick) solid var(--oui-color-bg);
+    border-radius: var(--oui-radius-full);
+    background: var(--oui-color-text-disabled);
+  }
+
+  .oui-avatar[data-status='online'] .oui-avatar__status {
+    background: var(--oui-color-success);
+  }
+
+  .oui-avatar[data-status='away'] .oui-avatar__status {
+    background: var(--oui-color-warning);
+  }
+
+  .oui-avatar[data-status='busy'] .oui-avatar__status {
+    background: var(--oui-color-danger);
+  }
+
+  .oui-avatar[data-status='offline'] .oui-avatar__status {
+    background: var(--oui-color-text-disabled);
+  }
+
+  /* ==========================================================================
+     头像组：统一尺寸 + 负外边距叠放 + 一圈底色描边把相邻头像分开
+     规则写在上面单头像之后，同样的特异性下靠顺序覆盖 data-size。
+     ========================================================================== */
+  .oui-avatar-group {
+    --oui-avatar-group-size: var(--oui-avatar-md);
+
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+  .oui-avatar-group[data-size='xs'] {
+    --oui-avatar-group-size: var(--oui-avatar-xs);
+  }
+
+  .oui-avatar-group[data-size='sm'] {
+    --oui-avatar-group-size: var(--oui-avatar-sm);
+  }
+
+  .oui-avatar-group[data-size='md'] {
+    --oui-avatar-group-size: var(--oui-avatar-md);
+  }
+
+  .oui-avatar-group[data-size='lg'] {
+    --oui-avatar-group-size: var(--oui-avatar-lg);
+  }
+
+  .oui-avatar-group .oui-avatar {
+    --oui-avatar-size: var(--oui-avatar-group-size);
+  }
+
+  .oui-avatar-group > * + * {
+    margin-inline-start: calc(-1 * var(--oui-space-2));
+  }
+
+  .oui-avatar-group > .oui-avatar {
+    box-shadow: 0 0 0 var(--oui-border-w-thick) var(--oui-color-bg);
+  }
+
+  /* +N 气泡：与头像同一套盒子，只换字色，不吃点击 */
+  .oui-avatar-group__more {
+    pointer-events: none;
+    font-size: calc(var(--oui-avatar-size) * 0.36);
+    letter-spacing: var(--oui-letter-tight);
+  }
+}

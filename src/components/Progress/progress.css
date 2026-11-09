@@ -1,0 +1,141 @@
+@layer oui.components {
+  .oui-progress {
+    --oui-progress-c: var(--oui-color-primary);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--oui-space-2);
+    width: 100%;
+  }
+
+  .oui-progress[data-color='primary'] { --oui-progress-c: var(--oui-color-primary); }
+  .oui-progress[data-color='success'] { --oui-progress-c: var(--oui-color-success); }
+  .oui-progress[data-color='warning'] { --oui-progress-c: var(--oui-color-warning); }
+  .oui-progress[data-color='danger'] { --oui-progress-c: var(--oui-color-danger); }
+  .oui-progress[data-color='neutral'] { --oui-progress-c: var(--oui-color-neutral); }
+
+  /* ---------- 线形 ---------- */
+  /* 高度默认取 :root 的 --oui-progress-h（6px）；这里只覆盖 xs / md 两档。
+     不要写 --oui-progress-h: var(--oui-progress-h) 这种自引用——自定义属性成环后
+     计算值 invalid，height 退化成 auto，进度条会变成 0 高。 */
+  .oui-progress[data-type='line'][data-size='xs'] { --oui-progress-h: 4px; }
+  .oui-progress[data-type='line'][data-size='md'] { --oui-progress-h: var(--oui-progress-h-lg); }
+
+  .oui-progress__track {
+    position: relative;
+    flex: 1;
+    height: var(--oui-progress-h);
+    overflow: hidden;
+    background: var(--oui-color-bg-muted);
+    border-radius: var(--oui-radius-full);
+  }
+
+  .oui-progress__fill {
+    height: 100%;
+    background: var(--oui-progress-c);
+    border-radius: inherit;
+    transition: width var(--oui-duration) var(--oui-ease);
+  }
+
+  .oui-progress[data-gradient] .oui-progress__fill {
+    background: var(--oui-gradient-brand);
+  }
+
+  .oui-progress__label {
+    flex: none;
+    min-width: 34px;
+    font-family: var(--oui-font-mono);
+    font-size: var(--oui-font-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--oui-color-text-tertiary);
+    text-align: end;
+  }
+
+  /* ---------- 不确定态：无限流动 ---------- */
+  .oui-progress[data-indeterminate] .oui-progress__fill {
+    width: 40%;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--oui-progress-c) 30%, transparent) 0%,
+      var(--oui-progress-c) 50%,
+      color-mix(in srgb, var(--oui-progress-c) 30%, transparent) 100%
+    );
+    animation: oui-progress-flow 1.4s var(--oui-ease) infinite;
+  }
+
+  @keyframes oui-progress-flow {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(250%); }
+  }
+
+  /* ---------- 环形 ---------- */
+  .oui-progress[data-type='circle'] {
+    position: relative;
+    width: var(--oui-ring-md);
+    height: var(--oui-ring-md);
+  }
+
+  .oui-progress[data-type='circle'][data-size='xs'] {
+    width: var(--oui-ring-sm);
+    height: var(--oui-ring-sm);
+  }
+
+  .oui-progress[data-type='circle'][data-size='md'] {
+    width: 72px;
+    height: 72px;
+  }
+
+  .oui-progress__ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .oui-progress__ring-track,
+  .oui-progress__ring-fill {
+    fill: none;
+    stroke-width: 4;
+  }
+
+  .oui-progress__ring-track {
+    stroke: var(--oui-color-bg-muted);
+  }
+
+  .oui-progress__ring-fill {
+    stroke: var(--oui-progress-c);
+    stroke-linecap: round;
+    transition: stroke-dasharray var(--oui-duration) var(--oui-ease);
+  }
+
+  .oui-progress[data-indeterminate] .oui-progress__ring-fill {
+    stroke-dasharray: 36 120;
+    animation: oui-progress-ring 1.4s linear infinite;
+    transform-origin: 22px 22px;
+  }
+
+  @keyframes oui-progress-ring {
+    to { transform: rotate(360deg); }
+  }
+
+  .oui-progress__ring-label {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--oui-font-mono);
+    font-size: var(--oui-font-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--oui-color-text-secondary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oui-progress[data-indeterminate] .oui-progress__fill {
+      animation: none;
+      width: 100%;
+      opacity: 0.7;
+    }
+    .oui-progress[data-indeterminate] .oui-progress__ring-fill {
+      animation: none;
+    }
+  }
+}

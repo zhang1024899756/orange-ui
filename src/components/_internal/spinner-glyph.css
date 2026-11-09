@@ -1,0 +1,20 @@
+@layer oui.components {
+  .oui-spinner-glyph {
+    display: inline-block;
+    flex: none;
+    vertical-align: -0.125em;
+    animation: oui-spin var(--oui-spin-duration) linear infinite;
+  }
+
+  @keyframes oui-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oui-spinner-glyph {
+      animation-duration: 1.6s;
+    }
+  }
+}

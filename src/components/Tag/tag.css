@@ -1,0 +1,193 @@
+@layer oui.components {
+  .oui-tag {
+    --oui-tag-accent: var(--oui-color-neutral);
+    --oui-tag-ink: var(--oui-color-text);
+    --oui-tag-h: var(--oui-tag-h-sm);
+    --oui-tag-fs: var(--oui-font-xs);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--oui-space-1);
+    max-width: 100%;
+    height: var(--oui-tag-h);
+    padding-inline: 6px;
+    border: var(--oui-border-width) solid transparent;
+    border-radius: var(--oui-radius-sm);
+    font-family: inherit;
+    font-size: var(--oui-tag-fs);
+    font-weight: var(--oui-font-weight-regular);
+    line-height: 1;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .oui-tag[data-size='md'] {
+    --oui-tag-h: var(--oui-tag-h-md);
+    padding-inline: var(--oui-space-2);
+  }
+
+  /* ---------- 角色色 ---------- */
+  .oui-tag[data-color='neutral'] {
+    --oui-tag-accent: var(--oui-color-neutral);
+    --oui-tag-ink: var(--oui-color-text);
+    --oui-tag-solid-bg: var(--oui-color-neutral);
+    --oui-tag-solid-fg: var(--oui-color-on-neutral);
+  }
+
+  .oui-tag[data-color='primary'] {
+    --oui-tag-accent: var(--oui-color-primary);
+    --oui-tag-ink: var(--oui-color-primary-ink);
+    --oui-tag-solid-bg: var(--oui-color-primary);
+    --oui-tag-solid-fg: var(--oui-color-on-primary);
+  }
+
+  .oui-tag[data-color='success'] {
+    --oui-tag-accent: var(--oui-color-success);
+    --oui-tag-ink: var(--oui-color-success-ink);
+    --oui-tag-solid-bg: var(--oui-color-success);
+    --oui-tag-solid-fg: var(--oui-color-on-success);
+  }
+
+  .oui-tag[data-color='warning'] {
+    --oui-tag-accent: var(--oui-color-warning);
+    --oui-tag-ink: var(--oui-color-warning-ink);
+    --oui-tag-solid-bg: var(--oui-color-warning);
+    --oui-tag-solid-fg: var(--oui-color-on-warning);
+  }
+
+  .oui-tag[data-color='danger'] {
+    --oui-tag-accent: var(--oui-color-danger);
+    --oui-tag-ink: var(--oui-color-danger-ink);
+    --oui-tag-solid-bg: var(--oui-color-danger);
+    --oui-tag-solid-fg: var(--oui-color-on-danger);
+  }
+
+  /* 装饰色：文字一律走中性色，强调只给图标与底色 —— 这样永远不会掉对比度 */
+  .oui-tag[data-color='cyan'] {
+    --oui-tag-accent: var(--oui-accent-cyan);
+    --oui-tag-ink: var(--oui-color-text);
+    --oui-tag-solid-bg: var(--oui-accent-cyan);
+    --oui-tag-solid-fg: var(--oui-color-on-accent);
+  }
+
+  .oui-tag[data-color='teal'] {
+    --oui-tag-accent: var(--oui-accent-teal);
+    --oui-tag-ink: var(--oui-color-text);
+    --oui-tag-solid-bg: var(--oui-accent-teal);
+    --oui-tag-solid-fg: var(--oui-color-on-accent);
+  }
+
+  .oui-tag[data-color='amber'] {
+    --oui-tag-accent: var(--oui-accent-amber);
+    --oui-tag-ink: var(--oui-color-text);
+    --oui-tag-solid-bg: var(--oui-accent-amber);
+    --oui-tag-solid-fg: var(--oui-color-on-accent);
+  }
+
+  .oui-tag[data-color='magenta'] {
+    --oui-tag-accent: var(--oui-accent-magenta);
+    --oui-tag-ink: var(--oui-color-text);
+    --oui-tag-solid-bg: var(--oui-accent-magenta);
+    --oui-tag-solid-fg: var(--oui-color-on-accent);
+  }
+
+  /* ---------- 形态 ---------- */
+  .oui-tag[data-variant='subtle'] {
+    background: color-mix(in srgb, var(--oui-tag-accent) 10%, transparent);
+    color: var(--oui-tag-ink);
+  }
+
+  .oui-tag[data-color='neutral'][data-variant='subtle'] {
+    background: var(--oui-color-bg-muted);
+  }
+
+  .oui-tag[data-variant='outlined'] {
+    background: transparent;
+    color: var(--oui-tag-ink);
+    border-color: color-mix(in srgb, var(--oui-tag-accent) 34%, transparent);
+  }
+
+  .oui-tag[data-variant='solid'] {
+    background: var(--oui-tag-solid-bg);
+    color: var(--oui-tag-solid-fg);
+  }
+
+  /* ---------- 交互与状态 ---------- */
+  .oui-tag[data-interactive] {
+    cursor: pointer;
+    transition:
+      background-color var(--oui-duration-fast) var(--oui-ease),
+      border-color var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  .oui-tag[data-interactive]:hover {
+    background: color-mix(in srgb, var(--oui-tag-accent) 18%, transparent);
+  }
+
+  .oui-tag[data-variant='solid'][data-interactive]:hover {
+    background: color-mix(in srgb, var(--oui-tag-solid-bg) 88%, var(--oui-color-shade));
+  }
+
+  .oui-tag[data-selected] {
+    border-color: var(--oui-tag-accent);
+    color: var(--oui-tag-ink);
+  }
+
+  .oui-tag[data-selected][data-variant='subtle'] {
+    background: color-mix(in srgb, var(--oui-tag-accent) 14%, transparent);
+  }
+
+  .oui-tag[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--oui-opacity-disabled);
+  }
+
+  /* ---------- 内部元素 ---------- */
+  .oui-tag__icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--oui-tag-accent);
+  }
+
+  .oui-tag[data-variant='solid'] .oui-tag__icon {
+    color: inherit;
+  }
+
+  .oui-tag__check {
+    flex: none;
+  }
+
+  .oui-tag__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .oui-tag__close {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 12px;
+    height: 12px;
+    margin-inline-start: 2px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+  }
+
+  /* 命中区扩到 24×24，视觉尺寸不变 */
+  .oui-tag__close::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+  }
+
+  .oui-tag__close:hover {
+    opacity: 1;
+  }
+}

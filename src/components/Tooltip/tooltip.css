@@ -1,0 +1,91 @@
+@layer oui.components {
+  .oui-tooltip {
+    position: fixed;
+    z-index: var(--oui-z-tooltip);
+    box-sizing: border-box;
+    max-width: var(--oui-tooltip-max);
+    padding: var(--oui-space-1) var(--oui-space-2);
+    border-radius: var(--oui-radius-md);
+    background: var(--oui-tooltip-bg);
+    color: var(--oui-tooltip-fg);
+    font-family: var(--oui-font-family);
+    font-size: var(--oui-font-xs);
+    line-height: var(--oui-leading-xs);
+    text-align: start;
+    overflow-wrap: break-word;
+    /* 提示不应拦截鼠标，否则会打断 hover */
+    pointer-events: none;
+    box-shadow: var(--oui-shadow-md);
+    animation: oui-tooltip-in var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  /* ---------- 四个方位：位移由 transform 承担，与箭头无关 ---------- */
+  .oui-tooltip[data-placement='top'] {
+    transform: translate(-50%, -100%);
+    margin-top: calc(-1 * var(--oui-tooltip-offset));
+  }
+
+  .oui-tooltip[data-placement='bottom'] {
+    transform: translate(-50%, 0);
+    margin-top: var(--oui-tooltip-offset);
+  }
+
+  .oui-tooltip[data-placement='left'] {
+    transform: translate(-100%, -50%);
+    margin-left: calc(-1 * var(--oui-tooltip-offset));
+  }
+
+  .oui-tooltip[data-placement='right'] {
+    transform: translate(0, -50%);
+    margin-left: var(--oui-tooltip-offset);
+  }
+
+  /* ---------- 箭头：一个旋转 45° 的方块，一半露在盒子外 ---------- */
+  .oui-tooltip__arrow {
+    position: absolute;
+    width: var(--oui-tooltip-arrow);
+    height: var(--oui-tooltip-arrow);
+    background: var(--oui-tooltip-bg);
+    transform: rotate(45deg);
+  }
+
+  .oui-tooltip[data-placement='top'] .oui-tooltip__arrow {
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%) rotate(45deg);
+  }
+
+  .oui-tooltip[data-placement='bottom'] .oui-tooltip__arrow {
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .oui-tooltip[data-placement='left'] .oui-tooltip__arrow {
+    top: 50%;
+    right: 0;
+    transform: translate(50%, -50%) rotate(45deg);
+  }
+
+  .oui-tooltip[data-placement='right'] .oui-tooltip__arrow {
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .oui-tooltip__loading {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--oui-space-1);
+  }
+
+  @keyframes oui-tooltip-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}

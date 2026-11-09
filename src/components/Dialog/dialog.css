@@ -1,0 +1,205 @@
+@layer oui.components {
+  /* 浮层挂在 body 下，不在 .oui-root 作用域里，字体与盒模型要自己兜住 */
+  .oui-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: var(--oui-z-dialog);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: var(--oui-space-4);
+    font-family: var(--oui-font-family);
+    font-size: var(--oui-font-sm);
+    line-height: var(--oui-leading-sm);
+    color: var(--oui-color-text);
+  }
+
+  .oui-dialog *,
+  .oui-dialog *::before,
+  .oui-dialog *::after {
+    box-sizing: inherit;
+  }
+
+  /* ---------- 遮罩 ---------- */
+  .oui-dialog__mask {
+    position: absolute;
+    inset: 0;
+    /* 明暗两套下都保持深色的中性 token 只有 tooltip-bg，用它做半透明遮罩 */
+    background: color-mix(in srgb, var(--oui-tooltip-bg) 55%, transparent);
+    animation: oui-dialog-fade var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  [data-oui-scheme='dark'] .oui-dialog__mask {
+    background: color-mix(in srgb, var(--oui-tooltip-bg) 78%, transparent);
+  }
+
+  /* ---------- 面板 ---------- */
+  .oui-dialog__panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: var(--oui-dialog-w-md);
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    background: var(--oui-color-bg);
+    border-radius: var(--oui-radius-xl);
+    box-shadow: var(--oui-shadow-lg);
+    outline: none;
+    animation: oui-dialog-in var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  .oui-dialog[data-size='sm'] .oui-dialog__panel {
+    width: var(--oui-dialog-w-sm);
+  }
+
+  .oui-dialog[data-size='lg'] .oui-dialog__panel {
+    width: var(--oui-dialog-w-lg);
+  }
+
+  /* ---------- 头部 ---------- */
+  .oui-dialog__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oui-space-1);
+    padding: var(--oui-space-6) var(--oui-space-6) var(--oui-space-2);
+  }
+
+  .oui-dialog__title {
+    margin: 0;
+    padding-inline-end: var(--oui-space-6);
+    color: var(--oui-color-text);
+    font-size: var(--oui-font-md);
+    line-height: var(--oui-leading-md);
+    font-weight: var(--oui-font-weight-semibold);
+    letter-spacing: var(--oui-letter-tight);
+  }
+
+  .oui-dialog__description {
+    margin: 0;
+    color: var(--oui-color-text-secondary);
+    font-size: var(--oui-font-sm);
+    line-height: var(--oui-leading-sm);
+  }
+
+  /* ---------- 关闭按钮：视觉 16px，命中区外扩到 24 ---------- */
+  .oui-dialog__close {
+    position: absolute;
+    top: var(--oui-space-4);
+    right: var(--oui-space-4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--oui-icon-md);
+    height: var(--oui-icon-md);
+    padding: 0;
+    border: 0;
+    border-radius: var(--oui-radius-sm);
+    background: transparent;
+    color: var(--oui-color-text-tertiary);
+    cursor: pointer;
+    transition:
+      color var(--oui-duration-fast) var(--oui-ease),
+      background-color var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  .oui-dialog__close::after {
+    content: '';
+    position: absolute;
+    inset: calc(var(--oui-space-1) / 2);
+  }
+
+  .oui-dialog__close:hover {
+    background: var(--oui-color-bg-muted);
+    color: var(--oui-color-text);
+  }
+
+  /* ---------- 内容 ---------- */
+  .oui-dialog__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--oui-space-6);
+  }
+
+  .oui-dialog[data-has-header] .oui-dialog__body {
+    padding-top: var(--oui-space-2);
+  }
+
+  /* ---------- 底部 ---------- */
+  .oui-dialog__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--oui-space-2);
+    padding: var(--oui-space-4) var(--oui-space-6);
+    border-top: var(--oui-border-width) solid var(--oui-color-border);
+  }
+
+  /* ---------- 骨架条 ---------- */
+  .oui-dialog__skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oui-space-2);
+  }
+
+  .oui-dialog__bar {
+    height: var(--oui-skeleton-line);
+    border-radius: var(--oui-radius-sm);
+    background: linear-gradient(
+      90deg,
+      var(--oui-skeleton-base) 0%,
+      var(--oui-skeleton-sheen) 50%,
+      var(--oui-skeleton-base) 100%
+    );
+    background-size: calc(var(--oui-skeleton-shimmer) * 100%) 100%;
+    animation: oui-dialog-shimmer var(--oui-shimmer-duration) var(--oui-ease) infinite;
+  }
+
+  .oui-dialog__bar:nth-child(2) {
+    width: 88%;
+  }
+
+  .oui-dialog__bar:nth-child(3) {
+    width: 62%;
+  }
+
+  /* ---------- 动效 ---------- */
+  @keyframes oui-dialog-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes oui-dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(var(--oui-space-2));
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes oui-dialog-shimmer {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: 0 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oui-dialog__mask,
+    .oui-dialog__panel,
+    .oui-dialog__bar {
+      animation: none;
+    }
+  }
+}

@@ -1,0 +1,177 @@
+@layer oui.components {
+  /* ---------- 外层视觉容器：底色 + 透明描边 + 圆角，尺寸全部落在 token 上 ---------- */
+  .oui-input {
+    --oui-input-h: var(--oui-control-md);
+    --oui-input-px: var(--oui-space-3);
+    --oui-input-fs: var(--oui-font-sm);
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--oui-space-1);
+    box-sizing: border-box;
+    width: 100%;
+    height: var(--oui-input-h);
+    padding-inline: var(--oui-input-px);
+    background: var(--oui-color-bg-subtle);
+    border: var(--oui-border-width) solid transparent;
+    border-radius: var(--oui-radius-md);
+    color: var(--oui-color-text);
+    font-family: inherit;
+    font-size: var(--oui-input-fs);
+    transition:
+      background-color var(--oui-duration-fast) var(--oui-ease),
+      border-color var(--oui-duration-fast) var(--oui-ease),
+      box-shadow var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  .oui-input[data-size='xs'] {
+    --oui-input-h: var(--oui-control-xs);
+    --oui-input-px: var(--oui-space-2);
+    --oui-input-fs: var(--oui-font-xs);
+  }
+
+  .oui-input[data-size='sm'] {
+    --oui-input-h: var(--oui-control-sm);
+    --oui-input-px: var(--oui-space-2);
+    --oui-input-fs: var(--oui-font-xs);
+  }
+
+  .oui-input[data-size='lg'] {
+    --oui-input-h: var(--oui-control-lg);
+    --oui-input-fs: var(--oui-font-sm);
+  }
+
+  /* 搜索态：胶囊圆角（社区站搜索框的既有形态） */
+  .oui-input[data-search] {
+    border-radius: var(--oui-radius-full);
+    padding-inline: var(--oui-space-3);
+  }
+
+  /* ---------- 状态 ---------- */
+  .oui-input:hover:not([data-disabled], [data-loading]) {
+    background: var(--oui-color-bg-muted);
+  }
+
+  .oui-input:focus-within {
+    background: var(--oui-color-bg);
+    border-color: var(--oui-color-primary-border);
+    box-shadow: var(--oui-focus-ring);
+  }
+
+  .oui-input[data-status='error'] {
+    border-color: var(--oui-color-danger);
+  }
+
+  .oui-input[data-status='error']:focus-within {
+    border-color: var(--oui-color-danger);
+    box-shadow: 0 0 0 var(--oui-focus-ring-width) var(--oui-color-danger-border);
+  }
+
+  .oui-input[data-disabled] {
+    opacity: var(--oui-opacity-disabled);
+    cursor: not-allowed;
+  }
+
+  .oui-input[data-loading] {
+    cursor: progress;
+  }
+
+  /* ---------- 真正的输入元素：透明、无内边距，继承容器排版 ---------- */
+  .oui-input__field {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+    outline: none;
+    appearance: none;
+  }
+
+  .oui-input__field::placeholder {
+    color: var(--oui-color-text-tertiary);
+    opacity: 1;
+  }
+
+  .oui-input__field:disabled {
+    cursor: not-allowed;
+  }
+
+  /* 搜索框自带的清除叉由本组件的 clearable 接管，去掉系统那个 */
+  .oui-input__field::-webkit-search-cancel-button,
+  .oui-input__field::-webkit-search-decoration {
+    display: none;
+    appearance: none;
+  }
+
+  /* ---------- 前后置插槽 ---------- */
+  .oui-input__prefix,
+  .oui-input__suffix {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    color: var(--oui-color-text-tertiary);
+    font-size: var(--oui-input-fs);
+  }
+
+  .oui-input__spin {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    color: var(--oui-color-text-tertiary);
+  }
+
+  /* ---------- 清除按钮：视觉 16px，命中区用伪元素外扩到 24×24 ---------- */
+  .oui-input__clear {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: var(--oui-icon-sm);
+    height: var(--oui-icon-sm);
+    padding: 0;
+    border: 0;
+    border-radius: var(--oui-radius-full);
+    background: var(--oui-color-bg-muted);
+    color: var(--oui-color-text-tertiary);
+    cursor: pointer;
+    transition:
+      background-color var(--oui-duration-fast) var(--oui-ease),
+      color var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  .oui-input__clear::after {
+    content: '';
+    position: absolute;
+    inset: calc(var(--oui-space-1) * -1);
+  }
+
+  .oui-input__clear:hover {
+    background: var(--oui-color-border-strong);
+    color: var(--oui-color-text);
+  }
+
+  /* ---------- 字数统计：12px + 等宽数字，避免输入时数字抖动 ---------- */
+  .oui-input__count {
+    flex: none;
+    color: var(--oui-color-text-tertiary);
+    font-size: var(--oui-font-xs);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .oui-input[data-status='error'] .oui-input__count {
+    color: var(--oui-color-danger-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oui-input {
+      transition: none;
+    }
+  }
+}

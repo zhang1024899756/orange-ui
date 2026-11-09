@@ -1,0 +1,320 @@
+/* ============================================================================
+   orange-ui v3 · Design Tokens
+   本文件是全部设计变量的唯一出口。命名前缀 --oui-。
+   依据：_research/orange-ui-spec.md（所有中性色、字号、圆角、间距、阴影为实测值）。
+
+   组织顺序（层叠顺序即优先级）
+     1  中性色（亮）        —— 所有主题共用
+     2  语义色（亮）
+     3  强调色 · 4 套主题    —— 切 data-oui-theme 只改这一组
+     4  中性色 / 语义色（暗）—— 切 data-oui-scheme 只改这一组
+     5  强调色 · 暗色微调    —— hover/active 在深色下改为提亮
+     6  字体 / 字号阶梯     7  圆角      8  间距 / 控件高度
+     9  阴影 / 动效 / 层级  10 组件度量  11 布局
+
+   两处与契约图表不同、说明如下（都以契约自己写的判定规则为准）：
+   · --oui-color-on-primary 按「对比度 ≥ 4.5:1 决定」求解：白字压在 orange/teal/rose
+     上分别只有 3.04 / 3.80 / 3.90，故取深墨 #15121F（6.06 / 4.85 / 4.73）；modelscope
+     白字 5.33，保留 #FFFFFF。
+   · --oui-color-primary-ink 是「文本级主色」：契约的 #F26B21 作为文字压在白底只有
+     3.04，故派生更深的 #B8480A（5.29，primary 淡底 4.75）；深色主题下换回亮色。
+     四个语义色同理解出一个 *-ink（判定口径见 §2 注释）。
+   · --oui-color-text-tertiary 契约抄的是魔搭实测值 #8284A4，压白底 3.63:1 / 压 #F7F9FD
+     3.44:1，都低于 AA 的 4.5。组件库不继承这个缺陷：抬到 #6B6D8E（5.00:1 / 4.74:1），
+     视觉上只暗一档。深色的 #7C819A 已达标（4.82 / 4.51），保持契约原值。
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---- 1. 中性色（亮） · 6 档阶梯 + 4 个辅助 ---- */
+  --oui-color-bg: #FFFFFF;              /* 阶梯 1 · 页面/卡片底 */
+  --oui-color-bg-subtle: #F7F9FD;       /* 阶梯 2 · 次级底、输入框填充 */
+  --oui-color-bg-muted: #EFF2F9;        /* 阶梯 3 · 三段底、hover 底 */
+  --oui-color-border: #ECEFF6;          /* 阶梯 4 · 1px 分隔线 */
+  --oui-color-border-strong: #DDE2EE;   /* 阶梯 5 · 输入框边 */
+  --oui-color-text-tertiary: #6B6D8E;   /* 阶梯 6 · 元信息（契约实测 #8284A4 只有 3.63:1，抬到 5.00:1） */
+  --oui-color-text-secondary: #464D5B;  /* 辅助 · 正文 */
+  --oui-color-text: #27254C;            /* 辅助 · 主文本（最深一档） */
+  --oui-color-text-disabled: #C4C3D9;   /* 辅助 · 禁用 */
+  --oui-color-text-inverse: #FFFFFF;    /* 辅助 · 深底上的字 */
+  --oui-color-shade: #000000;           /* hover/active 的混合基色（深色改为白） */
+
+  /* ---- 2. 语义色（亮） · 填充 / 填充上的字 / 文本级 ink / 派生 ----
+     ink = 这个角色当「文字」时的颜色，判定口径：白底 ≥4.5:1，且压在本色 10% 淡底上 ≥4.5:1
+     （淡底上会掉 2–8%，所以 ink 必须比 fill 深一档）。实测值随行标注。 */
+  --oui-color-success: #0B7A55;
+  --oui-color-on-success: #FFFFFF;
+  --oui-color-success-ink: #0A6F4C;    /* 白底 6.19 / 本色淡底 5.43 / 淡底叠 bg-subtle 5.03 */
+  --oui-color-warning: #A9610B;
+  --oui-color-on-warning: #FFFFFF;
+  --oui-color-warning-ink: #9F5B0B;    /* 白底 5.28 / 本色淡底 4.63 */
+  --oui-color-danger: #CF3A34;
+  --oui-color-on-danger: #FFFFFF;
+  --oui-color-danger-ink: #B32E29;     /* 白底 6.29 / 本色淡底 5.43 */
+  --oui-color-info: #2F6FED;
+  --oui-color-on-info: #FFFFFF;
+  --oui-color-info-ink: #1B63ED;       /* 白底 5.18 / 本色淡底 4.56 */
+
+  /* 中性角色的四件套（与上面的中性色同源，供组件统一取用） */
+  --oui-color-neutral: var(--oui-color-text);
+  --oui-color-on-neutral: var(--oui-color-bg);
+  --oui-color-neutral-subtle: var(--oui-color-bg-muted);
+  --oui-color-neutral-border: var(--oui-color-border-strong);
+
+  /* 派生底/描边：跟随各自角色色，亮暗两端共用（alpha 随底色自动适配） */
+  --oui-color-primary-subtle: color-mix(in srgb, var(--oui-color-primary) 10%, transparent);
+  --oui-color-primary-border: color-mix(in srgb, var(--oui-color-primary) 32%, transparent);
+  --oui-color-success-subtle: color-mix(in srgb, var(--oui-color-success) 10%, transparent);
+  --oui-color-success-border: color-mix(in srgb, var(--oui-color-success) 32%, transparent);
+  --oui-color-warning-subtle: color-mix(in srgb, var(--oui-color-warning) 10%, transparent);
+  --oui-color-warning-border: color-mix(in srgb, var(--oui-color-warning) 32%, transparent);
+  --oui-color-danger-subtle: color-mix(in srgb, var(--oui-color-danger) 10%, transparent);
+  --oui-color-danger-border: color-mix(in srgb, var(--oui-color-danger) 32%, transparent);
+  --oui-color-info-subtle: color-mix(in srgb, var(--oui-color-info) 10%, transparent);
+  --oui-color-info-border: color-mix(in srgb, var(--oui-color-info) 32%, transparent);
+
+  /* 装饰色上的字（四个装饰色都是中明度，深墨在明暗两套下都 ≥ 4.5:1） */
+  --oui-color-on-accent: #15121F;
+
+  /* ---- 5. 装饰图标色（唯一允许出现彩色的地方，只给 16px 图标用） ---- */
+  --oui-accent-cyan: #54C1FA;
+  --oui-accent-teal: #2FB3A1;
+  --oui-accent-amber: #F5A524;
+  --oui-accent-magenta: #E056A0;
+
+  /* ---- 6. 字体 ---- */
+  --oui-font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --oui-font-mono: "Roboto Mono", ui-monospace, Menlo, Consolas, monospace;
+  --oui-font-xs: 12px;   --oui-leading-xs: 18px;   /* 元信息、tag、徽章 */
+  --oui-font-sm: 14px;   --oui-leading-sm: 22px;   /* 正文默认 */
+  --oui-font-md: 16px;   --oui-leading-md: 24px;   /* 卡片标题 */
+  --oui-font-lg: 20px;   --oui-leading-lg: 28px;   /* 区块标题 */
+  --oui-font-xl: 24px;   --oui-leading-xl: 32px;   /* 页面标题 */
+  --oui-font-2xl: 32px;  --oui-leading-2xl: 40px;  /* 最大一档 */
+  --oui-font-weight-regular: 400;
+  --oui-font-weight-medium: 500;
+  --oui-font-weight-semibold: 600;
+  --oui-letter-tight: -0.01em;
+
+  /* ---- 7. 圆角 ---- */
+  --oui-radius-xs: 2px;
+  --oui-radius-sm: 4px;     /* 按钮、tag */
+  --oui-radius-md: 6px;     /* 输入框、头像方形 */
+  --oui-radius-lg: 8px;     /* 卡片 */
+  --oui-radius-xl: 12px;    /* 弹窗 */
+  --oui-radius-2xl: 16px;
+  --oui-radius-3xl: 24px;   /* 封面卡 */
+  --oui-radius-full: 9999px;/* 胶囊 */
+
+  /* ---- 8. 间距（只有 7 个值）与控件高度 ---- */
+  --oui-space-1: 4px;
+  --oui-space-2: 8px;
+  --oui-space-3: 12px;
+  --oui-space-4: 16px;
+  --oui-space-6: 24px;
+  --oui-space-8: 32px;
+  --oui-space-12: 48px;
+  --oui-gap-inline: var(--oui-space-2);
+  --oui-gap-block: var(--oui-space-6);
+  --oui-control-xs: 24px;
+  --oui-control-sm: 28px;
+  --oui-control-md: 32px;
+  --oui-control-lg: 40px;
+  --oui-control-xl: 48px;
+  --oui-border-width: 1px;
+
+  /* ---- 9. 阴影（只有 3 档，只给浮层） ---- */
+  --oui-shadow-sm: 0 1px 2px rgba(20, 23, 67, .06);
+  --oui-shadow-md: 0 6px 16px rgba(20, 23, 67, .10);
+  --oui-shadow-lg: 0 16px 48px rgba(20, 23, 67, .16);
+
+  /* 动效 */
+  --oui-duration-fast: 120ms;
+  --oui-duration: 200ms;
+  --oui-ease: cubic-bezier(.2, .8, .2, 1);
+  --oui-spin-duration: 800ms;
+  --oui-shimmer-duration: 1400ms;
+
+  /* 层级 */
+  --oui-z-sticky: 10;
+  --oui-z-dropdown: 30;
+  --oui-z-dialog: 40;
+  --oui-z-tooltip: 50;
+
+  /* ---- 10. 组件度量 ---- */
+  --oui-icon-sm: 16px;
+  --oui-icon-md: 20px;
+  --oui-icon-lg: 24px;
+  --oui-avatar-xs: 24px;
+  --oui-avatar-sm: 28px;
+  --oui-avatar-md: 32px;
+  --oui-avatar-lg: 40px;
+  --oui-badge-dot: 8px;
+  --oui-badge-height: 16px;
+  --oui-badge-min-width: 16px;
+  --oui-switch-w-sm: 32px;  --oui-switch-h-sm: 18px;  --oui-switch-thumb-sm: 14px;
+  --oui-switch-w-md: 40px;  --oui-switch-h-md: 22px;  --oui-switch-thumb-md: 18px;
+  --oui-slider-track: 4px;
+  --oui-slider-thumb: 14px;
+  --oui-slider-mark: 4px;
+  --oui-progress-h: 6px;
+  --oui-progress-h-lg: 8px;
+  --oui-ring-md: 56px;
+  --oui-ring-sm: 40px;
+  --oui-dialog-w-sm: 360px;
+  --oui-dialog-w-md: 480px;
+  --oui-dialog-w-lg: 640px;
+  --oui-tooltip-arrow: 6px;
+  --oui-tooltip-offset: 8px;
+  --oui-tooltip-max: 220px;
+  --oui-tag-h-sm: 20px;
+  --oui-tag-h-md: 24px;
+  --oui-skeleton-line: 12px;
+  --oui-skeleton-shimmer: 4;      /* 渐变宽度倍数 */
+  --oui-ratio-16x9: 16 / 9;
+  --oui-ratio-1x1: 1 / 1;
+  --oui-focus-ring-width: 2px;
+  --oui-focus-ring: 0 0 0 var(--oui-focus-ring-width) var(--oui-color-primary-border);
+  --oui-icon-stroke: 1.5;
+  --oui-border-w-thick: 2px;
+  --oui-lift: 2px;
+  --oui-opacity-disabled: .55;
+
+  /* 浮层专用（tooltip 恒为深底白字，两种配色下都成立） */
+  --oui-tooltip-bg: #27254C;
+  --oui-tooltip-fg: #FFFFFF;
+
+  /* 骨架屏：亮暗两端共用，靠 color-mix 跟随中性色 */
+  --oui-skeleton-base: var(--oui-color-bg-muted);
+  --oui-skeleton-sheen: color-mix(in srgb, var(--oui-color-text) 7%, var(--oui-color-bg-muted));
+
+  /* ---- 11. 布局（样张页自身也只用这些） ---- */
+  --oui-page-max: 1280px;
+  --oui-rail-w: 232px;
+  --oui-label-w: 72px;
+}
+
+/* ============================================================================
+   3. 强调色 · 4 套主题（亮）
+   每套只改这 5 + 2 个值，其余全部由它们派生。切 data-oui-theme 时中性色不动。
+   ========================================================================== */
+
+/* 默认主题 · 蜜橘（与库同名；未写 data-oui-theme 时也用它） */
+:root,
+[data-oui-theme="orange"] {
+  --oui-color-primary: #F26B21;
+  --oui-color-primary-hover: #F15E0E;      /* 加深 8% */
+  --oui-color-primary-active: #E0580D;     /* 再加深 6% */
+  --oui-color-on-primary: #15121F;         /* 白字 3.04 ⊂ 不合格，取深墨 6.06 */
+  --oui-color-primary-ink: #B8480A;        /* 白底 5.29 / primary 淡底 5.02 / 淡底 #FEF0E9 4.75 */
+  --oui-gradient-brand-2: #FF9F45;
+  --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
+}
+
+[data-oui-theme="modelscope"] {
+  --oui-color-primary: #624AFF;
+  --oui-color-primary-hover: #5036FF;
+  --oui-color-primary-active: #4124FF;
+  --oui-color-on-primary: #FFFFFF;         /* 5.33:1 */
+  --oui-color-primary-ink: #624AFF;        /* 5.33:1 */
+  --oui-gradient-brand-2: #816DF8;
+  --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
+}
+
+[data-oui-theme="teal"] {
+  --oui-color-primary: #0E9384;
+  --oui-color-primary-hover: #0C8073;
+  --oui-color-primary-active: #0B7065;
+  --oui-color-on-primary: #15121F;         /* 白字 3.80 ⊂ 不合格，深墨 4.85 */
+  --oui-color-primary-ink: #0B786C;        /* 白底 5.36 / primary 淡底 5.09 */
+  --oui-gradient-brand-2: #3DD4BE;
+  --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
+}
+
+[data-oui-theme="rose"] {
+  --oui-color-primary: #E5446D;
+  --oui-color-primary-hover: #E3325F;
+  --oui-color-primary-active: #E02253;
+  --oui-color-on-primary: #15121F;         /* 白字 3.90 ⊂ 不合格，深墨 4.73 */
+  --oui-color-primary-ink: #D01B49;        /* 白底 5.34 / primary 淡底 5.06 */
+  --oui-gradient-brand-2: #FF8FA3;
+  --oui-gradient-brand: linear-gradient(135deg, var(--oui-color-primary) 0%, var(--oui-gradient-brand-2) 100%);
+}
+
+/* ============================================================================
+   4. 深色配色（只覆盖中性色 + 语义色 + 浮层，强调色由主题继续持有）
+   ========================================================================== */
+[data-oui-scheme="dark"] {
+  color-scheme: dark;
+
+  --oui-color-bg: #12131A;
+  --oui-color-bg-subtle: #181A24;
+  --oui-color-bg-muted: #1F222E;
+  --oui-color-border: #262A38;
+  --oui-color-border-strong: #333849;
+  --oui-color-text: #F2F3F8;
+  --oui-color-text-secondary: #BFC3D4;
+  --oui-color-text-tertiary: #7C819A;
+  --oui-color-text-disabled: #565B70;
+  --oui-color-text-inverse: #12131A;
+  --oui-color-shade: #FFFFFF;              /* 深色下 hover 提亮而非压暗 */
+
+  --oui-color-success: #3DD68C;            /* 9.87:1 */
+  --oui-color-on-success: #15121F;
+  --oui-color-success-ink: var(--oui-color-success);
+  --oui-color-warning: #F0A22E;            /* 8.74:1 */
+  --oui-color-on-warning: #15121F;
+  --oui-color-warning-ink: var(--oui-color-warning);
+  --oui-color-danger: #F87171;             /* 6.70:1 */
+  --oui-color-on-danger: #15121F;
+  --oui-color-danger-ink: var(--oui-color-danger);
+  --oui-color-info: #7CA9FF;               /* 7.92:1 */
+  --oui-color-on-info: #15121F;
+  --oui-color-info-ink: var(--oui-color-info);
+
+  --oui-shadow-sm: 0 1px 2px rgba(0, 0, 0, .40);
+  --oui-shadow-md: 0 6px 16px rgba(0, 0, 0, .48);
+  --oui-shadow-lg: 0 16px 48px rgba(0, 0, 0, .60);
+
+  --oui-tooltip-bg: #2A2E3F;
+  --oui-tooltip-fg: #F2F3F8;
+}
+
+/* ============================================================================
+   5. 强调色 · 深色微调（hover/active 提亮；primary-ink 换成能在深底上读的亮色）
+   ========================================================================== */
+:root[data-oui-scheme="dark"],
+[data-oui-theme="orange"][data-oui-scheme="dark"] {
+  --oui-color-primary-hover: #F37834;
+  --oui-color-primary-active: #F48345;
+  --oui-color-primary-ink: #F26B21;        /* 深底 6.09 / bg-subtle 5.69 */
+}
+
+[data-oui-theme="modelscope"][data-oui-scheme="dark"] {
+  --oui-color-primary-hover: #745EFF;
+  --oui-color-primary-active: #8370FF;
+  --oui-color-primary-ink: #8C79FF;        /* 深底 5.55 / bg-subtle 5.19（原 7D68FF 在 bg-subtle 只有 4.37） */
+}
+
+[data-oui-theme="teal"][data-oui-scheme="dark"] {
+  --oui-color-primary-hover: #10A695;
+  --oui-color-primary-active: #11B6A3;
+  --oui-color-primary-ink: #12A090;        /* 深底 5.69 / bg-subtle 5.33（原 0E9384 在 bg-subtle 只有 4.56） */
+}
+
+[data-oui-theme="rose"][data-oui-scheme="dark"] {
+  --oui-color-primary-hover: #E7567B;
+  --oui-color-primary-active: #EA6687;
+  --oui-color-primary-ink: #EA5A7E;        /* 深底 5.52 / bg-subtle 5.17（原 E5446D 在 bg-subtle 只有 4.44） */
+}
+
+/* 无障碍：减少动态偏好下关掉所有循环动画（骨架退化为静态灰块） */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --oui-spin-duration: 0ms;
+    --oui-shimmer-duration: 0ms;
+    --oui-duration-fast: 0ms;
+    --oui-duration: 0ms;
+  }
+}

@@ -1,0 +1,172 @@
+@layer oui.components {
+  .oui-slider {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oui-space-2);
+    width: 100%;
+    font-family: inherit;
+    font-size: var(--oui-font-xs);
+    user-select: none;
+  }
+
+  /* ---------- 轨道：24px 高的可点区域，视觉轨道只有 4px ---------- */
+  .oui-slider__rail {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: var(--oui-control-xs);
+    touch-action: none;
+    cursor: pointer;
+  }
+
+  .oui-slider__track,
+  .oui-slider__fill {
+    position: absolute;
+    top: 50%;
+    height: var(--oui-slider-track);
+    border-radius: var(--oui-radius-full);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .oui-slider__track {
+    left: 0;
+    right: 0;
+    background: var(--oui-color-bg-muted);
+  }
+
+  .oui-slider__fill {
+    background: var(--oui-color-primary);
+  }
+
+  /* ---------- thumb：视觉 14px，命中区靠伪元素撑到 24 ---------- */
+  .oui-slider__thumb {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--oui-slider-thumb);
+    height: var(--oui-slider-thumb);
+    box-sizing: border-box;
+    background: var(--oui-color-bg);
+    border: var(--oui-border-width) solid var(--oui-color-primary);
+    border-radius: var(--oui-radius-full);
+    color: var(--oui-color-primary);
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    transition:
+      border-color var(--oui-duration-fast) var(--oui-ease),
+      background-color var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  .oui-slider__thumb::after {
+    content: '';
+    position: absolute;
+    inset: calc((var(--oui-control-xs) - var(--oui-slider-thumb)) / -2);
+  }
+
+  .oui-slider__thumb:hover,
+  .oui-slider__thumb[data-dragging] {
+    background: var(--oui-color-primary-subtle);
+  }
+
+  .oui-slider[data-dragging] .oui-slider__thumb {
+    cursor: grabbing;
+  }
+
+  .oui-slider__spin {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ---------- 提示气泡 ---------- */
+  .oui-slider__tip {
+    position: absolute;
+    bottom: calc(100% + var(--oui-space-1));
+    left: 50%;
+    padding-inline: var(--oui-space-1);
+    color: var(--oui-tooltip-fg);
+    background: var(--oui-tooltip-bg);
+    border-radius: var(--oui-radius-sm);
+    box-shadow: var(--oui-shadow-sm);
+    font-family: var(--oui-font-mono);
+    font-size: var(--oui-font-xs);
+    line-height: var(--oui-leading-xs);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--oui-duration-fast) var(--oui-ease);
+  }
+
+  .oui-slider[data-tooltip='always'] .oui-slider__tip,
+  .oui-slider__thumb:hover .oui-slider__tip,
+  .oui-slider__thumb:focus-visible .oui-slider__tip,
+  .oui-slider__thumb[data-dragging] .oui-slider__tip {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* ---------- 刻度 ---------- */
+  .oui-slider__marks {
+    position: relative;
+    height: var(--oui-leading-xs);
+  }
+
+  .oui-slider__mark {
+    position: absolute;
+    top: 0;
+    color: var(--oui-color-text-tertiary);
+    font-size: var(--oui-font-xs);
+    line-height: var(--oui-leading-xs);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
+
+  .oui-slider__mark::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    width: var(--oui-slider-mark);
+    height: var(--oui-slider-mark);
+    background: var(--oui-color-border-strong);
+    border-radius: var(--oui-radius-full);
+    transform: translateX(-50%);
+  }
+
+  .oui-slider__mark[data-active]::before {
+    background: var(--oui-color-primary);
+  }
+
+  /* ---------- 状态 ---------- */
+  .oui-slider[data-disabled],
+  .oui-slider[data-loading] {
+    opacity: var(--oui-opacity-disabled);
+  }
+
+  .oui-slider[data-disabled] .oui-slider__rail,
+  .oui-slider[data-loading] .oui-slider__rail {
+    cursor: not-allowed;
+  }
+
+  .oui-slider[data-disabled] .oui-slider__thumb,
+  .oui-slider[data-loading] .oui-slider__thumb {
+    cursor: not-allowed;
+  }
+
+  .oui-slider[data-disabled] .oui-slider__fill {
+    background: var(--oui-color-border-strong);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oui-slider__thumb,
+    .oui-slider__tip {
+      transition: none;
+    }
+  }
+}

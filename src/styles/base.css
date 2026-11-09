@@ -1,0 +1,51 @@
+/* ============================================================================
+   orange-ui · base
+   层级顺序只声明一次（重复声明是幂等的）。派生规则：
+     reset  < tokens < base < components
+   这样消费方任何「未分层」的普通 CSS 都能盖过组件样式，不需要 !important。
+   ========================================================================== */
+@layer oui.reset, oui.tokens, oui.base, oui.components;
+
+@layer oui.base {
+  /* 只有组件自己的根元素会带上 .oui-root，避免污染宿主页面 */
+  :where(.oui-root) {
+    box-sizing: border-box;
+    font-family: var(--oui-font-family);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :where(.oui-root) *,
+  :where(.oui-root) *::before,
+  :where(.oui-root) *::after {
+    box-sizing: inherit;
+  }
+
+  /* 可访问性工具类 */
+  .oui-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* 统一焦点环：只在键盘操作时出现 */
+  :where(.oui-root) :where(button, a, input, textarea, select, [tabindex]):focus-visible {
+    outline: var(--oui-focus-ring-width) solid var(--oui-color-primary-border);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(.oui-root) *,
+    :where(.oui-root) *::before,
+    :where(.oui-root) *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}

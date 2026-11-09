@@ -1,0 +1,23 @@
+@layer oui.components {
+  .oui-icon {
+    display: inline-block;
+    flex: none;
+    vertical-align: -0.15em;
+  }
+
+  .oui-icon--spin {
+    animation: oui-icon-spin var(--oui-spin-duration) linear infinite;
+  }
+
+  @keyframes oui-icon-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oui-icon--spin {
+      animation-duration: 1.6s;
+    }
+  }
+}

@@ -1,0 +1,80 @@
+@layer oui.components {
+  /* 骨架屏。底色与高光取自 tokens 的 --oui-skeleton-*，与主题中性色联动；
+     动效时长走 --oui-shimmer-duration，减少动态偏好下 tokens 会把它置 0 并禁用动画。 */
+  .oui-skeleton {
+    display: block;
+    max-width: 100%;
+  }
+
+  .oui-skeleton[data-variant='text'] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--oui-space-2);
+    width: 100%;
+  }
+
+  .oui-skeleton__bar {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: var(--oui-skeleton-line);
+    overflow: hidden;
+    border-radius: var(--oui-radius-sm);
+    background-color: var(--oui-skeleton-base);
+  }
+
+  .oui-skeleton[data-variant='rect'] .oui-skeleton__bar {
+    height: var(--oui-space-12);
+    border-radius: var(--oui-radius-md);
+  }
+
+  .oui-skeleton[data-variant='circle'] .oui-skeleton__bar {
+    width: var(--oui-control-lg);
+    height: var(--oui-control-lg);
+    border-radius: var(--oui-radius-full);
+  }
+
+  .oui-skeleton[data-variant='button'] .oui-skeleton__bar {
+    width: calc(var(--oui-control-xl) * 2);
+    height: var(--oui-control-md);
+    border-radius: var(--oui-radius-sm);
+  }
+
+  .oui-skeleton__bar[data-partial] {
+    width: 60%;
+  }
+
+  /* 扫光：一条窄高光带从左侧扫到右侧。带宽是 1/--oui-skeleton-shimmer，
+     位移用自身宽度百分比表示，所以恰好横穿整个骨块。 */
+  .oui-skeleton[data-animated] .oui-skeleton__bar::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: calc(100% / var(--oui-skeleton-shimmer));
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--oui-skeleton-sheen) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: oui-skeleton-shimmer var(--oui-shimmer-duration) var(--oui-ease) infinite;
+  }
+
+  @keyframes oui-skeleton-shimmer {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(calc(var(--oui-skeleton-shimmer) * 100%));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oui-skeleton[data-animated] .oui-skeleton__bar::after {
+      display: none;
+    }
+  }
+}

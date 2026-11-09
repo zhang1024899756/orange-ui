@@ -1,0 +1,127 @@
+@layer oui.components {
+  .oui-image {
+    position: relative;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    background: var(--oui-color-bg-muted);
+    border-radius: var(--oui-radius-md);
+  }
+
+  /* ---------- 比例：先用容器占位，图片本体铺满 ---------- */
+  .oui-image[data-ratio='1:1'] {
+    aspect-ratio: var(--oui-ratio-1x1);
+  }
+
+  .oui-image[data-ratio='16:9'] {
+    aspect-ratio: var(--oui-ratio-16x9);
+  }
+
+  /* 4:3 / 3:4 没有现成 token，比例不是长度，直接写数值 */
+  .oui-image[data-ratio='4:3'] {
+    aspect-ratio: 4 / 3;
+  }
+
+  .oui-image[data-ratio='3:4'] {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* auto：没有 ratio 可占位，给骨架一个最小高度，避免塌陷成 0 */
+  .oui-image[data-ratio='auto'] {
+    min-height: var(--oui-control-xl);
+  }
+
+  .oui-image__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity var(--oui-duration) var(--oui-ease);
+  }
+
+  .oui-image[data-fit='contain'] .oui-image__img {
+    object-fit: contain;
+  }
+
+  .oui-image[data-ratio='auto'] .oui-image__img {
+    height: auto;
+  }
+
+  .oui-image[data-status='loaded'] .oui-image__img {
+    opacity: 1;
+  }
+
+  /* ---------- 圆角 ---------- */
+  .oui-image[data-radius='none'] {
+    border-radius: 0;
+  }
+
+  .oui-image[data-radius='sm'] {
+    border-radius: var(--oui-radius-sm);
+  }
+
+  .oui-image[data-radius='md'] {
+    border-radius: var(--oui-radius-md);
+  }
+
+  .oui-image[data-radius='lg'] {
+    border-radius: var(--oui-radius-lg);
+  }
+
+  .oui-image[data-radius='xl'] {
+    border-radius: var(--oui-radius-xl);
+  }
+
+  .oui-image[data-radius='2xl'] {
+    border-radius: var(--oui-radius-2xl);
+  }
+
+  /* ---------- 骨架：底色 + 一道斜向流光，宽度由 shimmer token 决定 ---------- */
+  .oui-image__skeleton {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--oui-skeleton-sheen) 50%,
+        transparent 100%
+      ),
+      var(--oui-color-bg-muted);
+    background-size:
+      calc(100% * var(--oui-skeleton-shimmer)) 100%,
+      100% 100%;
+    background-repeat: no-repeat;
+    animation: oui-image-shimmer var(--oui-shimmer-duration) linear infinite;
+  }
+
+  @keyframes oui-image-shimmer {
+    from {
+      background-position: calc(-100% * var(--oui-skeleton-shimmer)) 0, 0 0;
+    }
+
+    to {
+      background-position: 100% 0, 0 0;
+    }
+  }
+
+  /* ---------- 失败 ---------- */
+  .oui-image__error {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--oui-space-1);
+    background: var(--oui-color-bg-muted);
+    color: var(--oui-color-text-tertiary);
+  }
+
+  .oui-image__error-text {
+    font-family: var(--oui-font-family);
+    font-size: var(--oui-font-xs);
+    line-height: var(--oui-leading-xs);
+  }
+}
