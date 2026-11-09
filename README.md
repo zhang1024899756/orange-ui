@@ -2,8 +2,6 @@
 
 <img src="docs/static/img/wordmark.svg" width="440" alt="orange-ui" />
 
-<p><strong>React 19 组件库 · 20 个元素组件 · 4 套可切换主题 × 明暗两套配色</strong></p>
-
 <p>面向 <strong>信息密集但仍有活力和温度的产品界面</strong>（模型社区、内容平台、AI 应用工作台）：<br />
 高密度小字、低阴影、细边框；「活泼」只允许出现在 16px 彩色图标和品牌渐变里，不靠彩色大色块和阴影堆叠。</p>
 
